@@ -13,6 +13,7 @@ import 'package:vibez/model/message_model.dart';
 import 'package:vibez/utils/dialog/dialog.dart';
 import 'package:vibez/utils/date_format/my_date_util.dart';
 import 'package:vibez/widgets/bottomshit_options.dart';
+import 'package:vibez/widgets/common_cached_widget.dart';
 import 'package:vibez/widgets/common_text.dart';
 import 'package:vibez/widgets/common_text_button.dart';
 import 'package:vibez/widgets/common_textfield.dart';
@@ -94,20 +95,7 @@ class _MessageCardState extends State<MessageCard> {
                       ]
                     ],
                   )
-                : CachedNetworkImage(
-                    imageUrl: widget.message.msg,
-                    imageBuilder: (context, imageProvider) => SizedBox(
-                      child: Image.network(
-                        height: 200.h,
-                        widget.message.msg,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    placeholder: (context, url) => Center(
-                        child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) =>
-                        Icon(Icons.error, size: 50),
-                  ),
+                : CommonCachedWidget(imageUrl:  widget.message.msg, height: 200.h, width: 200.w),
           ),
         ),
       ],
@@ -166,28 +154,7 @@ class _MessageCardState extends State<MessageCard> {
                       ),
                     ],
                   )
-                : CachedNetworkImage(
-                    imageUrl: widget.message.msg,
-                    imageBuilder: (context, imageProvider) => SizedBox(
-                      height: 200.h,
-                      child: Image.network(
-                        widget.message.msg,
-                        fit: BoxFit.contain,
-                        height: 200.h,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(
-                            child:
-                                CircularProgressIndicator(), // Show loader while loading
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) =>
-                            Icon(Icons.broken_image, size: 50),
-                      ),
-                    ),
-              placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-              errorWidget: (context, url, error) => Icon(Icons.error, size: 50),
-                  ),
+                : CommonCachedWidget(imageUrl:  widget.message.msg, height: 200.h, width: 200.w),
           ),
         ),
       ],

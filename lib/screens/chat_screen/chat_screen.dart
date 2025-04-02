@@ -64,8 +64,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  void _toggleAttachmentOptions(
-      BuildContext context, UserModel userData, GlobalKey key) {
+  void _toggleAttachmentOptions(BuildContext context, UserModel userData, GlobalKey key) {
     if (_overlayEntry != null) {
       _removeOverlay();
       return;
