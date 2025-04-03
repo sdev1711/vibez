@@ -44,7 +44,7 @@ class _FeedScreenState extends State<FeedScreen> {
                   height: 40,
                   child: CommonTextField(
                     readOnly: true,
-                    hintText: "${LocaleKeys.search.tr}...",
+                    hintText: "${LocaleKeys.search.tr}.......",
                     prefixIcons: Image.asset(
                       ImagePath.searchIcon,
                       color: AppColors.to.contrastThemeColor,
