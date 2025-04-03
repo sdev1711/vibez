@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:vibez/model/message_model.dart';
 import 'package:vibez/utils/dialog/dialog.dart';
 import 'package:vibez/utils/date_format/my_date_util.dart';
 import 'package:vibez/widgets/bottomshit_options.dart';
+import 'package:vibez/widgets/common_cached_widget.dart';
 import 'package:vibez/widgets/common_text.dart';
 import 'package:vibez/widgets/common_text_button.dart';
 import 'package:vibez/widgets/common_textfield.dart';
@@ -56,50 +58,44 @@ class _MessageCardState extends State<MessageCard> {
         Flexible(
           // Ensures the message container doesn't force overflow
           child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: AppColors.to.sendUserColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: widget.message.type == Type.text
-                  ? Row(
-                      mainAxisSize: MainAxisSize.min, // Allow dynamic width
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Flexible(
-                          // Prevents text from forcing overflow
-                          child: CommonSoraText(
-                            text: widget.message.msg,
-                            color: AppColors.to.sendUserFontColor,
-                            textSize: 15,
-                          ),
+            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: AppColors.to.sendUserColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: widget.message.type == Type.text
+                ? Row(
+                    mainAxisSize: MainAxisSize.min, // Allow dynamic width
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Flexible(
+                        // Prevents text from forcing overflow
+                        child: CommonSoraText(
+                          text: widget.message.msg,
+                          color: AppColors.to.sendUserFontColor,
+                          textSize: 15,
                         ),
-                        SizedBox(width: 10.w),
-                        CommonSoraText(
-                          text: formatTimestamp(timestamp),
-                          color: AppColors.to.defaultProfileImageBg
-                              .withOpacity(0.5),
-                          textSize: 10,
-                        ),
-                        if (widget.message.read.isNotEmpty) ...[
-                          SizedBox(width: 5.w),
-                          Icon(Icons.done_all_rounded,
-                              color: Colors.blue.shade400, size: 15),
-                        ] else ...[
-                          SizedBox(width: 5.w),
-                          Icon(Icons.done_all_rounded,
-                              color: Colors.grey.shade500, size: 15),
-                        ]
-                      ],
-                    )
-                  : SizedBox(
-                      child: Image.network(
-                        height: 200.h,
-                        widget.message.msg,
-                        fit: BoxFit.contain,
                       ),
-                    ),
+                      SizedBox(width: 10.w),
+                      CommonSoraText(
+                        text: formatTimestamp(timestamp),
+                        color:
+                            AppColors.to.defaultProfileImageBg.withOpacity(0.5),
+                        textSize: 10,
+                      ),
+                      if (widget.message.read.isNotEmpty) ...[
+                        SizedBox(width: 5.w),
+                        Icon(Icons.done_all_rounded,
+                            color: Colors.blue.shade400, size: 15),
+                      ] else ...[
+                        SizedBox(width: 5.w),
+                        Icon(Icons.done_all_rounded,
+                            color: Colors.grey.shade500, size: 15),
+                      ]
+                    ],
+                  )
+                : CommonCachedWidget(imageUrl:  widget.message.msg, height: 200.h, width: 200.w),
           ),
         ),
       ],
@@ -158,27 +154,7 @@ class _MessageCardState extends State<MessageCard> {
                       ),
                     ],
                   )
-                : SizedBox(
-              height: 200.h,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  // Image with loading indicator
-                  Image.network(
-                    widget.message.msg,
-                    fit: BoxFit.contain,
-                    height: 200.h,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(), // Show loader while loading
-                      );
-                    },
-                    errorBuilder: (context, error, stackTrace) => Icon(Icons.broken_image, size: 50),
-                  ),
-                ],
-              ),
-            ),
+                : CommonCachedWidget(imageUrl:  widget.message.msg, height: 200.h, width: 200.w),
           ),
         ),
       ],
@@ -187,7 +163,7 @@ class _MessageCardState extends State<MessageCard> {
 
   void showBottomShit(bool isMe) {
     showModalBottomSheet(
-      isDismissible: true,
+        isDismissible: true,
         context: context,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -210,18 +186,20 @@ class _MessageCardState extends State<MessageCard> {
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
-              widget.message.type==Type.image?Container():OptionItem(
-                icon: Icons.copy_rounded,
-                name: "Copy",
-                onTap: () async {
-                  await Clipboard.setData(
-                          ClipboardData(text: widget.message.msg))
-                      .then(
-                    (value) => Navigator.pop(context),
-                  );
-                  Dialogs.showSnackBar(context, "Text copied!");
-                },
-              ),
+              widget.message.type == Type.image
+                  ? Container()
+                  : OptionItem(
+                      icon: Icons.copy_rounded,
+                      name: "Copy",
+                      onTap: () async {
+                        await Clipboard.setData(
+                                ClipboardData(text: widget.message.msg))
+                            .then(
+                          (value) => Navigator.pop(context),
+                        );
+                        Dialogs.showSnackBar(context, "Text copied!");
+                      },
+                    ),
               if (!isMe && widget.message.type == Type.image)
                 OptionItem(
                   icon: Icons.download_rounded,
@@ -264,14 +242,16 @@ class _MessageCardState extends State<MessageCard> {
                   },
                 ),
               isMe
-                  ? widget.message.type==Type.image?Container():OptionItem(
-                      icon: Icons.edit,
-                      name: "Edit",
-                      onTap: () {
-                        Navigator.pop(context);
-                        _showMessageUpdateDialog();
-                      },
-                    )
+                  ? widget.message.type == Type.image
+                      ? Container()
+                      : OptionItem(
+                          icon: Icons.edit,
+                          name: "Edit",
+                          onTap: () {
+                            Navigator.pop(context);
+                            _showMessageUpdateDialog();
+                          },
+                        )
                   : SizedBox(),
               if (isMe)
                 OptionItem(
@@ -319,10 +299,11 @@ class _MessageCardState extends State<MessageCard> {
 
     showDialog(
       context: context,
-      builder: (BuildContext dialogContext) {  // Use a separate context
+      builder: (BuildContext dialogContext) {
+        // Use a separate context
         return AlertDialog(
-          contentPadding: const EdgeInsets.only(
-              left: 24, right: 24, top: 20, bottom: 10),
+          contentPadding:
+              const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 10),
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20))),
           title: CommonSoraText(
@@ -370,12 +351,8 @@ class _MessageCardState extends State<MessageCard> {
       },
     );
   }
-
 }
-
 
 Timestamp convertMillisecondsToTimestamp(int milliseconds) {
   return Timestamp.fromMillisecondsSinceEpoch(milliseconds);
 }
-
-

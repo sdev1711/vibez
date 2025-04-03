@@ -20,6 +20,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:vibez/widgets/common_video_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'bottomshit_options.dart';
+import 'common_cached_widget.dart';
 import 'common_text.dart';
 import 'common_text_button.dart';
 import 'common_textfield.dart';
@@ -257,7 +258,7 @@ class CommonPostView extends StatelessWidget {
                             },
                             child: CircleAvatar(
                               backgroundImage: profilePic.isNotEmpty
-                                  ? NetworkImage(profilePic)
+                                  ? CachedNetworkImageProvider(profilePic,)
                                   : AssetImage(ImagePath.profileIcon)
                                       as ImageProvider,
                               backgroundColor: AppColors.to.contrastThemeColor,
@@ -454,21 +455,7 @@ class CommonPostView extends StatelessWidget {
   }
 
   Widget _buildImagePost(PostModel postsData) {
-    return CachedNetworkImage(
-      imageUrl: postsData.imageUrl,
-      imageBuilder: (context,imageProvider)=>Container(
-        height: 400.h,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: AppColors.to.darkBgColor,
-          image: DecorationImage(
-            image: imageProvider,
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-      placeholder: (context, url) => CircularProgressIndicator(),
-      errorWidget: (context, url, error) => Icon(Icons.error),
-    );
+    return CommonCachedWidget( imageUrl: postsData.imageUrl,height: 400.h,width: 390.w,);
   }
 }
+
