@@ -31,10 +31,14 @@ class _PostViewState extends State<PostView> {
     user = Get.arguments["userData"];
     _scrollController = ScrollController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollController.jumpTo(
-        postIndex * 500.h,
-      );
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(
+          _scrollController.position.minScrollExtent +
+              postIndex * 500.h, // Prevents unwanted jumps
+        );
+      }
     });
+
 
     super.initState();
   }
@@ -59,7 +63,9 @@ class _PostViewState extends State<PostView> {
         itemCount: posts.length,
         itemBuilder: (context, index) {
           final postsData = posts[index];
-          return CommonPostView(postsData: postsData);
+          return CommonPostView(
+              key: ValueKey(postsData.postId),
+              postsData: postsData);
         },
       ),
     );
