@@ -1,19 +1,22 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vibez/Cubit/video_visibility/video_visibility.dart';
+import 'package:vibez/utils/image_path/image_path.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class PostVideoView extends StatefulWidget {
+class CommonVideoView extends StatefulWidget {
   final String postUrl;
-  const PostVideoView({super.key,required this.postUrl, });
+  const CommonVideoView({super.key,required this.postUrl, });
 
   @override
-  State<PostVideoView> createState() => _PostVideoViewState();
+  State<CommonVideoView> createState() => _CommonVideoViewState();
 }
 
-class _PostVideoViewState extends State<PostVideoView> {
+class _CommonVideoViewState extends State<CommonVideoView> {
   late VideoPlayerController videoController;
   final StreamController<void> videoStreamController = StreamController<void>();
   bool isVisible = false;

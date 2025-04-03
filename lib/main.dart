@@ -20,6 +20,8 @@ import 'package:vibez/Cubit/send_receive_chat_time/send_receive_chat_cubit.dart'
 import 'package:vibez/Cubit/user/user_cubit.dart';
 import 'package:vibez/Cubit/video_visibility/video_visibility.dart';
 import 'package:vibez/Cubit/zoom_image/zoom_cubit.dart';
+import 'package:vibez/api_service/api_service.dart';
+import 'package:vibez/model/user_model.dart';
 import 'package:vibez/repository/post_repository.dart';
 import 'package:vibez/services/notification_services.dart';
 import 'package:vibez/services/story/story_service.dart';
@@ -88,7 +90,50 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final _appLinks = AppLinks();
+  StreamSubscription<Uri>? _linkSubscription;
 
+  @override
+  void initState() {
+    _initDeepLinks();
+    super.initState();
+  }
+  @override
+  void dispose() {
+    _linkSubscription?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _initDeepLinks() async {
+    // Handle app launch via deep link
+    try {
+      final Uri? initialUri = await _appLinks.getInitialLink();
+      if (initialUri != null) {
+        _handleDeepLink(initialUri);
+      }
+    } catch (e) {
+      debugPrint('Error getting initial deep link: $e');
+    }
+
+    // Handle deep links while the app is in the foreground
+    _linkSubscription = _appLinks.uriLinkStream.listen((Uri uri) {
+      debugPrint('Deep link received============: ${uri.toString()}');
+      _handleDeepLink(uri);
+    }, onError: (Object err) {
+      debugPrint('Deep link error: $err');
+    });
+  }
+
+  void _handleDeepLink(Uri uri) async{
+    debugPrint('Deep link received===========: ${uri.toString()}');
+    if ( uri.pathSegments.contains('profile')) {
+      String? userId = uri.queryParameters['id'];
+      if (userId != null) {
+        UserModel? userModel = await ApiService().getUserById(userId);
+        Get.toNamed(AppRoutes.otherUserProfileScreen, arguments: userModel);
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(

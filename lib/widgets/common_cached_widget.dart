@@ -33,7 +33,7 @@ class CommonCachedWidget extends StatelessWidget {
           color: Colors.grey[300],
         ),
         child: Center(
-          child: CircularProgressIndicator(value: downloadProgress.progress,color: AppColors.to.contrastThemeColor,),
+          child: CircularProgressIndicator(value: downloadProgress.progress,),
         ),
       ),
       errorWidget: (context, url, error) => Container(

@@ -97,6 +97,7 @@ class _FeedScreenState extends State<FeedScreen> {
                     return GestureDetector(
                       onTap: () {},
                       child: Container(
+                        // height: 200.h,
                         width: 200.w,
                         decoration: BoxDecoration(
                             color: AppColors.to.contrastThemeColor,
