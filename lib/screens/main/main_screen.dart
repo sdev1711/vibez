@@ -14,7 +14,7 @@ import 'package:vibez/screens/clips/clip_screen.dart';
 import 'package:vibez/screens/feed/feed.dart';
 import 'package:vibez/screens/home/home_screen.dart';
 import 'package:vibez/screens/notifications/notifications_screen.dart';
-import 'package:vibez/screens/post/add_post_screen.dart';
+import 'package:vibez/screens/post/add_post/add_post_screen.dart';
 import 'package:vibez/screens/post/select_post_type.dart';
 import 'package:vibez/screens/user_profile/profile_screen.dart';
 import 'package:vibez/utils/image_path/image_path.dart';

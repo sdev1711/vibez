@@ -39,7 +39,6 @@ class CommonCachedWidget extends StatelessWidget {
       errorWidget: (context, url, error) => Container(
         height:height,
         width: width,
-
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Colors.grey[400],

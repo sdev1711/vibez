@@ -311,7 +311,6 @@ class _MessagesScreenState extends State<MessagesScreen> {
                   int.tryParse(messageList[b.uid]?.sent ?? '0') ?? 0;
               return lastMsgB.compareTo(lastMsgA);
             });
-
             return ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,

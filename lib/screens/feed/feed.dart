@@ -87,7 +87,6 @@ class _FeedScreenState extends State<FeedScreen> {
                     crossAxisSpacing: 5,
                     mainAxisSpacing: 2,
                     mainAxisExtent: 150,
-                    // Dynamic height for items
                   ),
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -95,7 +94,9 @@ class _FeedScreenState extends State<FeedScreen> {
                   itemBuilder: (context, index) {
                     final post = postData[index];
                     return GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                      Get.toNamed(AppRoutes.feedPostViewScreen,arguments: post);
+                      },
                       child: Container(
                         width: 200.w,
                         decoration: BoxDecoration(

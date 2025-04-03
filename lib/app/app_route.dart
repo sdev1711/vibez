@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:vibez/screens/chat_screen/chat_screen.dart';
 import 'package:vibez/screens/chatbot/chatbot_screen.dart';
 import 'package:vibez/screens/clips/clip_screen.dart';
-import 'package:vibez/screens/clips/clip_view.dart';
 import 'package:vibez/screens/feed/feed.dart';
 import 'package:vibez/screens/follow/followers.dart';
 import 'package:vibez/screens/follow/following.dart';
@@ -12,10 +11,11 @@ import 'package:vibez/screens/login/login_screen.dart';
 import 'package:vibez/screens/main/main_screen.dart';
 import 'package:vibez/screens/messages/messages_screen.dart';
 import 'package:vibez/screens/notifications/notifications_screen.dart';
-import 'package:vibez/screens/post/add_post_screen.dart';
+import 'package:vibez/screens/post/add_post/add_post_screen.dart';
 import 'package:vibez/screens/post/comment/comment_screen.dart';
-import 'package:vibez/screens/post/post_view.dart';
-import 'package:vibez/screens/post/add_clip.dart';
+import 'package:vibez/screens/post/post_view/feed_post_view.dart';
+import 'package:vibez/screens/post/post_view/post_view.dart';
+import 'package:vibez/screens/post/add_post/add_clip.dart';
 import 'package:vibez/screens/search/search_screen.dart';
 import 'package:vibez/screens/signup/signUp_screen.dart';
 import 'package:vibez/screens/splash_screen/splash_screen.dart';
@@ -54,6 +54,7 @@ class AppRoutes{
   static const String chatBotScreen="/chatBotScreen";
   static const String addClipScreen="/addClipScreen";
   static const String clipViewScreen="/clipViewScreen";
+  static const String feedPostViewScreen="/feedPostViewScreen";
 
   static final List<GetPage> getPages=  [
     GetPage(name: AppRoutes.initialRoute,
@@ -136,6 +137,9 @@ class AppRoutes{
     ),
     GetPage(name: AppRoutes.clipViewScreen,
       page: ()=> ClipScreen(),
+    ),
+    GetPage(name: AppRoutes.feedPostViewScreen,
+      page: ()=> FeedPostView(),
     ),
   ];
 }
