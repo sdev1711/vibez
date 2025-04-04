@@ -1,9 +1,6 @@
-
-
 import 'dart:developer';
-import 'package:awesome_notifications/awesome_notifications.dart';import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get_navigation/get_navigation.dart';
-import 'package:get/state_manager.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vibez/app/app_route.dart';
 import 'package:vibez/app/colors.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';

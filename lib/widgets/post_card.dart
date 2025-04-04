@@ -44,7 +44,6 @@ class PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     String userId = ApiService.user.uid;
     bool isMe = userId == postsData.userId;
-    log("tokes is ========= ${userDetails.pushToken}");
     void sharePost(String name, String userName) {
       final String shareText =
           "Check out my post on Vibez! 👇\n Post: $name\nUsername: $userName\n App: vibez.app";

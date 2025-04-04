@@ -113,7 +113,7 @@ class _StoryViewerScreenState extends State<StoryViewerScreen> {
                     storyItems: userStories.map((story) {
                       return StoryItem.pageImage(
                         url: story.mediaUrl,
-                        imageFit: BoxFit.cover,
+                        imageFit: BoxFit.contain,
                         controller: _storyController,
                       );
                     }).toList(),
