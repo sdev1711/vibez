@@ -12,11 +12,9 @@ import 'package:vibez/app/colors.dart';
 import 'package:vibez/controllers/bottom_navigation_controller.dart';
 import 'package:vibez/generated/locales.g.dart';
 import 'package:vibez/model/user_model.dart';
-import 'package:vibez/screens/clips/clip_screen.dart';
 import 'package:vibez/screens/feed/feed.dart';
 import 'package:vibez/screens/home/home_screen.dart';
 import 'package:vibez/screens/notifications/notifications_screen.dart';
-import 'package:vibez/screens/post/add_post/add_post_screen.dart';
 import 'package:vibez/screens/post/select_post_type.dart';
 import 'package:vibez/screens/user_profile/profile_screen.dart';
 import 'package:vibez/utils/image_path/image_path.dart';
@@ -44,9 +42,10 @@ class _MainScreenState extends State<MainScreen> {
 
   UserModel? userModel;
   ApiService apiService = ApiService();
-  final BottomNavController bottomNavController = Get.find<BottomNavController>();
+  final BottomNavController bottomNavController =
+      Get.find<BottomNavController>();
   @override
-  void initState(){
+  void initState() {
     SystemChannels.lifecycle.setMessageHandler((message) {
       log("main screen message $message ");
       if (ApiService.auth.currentUser != null) {
@@ -55,7 +54,8 @@ class _MainScreenState extends State<MainScreen> {
         }
         if (message.toString().contains('paused')) {
           ApiService.updateUserActiveStatus(false);
-        }if (message.toString().contains('inactive')) {
+        }
+        if (message.toString().contains('inactive')) {
           ApiService.updateUserActiveStatus(false);
         }
       }
@@ -69,7 +69,8 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     // SharedPrefs.setOnBoard(false);
   }
-  Future<void>updateUserScore(UserModel user)async{
+
+  Future<void> updateUserScore(UserModel user) async {
     String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
     final userRef = ApiService.firestore.collection('users').doc(user.uid);
     final snapshot = await userRef.get();
@@ -85,9 +86,7 @@ class _MainScreenState extends State<MainScreen> {
           lastDate = null;
         }
         DateTime now = DateTime.now();
-        if (lastDate == null || now
-            .difference(lastDate)
-            .inDays > 1) {
+        if (lastDate == null || now.difference(lastDate).inDays > 1) {
           await userRef.update({
             'userScore': 1,
             'lastOpenedDate': today,
@@ -99,10 +98,11 @@ class _MainScreenState extends State<MainScreen> {
           });
         }
       }
-      }
+    }
   }
+
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
         final shouldExit = await _showExitDialog(context);
@@ -164,75 +164,78 @@ class _MainScreenState extends State<MainScreen> {
     required int index,
     required double screenHeight,
   }) {
-    final BottomNavController bottomNavController = Get.find<BottomNavController>();
+    final BottomNavController bottomNavController =
+        Get.find<BottomNavController>();
     return GestureDetector(
       onTap: () {
         bottomNavController.changeIndex(index);
       },
-      child: Obx((){
+      child: Obx(() {
         bool isSelected = bottomNavController.pageIndex.value == index;
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             isSelected
                 ? Column(
-              children: [
-                Container(
-                  width: 60.w,
-                  height: 35.h,
-                  decoration: BoxDecoration(
-                      color: AppColors.to.primaryBgColor.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Center(
-                    child: ImageIcon(
-                      AssetImage(iconPath),
-                      color: isSelected
-                          ? AppColors.to.contrastThemeColor
-                          : AppColors.to.contrastThemeColor.withOpacity(0.5),
-                      size: screenHeight,
-                    ),
-                  ),
-                ),
-                // Padding(
-                //   padding: const EdgeInsets.only(top: 3.0),
-                //   child: CommonSoraText(
-                //     text: text??"",
-                //     color: AppColors.to.contrastThemeColor,
-                //     textSize: 12,
-                //     fontWeight: FontWeight.bold,
-                //   ),
-                // )
-              ],
-            )
+                    children: [
+                      Container(
+                        width: 60.w,
+                        height: 35.h,
+                        decoration: BoxDecoration(
+                            color: AppColors.to.primaryBgColor.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Center(
+                          child: ImageIcon(
+                            AssetImage(iconPath),
+                            color: isSelected
+                                ? AppColors.to.contrastThemeColor
+                                : AppColors.to.contrastThemeColor
+                                    .withOpacity(0.5),
+                            size: screenHeight,
+                          ),
+                        ),
+                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(top: 3.0),
+                      //   child: CommonSoraText(
+                      //     text: text??"",
+                      //     color: AppColors.to.contrastThemeColor,
+                      //     textSize: 12,
+                      //     fontWeight: FontWeight.bold,
+                      //   ),
+                      // )
+                    ],
+                  )
                 : Column(
-              children: [
-                Container(
-                  width: 60.w,
-                  height: 35.h,
-                  decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Center(
-                    child: ImageIcon(
-                      AssetImage(iconPath),
-                      color: isSelected
-                          ? AppColors.to.contrastThemeColor
-                          : AppColors.to.contrastThemeColor.withOpacity(0.5),
-                      size: screenHeight,
-                    ),
-                  ),
-                ),
-                // Padding(
-                //   padding: const EdgeInsets.only(top: 3.0),
-                //   child: CommonSoraText(
-                //     text: text??"",
-                //     color: AppColors.to.contrastThemeColor,
-                //     textSize: 12,
-                //     fontWeight: FontWeight.w400,
-                //   ),
-                // )
-              ],
-            )
+                    children: [
+                      Container(
+                        width: 60.w,
+                        height: 35.h,
+                        decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Center(
+                          child: ImageIcon(
+                            AssetImage(iconPath),
+                            color: isSelected
+                                ? AppColors.to.contrastThemeColor
+                                : AppColors.to.contrastThemeColor
+                                    .withOpacity(0.5),
+                            size: screenHeight,
+                          ),
+                        ),
+                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(top: 3.0),
+                      //   child: CommonSoraText(
+                      //     text: text??"",
+                      //     color: AppColors.to.contrastThemeColor,
+                      //     textSize: 12,
+                      //     fontWeight: FontWeight.w400,
+                      //   ),
+                      // )
+                    ],
+                  )
           ],
         );
       }),

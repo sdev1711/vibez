@@ -49,8 +49,8 @@ class UserModel {
     email = json['email'] ?? '';
     pushToken = json['pushToken'] ?? '';
     username = json['username'] ?? '';
-    postCount =json['postCount'] != null ? json['postCount'] as int : 0;
-    userScore =json['userScore'] != null ? json['userScore'] as int : 0;
+    postCount = json['postCount'] != null ? json['postCount'] as int : 0;
+    userScore = json['userScore'] != null ? json['userScore'] as int : 0;
     isPrivate = json['isPrivate'] ?? false;
     followers = List<String>.from(json['followers'] ?? []);
     following = List<String>.from(json['following'] ?? []);
@@ -74,8 +74,8 @@ class UserModel {
       'followers': followers,
       'following': following,
       'followRequests': followRequests,
-      'postCount':postCount,
-      'userScore':userScore,
+      'postCount': postCount,
+      'userScore': userScore,
     };
   }
 }

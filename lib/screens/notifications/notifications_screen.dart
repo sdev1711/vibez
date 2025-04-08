@@ -11,6 +11,7 @@ import 'package:vibez/api_service/api_service.dart';
 import 'package:vibez/app/colors.dart';
 import 'package:vibez/generated/locales.g.dart';
 import 'package:vibez/model/user_model.dart';
+import 'package:vibez/utils/image_path/image_path.dart';
 import 'package:vibez/widgets/common_appBar.dart';
 import 'package:vibez/widgets/common_button.dart';
 import 'package:vibez/widgets/common_text.dart';
@@ -53,7 +54,8 @@ class NotificationsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                       child: CommonSoraText(
                         text: "Follow requests",
                         color: AppColors.to.contrastThemeColor,
@@ -67,7 +69,9 @@ class NotificationsScreen extends StatelessWidget {
                         UserModel user = state.requests[index];
                         return ListTile(
                           leading: CircleAvatar(
-                            backgroundImage: NetworkImage(user.image),
+                            backgroundImage: user.image.isEmpty
+                                ? AssetImage(ImagePath.profileIcon)
+                                : NetworkImage(user.image),
                           ),
                           title: Text(user.username),
                           subtitle: Text(user.name),
@@ -135,14 +139,17 @@ class NotificationsScreen extends StatelessWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    state.posts.isEmpty?Container():Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
-                      child: CommonSoraText(
-                          text: "Likes",
-                          color: AppColors.to.contrastThemeColor,
-                          textSize: 17,
+                    state.posts.isEmpty
+                        ? Container()
+                        : Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 10),
+                            child: CommonSoraText(
+                              text: "Likes",
+                              color: AppColors.to.contrastThemeColor,
+                              textSize: 17,
+                            ),
                           ),
-                    ),
                     ListView.builder(
                       shrinkWrap: true,
                       itemCount: state.posts.length,
@@ -152,53 +159,66 @@ class NotificationsScreen extends StatelessWidget {
                           children: [
                             // StreamBuilder to listen for real-time likes
                             StreamBuilder<List<String>>(
-                              stream: context.read<PostCubit>().getPostLikes(post.postId), // Call the stream function
+                              stream: context.read<PostCubit>().getPostLikes(
+                                  post.postId), // Call the stream function
                               builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
                                   return Container();
                                 }
-                                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                if (!snapshot.hasData ||
+                                    snapshot.data!.isEmpty) {
                                   return Container();
                                 }
 
                                 // Filter out the current user's username
                                 List<String> likedUsers = snapshot.data!
-                                    .where((username) => username != ApiService.me.username)
+                                    .where((username) =>
+                                        username != ApiService.me.username)
                                     .toList();
 
                                 log("liked user length ${likedUsers.length}");
 
-                                if (likedUsers.isEmpty) return Container(); // If no other user liked, don't show anything
+                                if (likedUsers.isEmpty)
+                                  return Container(); // If no other user liked, don't show anything
 
                                 return likedUsers.length == 1
                                     ? Expanded(
-                                  child: ListTile(
-                                    title: CommonSoraText(
-                                      text: "${likedUsers.first} liked your post",
-                                      color: AppColors.to.contrastThemeColor,
-                                    ),
-                                    leading: _buildImage(post.imageUrl),
-                                  ),
-                                )
+                                        child: ListTile(
+                                          title: CommonSoraText(
+                                            text:
+                                                "${likedUsers.first} liked your post",
+                                            color:
+                                                AppColors.to.contrastThemeColor,
+                                          ),
+                                          leading: _buildImage(post.imageUrl),
+                                        ),
+                                      )
                                     : likedUsers.length == 2
-                                    ? Expanded(
-                                  child: ListTile(
-                                    title: CommonSoraText(
-                                      text: "${likedUsers[0]}, ${likedUsers[1]} liked your post",
-                                      color: AppColors.to.contrastThemeColor,
-                                    ),
-                                    leading: _buildImage(post.imageUrl),
-                                  ),
-                                )
-                                    : Expanded(
-                                  child: ListTile(
-                                    title: CommonSoraText(
-                                      text: "${likedUsers[0]}, ${likedUsers[1]} and others liked your post",
-                                      color: AppColors.to.contrastThemeColor,
-                                    ),
-                                    leading: _buildImage(post.imageUrl),
-                                  ),
-                                );
+                                        ? Expanded(
+                                            child: ListTile(
+                                              title: CommonSoraText(
+                                                text:
+                                                    "${likedUsers[0]}, ${likedUsers[1]} liked your post",
+                                                color: AppColors
+                                                    .to.contrastThemeColor,
+                                              ),
+                                              leading:
+                                                  _buildImage(post.imageUrl),
+                                            ),
+                                          )
+                                        : Expanded(
+                                            child: ListTile(
+                                              title: CommonSoraText(
+                                                text:
+                                                    "${likedUsers[0]}, ${likedUsers[1]} and others liked your post",
+                                                color: AppColors
+                                                    .to.contrastThemeColor,
+                                              ),
+                                              leading:
+                                                  _buildImage(post.imageUrl),
+                                            ),
+                                          );
                               },
                             ),
                           ],
@@ -216,6 +236,7 @@ class NotificationsScreen extends StatelessWidget {
     );
   }
 }
+
 Widget _buildImage(String imageUrl) {
   return Container(
     height: 40,

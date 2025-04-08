@@ -36,6 +36,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         "Check out my profile on MyApp! 👇\n\nName: $name\nUsername: $userName\n Profile: https://vibez.com/profile?id=${ApiService.user.uid}";
     Share.share(shareText);
   }
+
   @override
   void initState() {
     ApiService.getSelfInfo();
@@ -146,7 +147,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                         children: [
                                           GestureDetector(
                                             onTap: () {
-                                              Get.toNamed(AppRoutes.followersScreen,
+                                              Get.toNamed(
+                                                  AppRoutes.followersScreen,
                                                   arguments: state.user.uid);
                                             },
                                             child: Container(
@@ -155,7 +157,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                                 spacing: 5.w,
                                                 children: [
                                                   CommonSoraText(
-                                                    text: LocaleKeys.followers.tr,
+                                                    text:
+                                                        LocaleKeys.followers.tr,
                                                     color: AppColors
                                                         .to.contrastThemeColor,
                                                     textSize: 15,
@@ -175,12 +178,15 @@ class _ProfileScreenState extends State<ProfileScreen>
                                           ),
                                           Container(
                                             width: 1,
-                                            height: 25, // height of the divider line
-                                            color:AppColors.to.contrastThemeColor,
+                                            height:
+                                                25, // height of the divider line
+                                            color:
+                                                AppColors.to.contrastThemeColor,
                                           ),
                                           GestureDetector(
                                             onTap: () {
-                                              Get.toNamed(AppRoutes.followingScreen,
+                                              Get.toNamed(
+                                                  AppRoutes.followingScreen,
                                                   arguments: state.user.uid);
                                             },
                                             child: Container(
@@ -189,7 +195,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                                 spacing: 5.w,
                                                 children: [
                                                   CommonSoraText(
-                                                    text: LocaleKeys.following.tr,
+                                                    text:
+                                                        LocaleKeys.following.tr,
                                                     color: AppColors
                                                         .to.contrastThemeColor,
                                                     textSize: 15,
@@ -213,17 +220,16 @@ class _ProfileScreenState extends State<ProfileScreen>
                                         spacing: 5.w,
                                         children: [
                                           CommonSoraText(
-                                            text:"Active days streak",
-                                            color: AppColors
-                                                .to.contrastThemeColor,
+                                            text: "Active days streak",
+                                            color:
+                                                AppColors.to.contrastThemeColor,
                                             textSize: 15,
                                           ),
                                           CommonSoraText(
-                                            text: state
-                                                .user.userScore
-                                                .toString(),
-                                            color: AppColors
-                                                .to.contrastThemeColor,
+                                            text:
+                                                state.user.userScore.toString(),
+                                            color:
+                                                AppColors.to.contrastThemeColor,
                                             textSize: 17,
                                             fontWeight: FontWeight.w500,
                                           ),
