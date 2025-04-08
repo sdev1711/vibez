@@ -12,6 +12,8 @@ class UserModel {
     required this.username,
     required this.isPrivate,
     required this.postCount,
+    required this.userScore,
+    required this.lastOpenedDate,
     this.followers = const [],
     this.following = const [],
     this.followRequests = const [],
@@ -27,8 +29,10 @@ class UserModel {
   late String email;
   late String pushToken;
   late String username;
+  late String lastOpenedDate;
   late bool isPrivate;
   late int postCount;
+  late int userScore;
   late List<String> followers;
   late List<String> following;
   late List<String> followRequests;
@@ -37,6 +41,7 @@ class UserModel {
     image = json['image'] ?? '';
     about = json['about'] ?? '';
     name = json['name'] ?? '';
+    lastOpenedDate = json['lastOpenedDate'] ?? '';
     createdAt = json['created_at'] ?? '';
     isOnline = json['is_online'] ?? false;
     uid = json['uid'] ?? '';
@@ -45,6 +50,7 @@ class UserModel {
     pushToken = json['pushToken'] ?? '';
     username = json['username'] ?? '';
     postCount =json['postCount'] != null ? json['postCount'] as int : 0;
+    userScore =json['userScore'] != null ? json['userScore'] as int : 0;
     isPrivate = json['isPrivate'] ?? false;
     followers = List<String>.from(json['followers'] ?? []);
     following = List<String>.from(json['following'] ?? []);
@@ -56,6 +62,7 @@ class UserModel {
       'image': image,
       'about': about,
       'name': name,
+      'lastOpenedDate': lastOpenedDate,
       'created_at': createdAt,
       'is_online': isOnline,
       'uid': uid,
@@ -68,6 +75,7 @@ class UserModel {
       'following': following,
       'followRequests': followRequests,
       'postCount':postCount,
+      'userScore':userScore,
     };
   }
 }

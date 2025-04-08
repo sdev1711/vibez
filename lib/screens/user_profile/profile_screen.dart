@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:vibez/Cubit/post/post_cubit.dart';
+import 'package:vibez/Cubit/profile_bio/profile_bio_cubit.dart';
 import 'package:vibez/Cubit/user_profile_data/user_profile_cubit.dart';
 import 'package:vibez/api_service/api_service.dart';
 import 'package:vibez/app/app_route.dart';
@@ -35,7 +36,6 @@ class _ProfileScreenState extends State<ProfileScreen>
         "Check out my profile on MyApp! 👇\n\nName: $name\nUsername: $userName\n Profile: https://vibez.com/profile?id=${ApiService.user.uid}";
     Share.share(shareText);
   }
-
   @override
   void initState() {
     ApiService.getSelfInfo();
@@ -110,77 +110,124 @@ class _ProfileScreenState extends State<ProfileScreen>
                                       children: [
                                         CircleAvatar(
                                           radius: 37,
-                                          backgroundColor: AppColors.to.contrastThemeColor,
-                                          backgroundImage: state.user.image.isEmpty
-                                              ? AssetImage(ImagePath.profileIcon)
-                                              :  CachedNetworkImageProvider(state.user.image),
+                                          backgroundColor:
+                                              AppColors.to.contrastThemeColor,
+                                          backgroundImage:
+                                              state.user.image.isEmpty
+                                                  ? AssetImage(
+                                                      ImagePath.profileIcon)
+                                                  : CachedNetworkImageProvider(
+                                                      state.user.image),
                                         ),
                                         Positioned(
                                           bottom: 0,
                                           right: 10,
                                           child: CommonIconButton(
-                                            onTap:(){
-                                              Get.toNamed(AppRoutes.storyUploadScreen);
-                                            },
-                                            iconData: Icons.add_circle,
-                                            size: 25,
-                                            color: AppColors.to.contrastThemeColor),
+                                              onTap: () {
+                                                Get.toNamed(AppRoutes
+                                                    .storyUploadScreen);
+                                              },
+                                              iconData: Icons.add_circle,
+                                              size: 25,
+                                              color: AppColors
+                                                  .to.contrastThemeColor),
                                         ),
                                       ],
                                     ),
                                   ),
                                   SizedBox(width: 30.w),
-                                  Row(
-                                    spacing: 25.w,
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  Column(
+                                    spacing: 5.h,
                                     children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.toNamed(AppRoutes.followersScreen,
-                                              arguments: state.user.uid);
-                                        },
-                                        child: Container(
-                                          color: Colors.transparent,
-                                          child: Column(
-                                            children: [
-                                              CommonSoraText(
-                                                text: state.user.followers.length.toString(),
-                                                color: AppColors.to.contrastThemeColor,
-                                                textSize: 17,
-                                                fontWeight: FontWeight.w500,
+                                      Row(
+                                        spacing: 10.w,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.toNamed(AppRoutes.followersScreen,
+                                                  arguments: state.user.uid);
+                                            },
+                                            child: Container(
+                                              color: Colors.transparent,
+                                              child: Row(
+                                                spacing: 5.w,
+                                                children: [
+                                                  CommonSoraText(
+                                                    text: LocaleKeys.followers.tr,
+                                                    color: AppColors
+                                                        .to.contrastThemeColor,
+                                                    textSize: 15,
+                                                  ),
+                                                  CommonSoraText(
+                                                    text: state
+                                                        .user.followers.length
+                                                        .toString(),
+                                                    color: AppColors
+                                                        .to.contrastThemeColor,
+                                                    textSize: 17,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ],
                                               ),
-                                              CommonSoraText(
-                                                text: LocaleKeys.followers.tr,
-                                                color: AppColors.to.contrastThemeColor,
-                                                textSize: 15,
-                                              ),
-                                            ],
+                                            ),
                                           ),
-                                        ),
+                                          Container(
+                                            width: 1,
+                                            height: 25, // height of the divider line
+                                            color:AppColors.to.contrastThemeColor,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.toNamed(AppRoutes.followingScreen,
+                                                  arguments: state.user.uid);
+                                            },
+                                            child: Container(
+                                              color: Colors.transparent,
+                                              child: Row(
+                                                spacing: 5.w,
+                                                children: [
+                                                  CommonSoraText(
+                                                    text: LocaleKeys.following.tr,
+                                                    color: AppColors
+                                                        .to.contrastThemeColor,
+                                                    textSize: 15,
+                                                  ),
+                                                  CommonSoraText(
+                                                    text: state
+                                                        .user.following.length
+                                                        .toString(),
+                                                    color: AppColors
+                                                        .to.contrastThemeColor,
+                                                    textSize: 17,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.toNamed(AppRoutes.followingScreen,
-                                              arguments: state.user.uid);
-                                        },
-                                        child: Container(
-                                          color: Colors.transparent,
-                                          child: Column(
-                                            children: [
-                                              CommonSoraText(
-                                                text: state.user.following.length.toString(),
-                                                color: AppColors.to.contrastThemeColor,
-                                                textSize: 17,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                              CommonSoraText(
-                                                text: LocaleKeys.following.tr,
-                                                color: AppColors.to.contrastThemeColor,
-                                                textSize: 15,
-                                              ),
-                                            ],
+                                      Row(
+                                        spacing: 5.w,
+                                        children: [
+                                          CommonSoraText(
+                                            text:"Active days streak",
+                                            color: AppColors
+                                                .to.contrastThemeColor,
+                                            textSize: 15,
                                           ),
-                                        ),
+                                          CommonSoraText(
+                                            text: state
+                                                .user.userScore
+                                                .toString(),
+                                            color: AppColors
+                                                .to.contrastThemeColor,
+                                            textSize: 17,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
@@ -193,14 +240,49 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 textSize: 17,
                                 fontWeight: FontWeight.w500,
                               ),
-                              CommonSoraText(
-                                text: state.user.about,
-                                color: AppColors.to.contrastThemeColor,
-                                textSize: 15,
+                              BlocBuilder<ProfileBioCubit, bool>(
+                                builder: (context, isMore) {
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      CommonSoraText(
+                                        text: state.user.about,
+                                        color: AppColors.to.contrastThemeColor,
+                                        textSize: 15,
+                                        maxLine: isMore
+                                            ? state.user.about.length
+                                            : 4,
+                                        softWrap: true,
+                                        textOverflow: TextOverflow.ellipsis,
+                                      ),
+                                      // GestureDetector(
+                                      //   onTap: () {
+                                      //     if (!isMore) {
+                                      //       context
+                                      //           .read<ProfileBioCubit>()
+                                      //           .setVisibility(true);
+                                      //     } else {
+                                      //       context
+                                      //           .read<ProfileBioCubit>()
+                                      //           .setVisibility(false);
+                                      //     }
+                                      //   },
+                                      //   child: CommonSoraText(
+                                      //     text: isMore?"see less":"more...",
+                                      //     color: AppColors.to.contrastThemeColor
+                                      //         .withOpacity(0.5),
+                                      //     textSize: 15,
+                                      //   ),
+                                      // ),
+                                    ],
+                                  );
+                                },
                               ),
                               SizedBox(height: 30.h),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   GestureDetector(
                                     onTap: () {
@@ -212,13 +294,16 @@ class _ProfileScreenState extends State<ProfileScreen>
                                       width: 150.h,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(color: AppColors.to.contrastThemeColor
-                                        ,width: 2),
+                                        border: Border.all(
+                                            color:
+                                                AppColors.to.contrastThemeColor,
+                                            width: 2),
                                       ),
                                       child: Center(
                                         child: CommonSoraText(
                                           text: LocaleKeys.editProfile.tr,
-                                          color: AppColors.to.contrastThemeColor,
+                                          color:
+                                              AppColors.to.contrastThemeColor,
                                           // fontWeight: FontWeight.w500,
                                           textSize: 15,
                                         ),
@@ -227,21 +312,24 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      shareProfile(state.user.name, state.user.username);
+                                      shareProfile(
+                                          state.user.name, state.user.username);
                                     },
                                     child: Container(
                                       height: 30.h,
                                       width: 150.h,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(color: AppColors.to.contrastThemeColor
-                                            ,width: 2),
+                                        border: Border.all(
+                                            color:
+                                                AppColors.to.contrastThemeColor,
+                                            width: 2),
                                       ),
                                       child: Center(
                                         child: CommonSoraText(
                                           text: LocaleKeys.shareProfile.tr,
-                                          color: AppColors.to.contrastThemeColor,
-
+                                          color:
+                                              AppColors.to.contrastThemeColor,
                                           textSize: 15,
                                         ),
                                       ),

@@ -103,6 +103,8 @@ class AuthCubit extends Cubit<AuthState> {
           isOnline: false,
           isPrivate:false,
           postCount: 0,
+          userScore: 0,
+          lastOpenedDate: '',
         );
         ApiService.getSelfInfo();
         emit(AuthAuthenticated(_user!));
@@ -147,6 +149,8 @@ class AuthCubit extends Cubit<AuthState> {
         isOnline: false,
         isPrivate: false,
         postCount: 0,
+        userScore: 0,
+        lastOpenedDate: '',
       );
       emit(AuthAuthenticated(_user!));
       log("hello is user $_user");

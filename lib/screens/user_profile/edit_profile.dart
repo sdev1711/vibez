@@ -40,6 +40,8 @@ class _EditProfileState extends State<EditProfile> {
             isOnline: false,
             isPrivate: false,
           postCount: 0,
+          userScore: 0,
+          lastOpenedDate: '',
         );
     log(userModel.username);
     context.read<UserCubit>().fetchUserProfile(userModel.uid);
@@ -101,9 +103,9 @@ class _EditProfileState extends State<EditProfile> {
                               onTap: () {
                                 if (formKey.currentState!.validate()) {
                                   userCubit.updateUserProfile(userModel.uid, {
-                                    "name": nameController.text,
-                                    "username": userNameController.text,
-                                    "about": aboutController.text,
+                                    "name": nameController.text.trim(),
+                                    "username": userNameController.text.trim(),
+                                    "about": aboutController.text.trim(),
                                   });
                                   context.read<UserProfileCubit>()
                                       .fetchUserProfile();

@@ -25,6 +25,7 @@ import 'Cubit/auth/auth_cubit.dart';
 import 'Cubit/feed_search/feed_search_cubit.dart';
 import 'Cubit/follow_request/follow_request_cubit.dart';
 import 'Cubit/post/post_cubit.dart';
+import 'Cubit/profile_bio/profile_bio_cubit.dart';
 import 'Cubit/user_profile_data/user_profile_cubit.dart';
 import 'Flavour/config.dart';
 import 'app/app_route.dart';
@@ -35,7 +36,6 @@ import 'firebase_options.dart';
 import 'generated/locales.g.dart';
 
 Future<void> initApp({Flavour? appFlavour}) async {
-
   WidgetsFlutterBinding.ensureInitialized();
   if (appFlavour == null) {
     throw Exception("App flavor must not be null!");
@@ -54,7 +54,8 @@ Future<void> initApp({Flavour? appFlavour}) async {
       ? Locale(languageCode, languageCode == 'en' ? 'US' : 'IND')
       : Locale('en', 'US');
   Get.put(BottomNavController());
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_){
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
     runApp(MyApp(
       initialThemeMode: initialThemeMode,
       initialLocale: initialCode,
@@ -73,7 +74,8 @@ ThemeMode getStoredThemeMode() {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key,
+  const MyApp({
+    super.key,
     required this.initialRoute,
     this.initialThemeMode = ThemeMode.system,
     this.initialLocale = const Locale('en', 'US'),
@@ -86,7 +88,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -145,12 +146,16 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
           BlocProvider<ChatBotCubit>(
-            create: (context)=>ChatBotCubit(),
+            create: (context) => ChatBotCubit(),
           ),
           BlocProvider<ZoomCubit>(
-            create: (context)=>ZoomCubit(),
-          ),BlocProvider<VideoVisibilityCubit>(
-            create: (context)=>VideoVisibilityCubit(),
+            create: (context) => ZoomCubit(),
+          ),
+          BlocProvider<VideoVisibilityCubit>(
+            create: (context) => VideoVisibilityCubit(),
+          ),
+          BlocProvider<ProfileBioCubit>(
+            create: (context) => ProfileBioCubit(),
           ),
         ],
         child: GetMaterialApp(

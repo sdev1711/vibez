@@ -1,9 +1,11 @@
 import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:vibez/Cubit/user_profile_data/user_profile_cubit.dart';
 import 'package:vibez/api_service/api_service.dart';
 import 'package:vibez/app/colors.dart';
@@ -44,7 +46,7 @@ class _MainScreenState extends State<MainScreen> {
   ApiService apiService = ApiService();
   final BottomNavController bottomNavController = Get.find<BottomNavController>();
   @override
-  void initState() {
+  void initState(){
     SystemChannels.lifecycle.setMessageHandler((message) {
       log("main screen message $message ");
       if (ApiService.auth.currentUser != null) {
@@ -60,11 +62,45 @@ class _MainScreenState extends State<MainScreen> {
       return Future.value(message);
     });
     ApiService.getSelfInfo();
+    ApiService().getCurrentUser().then((userModel) async {
+      await updateUserScore(userModel!);
+    });
     context.read<UserProfileCubit>().fetchUserProfile();
     super.initState();
     // SharedPrefs.setOnBoard(false);
   }
+  Future<void>updateUserScore(UserModel user)async{
+    String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    final userRef = ApiService.firestore.collection('users').doc(user.uid);
+    final snapshot = await userRef.get();
 
+    if (snapshot.exists) {
+      final data = snapshot.data()!;
+      String? serverLastOpenedDate = data['lastOpenedDate'];
+      if (serverLastOpenedDate != today) {
+        DateTime? lastDate;
+        try {
+          lastDate = DateFormat('yyyy-MM-dd').parse(serverLastOpenedDate ?? '');
+        } catch (e) {
+          lastDate = null;
+        }
+        DateTime now = DateTime.now();
+        if (lastDate == null || now
+            .difference(lastDate)
+            .inDays > 1) {
+          await userRef.update({
+            'userScore': 1,
+            'lastOpenedDate': today,
+          });
+        } else {
+          await userRef.update({
+            'userScore': FieldValue.increment(1),
+            'lastOpenedDate': today,
+          });
+        }
+      }
+      }
+  }
   @override
   Widget build(BuildContext context){
     return WillPopScope(

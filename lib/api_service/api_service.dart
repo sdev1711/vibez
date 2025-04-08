@@ -271,33 +271,18 @@ class ApiService {
       log("Error removing follower: $e");
     }
   }
-  Future<void> removeFollowing(String userId) async {
-    String currentUserId= ApiService.user.uid;
-    try {
-      // Reference to the current user's followers list
-      DocumentReference userDoc =firestore.collection('users').doc(currentUserId);
-
-      await userDoc.update({
-        "following": FieldValue.arrayRemove([userId])
-      });
-
-      log("Removed from following successfully");
-    } catch (e) {
-      log("Error removing follower: $e");
-    }
-  }
-  Future<UserModel?> getUserById(String userId) async {
-    try {
-      final doc =
-      await firestore.collection('users').doc(userId).get();
-
-      if (doc.exists) {
-        return UserModel.fromJson(doc.data()!);
-      }
-    } catch (e) {
-      log("Error fetching user: $e");
-    }
-    return null; // Return null if user is not found
-  }
+  // Future<UserModel?> getUserById(String userId) async {
+  //   try {
+  //     final doc =
+  //     await firestore.collection('users').doc(userId).get();
+  //
+  //     if (doc.exists) {
+  //       return UserModel.fromJson(doc.data()!);
+  //     }
+  //   } catch (e) {
+  //     log("Error fetching user: $e");
+  //   }
+  //   return null; // Return null if user is not found
+  // }
 
 }

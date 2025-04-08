@@ -47,6 +47,8 @@ class ClipModel{
       username: "username",
       isPrivate: false,
       postCount: 0,
+      userScore: 0,
+      lastOpenedDate: '',
     );
   }
 
