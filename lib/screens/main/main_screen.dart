@@ -182,7 +182,7 @@ class _MainScreenState extends State<MainScreen> {
                         width: 60.w,
                         height: 35.h,
                         decoration: BoxDecoration(
-                            color: AppColors.to.primaryBgColor.withOpacity(0.5),
+                            color: AppColors.to.lightPrimaryBgColor,
                             borderRadius: BorderRadius.circular(20)),
                         child: Center(
                           child: ImageIcon(

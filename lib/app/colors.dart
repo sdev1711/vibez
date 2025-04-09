@@ -160,6 +160,7 @@ class AppColors extends GetxController {
   }
 
   Color primaryBgColor = HexColor('312c51');
+  Color lightPrimaryBgColor = HexColor('838096');
   Color white = Colors.white;
   Color alertColor = Colors.red;
   Color defaultProfileImageBg = Colors.grey.shade300;

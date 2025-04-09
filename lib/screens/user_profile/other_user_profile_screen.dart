@@ -292,60 +292,93 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                       SizedBox(
                                         width: 40.w,
                                       ),
-                                      Row(
-                                        spacing: 25.w,
+                                      Column(
+                                        spacing: 5.h,
                                         children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              Get.toNamed(
-                                                  AppRoutes.followersScreen,
-                                                  arguments: state.user.uid);
-                                            },
-                                            child: Column(
-                                              children: [
-                                                CommonSoraText(
-                                                  text: state
-                                                      .user.followers.length
-                                                      .toString(),
-                                                  // Updated followers count
-                                                  color: AppColors
-                                                      .to.contrastThemeColor,
-                                                  textSize: 17,
-                                                  fontWeight: FontWeight.w500,
+                                          Row(
+                                            spacing: 10.w,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Get.toNamed(
+                                                      AppRoutes.followersScreen,
+                                                      arguments: state.user.uid);
+                                                },
+                                                child: Row(
+                                                  spacing: 5.w,
+                                                  children: [
+                                                    CommonSoraText(
+                                                      text: LocaleKeys.followers.tr,
+                                                      color: AppColors
+                                                          .to.contrastThemeColor,
+                                                    ),
+                                                    CommonSoraText(
+                                                      text: state
+                                                          .user.followers.length
+                                                          .toString(),
+                                                      // Updated followers count
+                                                      color: AppColors
+                                                          .to.contrastThemeColor,
+                                                      textSize: 17,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ],
                                                 ),
-                                                CommonSoraText(
-                                                  text: LocaleKeys.followers.tr,
-                                                  color: AppColors
-                                                      .to.contrastThemeColor,
+                                              ),
+                                              Container(
+                                                width: 1,
+                                                height:
+                                                25, // height of the divider line
+                                                color:
+                                                AppColors.to.contrastThemeColor,
+                                              ),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Get.toNamed(
+                                                      AppRoutes.followingScreen,
+                                                      arguments: state.user.uid);
+                                                },
+                                                child: Row(
+                                                  spacing: 5.w,
+                                                  children: [
+                                                    CommonSoraText(
+                                                      text: LocaleKeys.following.tr,
+                                                      color: AppColors
+                                                          .to.contrastThemeColor,
+                                                    ),
+                                                    CommonSoraText(
+                                                      text: state
+                                                          .user.following.length
+                                                          .toString(),
+                                                      // Updated following count
+                                                      color: AppColors
+                                                          .to.contrastThemeColor,
+                                                      textSize: 17,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ],
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Get.toNamed(
-                                                  AppRoutes.followingScreen,
-                                                  arguments: state.user.uid);
-                                            },
-                                            child: Column(
-                                              children: [
-                                                CommonSoraText(
-                                                  text: state
-                                                      .user.following.length
-                                                      .toString(),
-                                                  // Updated following count
-                                                  color: AppColors
-                                                      .to.contrastThemeColor,
-                                                  textSize: 17,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                                CommonSoraText(
-                                                  text: LocaleKeys.following.tr,
-                                                  color: AppColors
-                                                      .to.contrastThemeColor,
-                                                ),
-                                              ],
-                                            ),
+                                          Row(
+                                            spacing: 5.w,
+                                            children: [
+                                              CommonSoraText(
+                                                text: "Active days streak",
+                                                color:
+                                                AppColors.to.contrastThemeColor,
+                                                textSize: 15,
+                                              ),
+                                              CommonSoraText(
+                                                text:
+                                                state.user.userScore.toString(),
+                                                color:
+                                                AppColors.to.contrastThemeColor,
+                                                textSize: 17,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
