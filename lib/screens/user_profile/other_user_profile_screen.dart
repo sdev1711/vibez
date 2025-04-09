@@ -30,6 +30,7 @@ class OtherUserProfileScreen extends StatefulWidget {
 
 class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
     with TickerProviderStateMixin {
+
   late UserModel userData;
   late String currentUserId;
   OverlayEntry? _overlayEntry;
@@ -230,6 +231,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                 leading: IconButton(
                   onPressed: () {
                     Navigator.of(context).pop();
+                    context.read<PostCubit>().fetchPosts();
                   },
                   icon: Icon(Icons.arrow_back_rounded,
                       color: AppColors.to.contrastThemeColor),
@@ -250,275 +252,281 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                 ],
               ),
               backgroundColor: AppColors.to.darkBgColor,
-              body: NestedScrollView(
-                controller: scrollController,
-                headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                  SliverToBoxAdapter(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 30.0, left: 15, right: 15),
-                          child: Container(
-                            color: AppColors.to.darkBgColor,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    GestureDetector(
-                                      onLongPress: () {
-                                        ZoomImage().showFullScreenImage(
-                                            context, state.user.image);
-                                      },
-                                      child: CircleAvatar(
-                                        radius: 45,
-                                        backgroundColor:
-                                            AppColors.to.contrastThemeColor,
-                                        backgroundImage: state
-                                                .user.image.isEmpty
-                                            ? AssetImage(ImagePath.profileIcon)
-                                            : NetworkImage(state.user.image),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 40.w,
-                                    ),
-                                    Row(
-                                      spacing: 25.w,
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.toNamed(
-                                                AppRoutes.followersScreen,
-                                                arguments: state.user.uid);
-                                          },
-                                          child: Column(
-                                            children: [
-                                              CommonSoraText(
-                                                text: state
-                                                    .user.followers.length
-                                                    .toString(),
-                                                // Updated followers count
-                                                color: AppColors
-                                                    .to.contrastThemeColor,
-                                                textSize: 17,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                              CommonSoraText(
-                                                text: LocaleKeys.followers.tr,
-                                                color: AppColors
-                                                    .to.contrastThemeColor,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.toNamed(
-                                                AppRoutes.followingScreen,
-                                                arguments: state.user.uid);
-                                          },
-                                          child: Column(
-                                            children: [
-                                              CommonSoraText(
-                                                text: state
-                                                    .user.following.length
-                                                    .toString(),
-                                                // Updated following count
-                                                color: AppColors
-                                                    .to.contrastThemeColor,
-                                                textSize: 17,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                              CommonSoraText(
-                                                text: LocaleKeys.following.tr,
-                                                color: AppColors
-                                                    .to.contrastThemeColor,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10.h,
-                                ),
-                                CommonSoraText(
-                                  text: state.user.name,
-                                  color: AppColors.to.contrastThemeColor,
-                                  textSize: 17,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                CommonSoraText(
-                                  text: state.user.about,
-                                  color: AppColors.to.contrastThemeColor,
-                                ),
-                                SizedBox(
-                                  height: 20.h,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    state.user.uid != currentUserId
-                                        ? GestureDetector(
-                                            onTap: () {
-                                              context
-                                                  .read<UserCubit>()
-                                                  .toggleFollow(currentUserId,
-                                                      state.user.uid);
-                                              context
-                                                  .read<FeedPostCubit>()
-                                                  .fetchFollowingPosts();
-                                              // context.read<UserProfileCubit>().fetchUserProfile(otherUserId: userData.uid);
-                                            },
-                                            child: Container(
-                                              height: 30.h,
-                                              width: 150.h,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                border: Border.all(
-                                                    color: AppColors
-                                                        .to.contrastThemeColor,
-                                                    width: 2),
-                                              ),
-                                              child: Center(
-                                                child: state is UserLoading
-                                                    ? SizedBox(
-                                                        height: 17,
-                                                        width: 17,
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                          color: AppColors.to
-                                                              .authCircularIndicatorColor,
-                                                        ),
-                                                      )
-                                                    : CommonSoraText(
-                                                        text: isFollow
-                                                            ? LocaleKeys
-                                                                .unfollow.tr
-                                                            : (isFollowRequest
-                                                                ? LocaleKeys
-                                                                    .cancelRequest
-                                                                    .tr
-                                                                : LocaleKeys
-                                                                    .follow.tr),
-                                                        color: AppColors.to
-                                                            .contrastThemeColor,
-                                                        // fontWeight: FontWeight.w500,
-                                                      ),
-                                              ),
-                                            ),
-                                          )
-                                        : SizedBox.shrink(),
-                                    if (isFollow) ...[
+              body: WillPopScope(
+                onWillPop: ()async{
+                  context.read<PostCubit>().fetchPosts();
+                  return true;
+                },
+                child: NestedScrollView(
+                  controller: scrollController,
+                  headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                    SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: 30.0, left: 15, right: 15),
+                            child: Container(
+                              color: AppColors.to.darkBgColor,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
                                       GestureDetector(
-                                        onTap: () {
-                                          Get.toNamed(AppRoutes.chatScreen,
-                                              arguments: state.user);
+                                        onLongPress: () {
+                                          ZoomImage().showFullScreenImage(
+                                              context, state.user.image);
                                         },
-                                        child: Container(
-                                          height: 30.h,
-                                          width: 150.h,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            border: Border.all(
-                                                color: AppColors
-                                                    .to.contrastThemeColor,
-                                                width: 2),
-                                          ),
-                                          child: Center(
-                                            child: CommonSoraText(
-                                              text: LocaleKeys.message.tr,
-                                              color: AppColors
-                                                  .to.contrastThemeColor,
-                                              // fontWeight: FontWeight
-                                              //     .w500,
+                                        child: CircleAvatar(
+                                          radius: 45,
+                                          backgroundColor:
+                                              AppColors.to.contrastThemeColor,
+                                          backgroundImage: state
+                                                  .user.image.isEmpty
+                                              ? AssetImage(ImagePath.profileIcon)
+                                              : NetworkImage(state.user.image),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 40.w,
+                                      ),
+                                      Row(
+                                        spacing: 25.w,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.toNamed(
+                                                  AppRoutes.followersScreen,
+                                                  arguments: state.user.uid);
+                                            },
+                                            child: Column(
+                                              children: [
+                                                CommonSoraText(
+                                                  text: state
+                                                      .user.followers.length
+                                                      .toString(),
+                                                  // Updated followers count
+                                                  color: AppColors
+                                                      .to.contrastThemeColor,
+                                                  textSize: 17,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                                CommonSoraText(
+                                                  text: LocaleKeys.followers.tr,
+                                                  color: AppColors
+                                                      .to.contrastThemeColor,
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                        ),
-                                      )
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.toNamed(
+                                                  AppRoutes.followingScreen,
+                                                  arguments: state.user.uid);
+                                            },
+                                            child: Column(
+                                              children: [
+                                                CommonSoraText(
+                                                  text: state
+                                                      .user.following.length
+                                                      .toString(),
+                                                  // Updated following count
+                                                  color: AppColors
+                                                      .to.contrastThemeColor,
+                                                  textSize: 17,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                                CommonSoraText(
+                                                  text: LocaleKeys.following.tr,
+                                                  color: AppColors
+                                                      .to.contrastThemeColor,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ],
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10.h,
-                                ),
-                              ],
+                                  ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                  CommonSoraText(
+                                    text: state.user.name,
+                                    color: AppColors.to.contrastThemeColor,
+                                    textSize: 17,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  CommonSoraText(
+                                    text: state.user.about,
+                                    color: AppColors.to.contrastThemeColor,
+                                  ),
+                                  SizedBox(
+                                    height: 20.h,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      state.user.uid != currentUserId
+                                          ? GestureDetector(
+                                              onTap: () {
+                                                context
+                                                    .read<UserCubit>()
+                                                    .toggleFollow(currentUserId,
+                                                        state.user.uid);
+                                                context
+                                                    .read<FeedPostCubit>()
+                                                    .fetchFollowingPosts();
+                                                // context.read<UserProfileCubit>().fetchUserProfile(otherUserId: userData.uid);
+                                              },
+                                              child: Container(
+                                                height: 30.h,
+                                                width: 150.h,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                      color: AppColors
+                                                          .to.contrastThemeColor,
+                                                      width: 2),
+                                                ),
+                                                child: Center(
+                                                  child: state is UserLoading
+                                                      ? SizedBox(
+                                                          height: 17,
+                                                          width: 17,
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            color: AppColors.to
+                                                                .authCircularIndicatorColor,
+                                                          ),
+                                                        )
+                                                      : CommonSoraText(
+                                                          text: isFollow
+                                                              ? LocaleKeys
+                                                                  .unfollow.tr
+                                                              : (isFollowRequest
+                                                                  ? LocaleKeys
+                                                                      .cancelRequest
+                                                                      .tr
+                                                                  : LocaleKeys
+                                                                      .follow.tr),
+                                                          color: AppColors.to
+                                                              .contrastThemeColor,
+                                                          // fontWeight: FontWeight.w500,
+                                                        ),
+                                                ),
+                                              ),
+                                            )
+                                          : SizedBox.shrink(),
+                                      if (isFollow) ...[
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.toNamed(AppRoutes.chatScreen,
+                                                arguments: state.user);
+                                          },
+                                          child: Container(
+                                            height: 30.h,
+                                            width: 150.h,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                  color: AppColors
+                                                      .to.contrastThemeColor,
+                                                  width: 2),
+                                            ),
+                                            child: Center(
+                                              child: CommonSoraText(
+                                                text: LocaleKeys.message.tr,
+                                                color: AppColors
+                                                    .to.contrastThemeColor,
+                                                // fontWeight: FontWeight
+                                                //     .w500,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  if (state.user.followers.contains(currentUserId) ||
-                      !state.user.isPrivate)
-                    SliverPersistentHeader(
-                      pinned: true,
-                      delegate: _SliverAppBarDelegate(
-                        TabBar(
-                          controller: tabController,
-                          labelColor: AppColors.to.contrastThemeColor,
-                          labelStyle: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                          ),
-                          unselectedLabelColor: AppColors.to.contrastThemeColor,
-                          indicatorColor: AppColors.to.contrastThemeColor,
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          tabs: [
-                            Tab(
-                              child: CommonSoraText(
-                                text: "Posts (${state.user.postCount})",
-                                color: AppColors.to.contrastThemeColor,
-                                textSize: 15,
-                              ),
+                    if (state.user.followers.contains(currentUserId) ||
+                        !state.user.isPrivate)
+                      SliverPersistentHeader(
+                        pinned: true,
+                        delegate: _SliverAppBarDelegate(
+                          TabBar(
+                            controller: tabController,
+                            labelColor: AppColors.to.contrastThemeColor,
+                            labelStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
                             ),
-                            Tab(
-                              child: CommonSoraText(
-                                text: "Clips",
-                                color: AppColors.to.contrastThemeColor,
-                                textSize: 15,
+                            unselectedLabelColor: AppColors.to.contrastThemeColor,
+                            indicatorColor: AppColors.to.contrastThemeColor,
+                            indicatorSize: TabBarIndicatorSize.tab,
+                            tabs: [
+                              Tab(
+                                child: CommonSoraText(
+                                  text: "Posts (${state.user.postCount})",
+                                  color: AppColors.to.contrastThemeColor,
+                                  textSize: 15,
+                                ),
                               ),
+                              Tab(
+                                child: CommonSoraText(
+                                  text: "Clips",
+                                  color: AppColors.to.contrastThemeColor,
+                                  textSize: 15,
+                                ),
+                              ),
+                            ],
+                          ),
+                          context,
+                        ),
+                      ),
+                  ],
+                  body: state.user.followers.contains(currentUserId) ||
+                          !state.user.isPrivate
+                      ? TabBarView(
+                          controller: tabController,
+                          children: [
+                            UsersPosts(),
+                            UserVideos(),
+                          ],
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 150),
+                            Image.asset(
+                              ImagePath.privateAccountIcon,
+                              height: 80.h,
+                              color: AppColors.to.contrastThemeColor,
+                            ),
+                            SizedBox(height: 15.h),
+                            CommonSoraText(
+                              text: "Private account",
+                              color: AppColors.to.contrastThemeColor,
+                              textSize: 20,
                             ),
                           ],
                         ),
-                        context,
-                      ),
-                    ),
-                ],
-                body: state.user.followers.contains(currentUserId) ||
-                        !state.user.isPrivate
-                    ? TabBarView(
-                        controller: tabController,
-                        children: [
-                          UsersPosts(),
-                          UserVideos(),
-                        ],
-                      )
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 150),
-                          Image.asset(
-                            ImagePath.privateAccountIcon,
-                            height: 80.h,
-                            color: AppColors.to.contrastThemeColor,
-                          ),
-                          SizedBox(height: 15.h),
-                          CommonSoraText(
-                            text: "Private account",
-                            color: AppColors.to.contrastThemeColor,
-                            textSize: 20,
-                          ),
-                        ],
-                      ),
+                ),
               ),
             ),
           );

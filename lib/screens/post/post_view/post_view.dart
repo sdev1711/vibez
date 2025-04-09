@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:vibez/Cubit/post/post_cubit.dart';
 import 'package:vibez/app/colors.dart';
 import 'package:vibez/model/post_model.dart';
-import 'package:vibez/model/user_model.dart';
 import 'package:vibez/widgets/common_appBar.dart';
 import 'package:vibez/widgets/common_icon_button.dart';
 import 'package:vibez/widgets/common_post_view.dart';
@@ -21,14 +20,11 @@ class PostView extends StatefulWidget {
 class _PostViewState extends State<PostView> {
   late List<PostModel> posts;
   late int postIndex;
-  late UserModel user;
   late ScrollController _scrollController;
   TextEditingController commentController= TextEditingController();
   @override
   void initState() {
-    posts = Get.arguments["posts"];
     postIndex = Get.arguments["index"];
-    user = Get.arguments["userData"];
     _scrollController = ScrollController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
@@ -38,8 +34,7 @@ class _PostViewState extends State<PostView> {
         );
       }
     });
-
-
+    // context.read<PostCubit>().fetchOtherUserPosts(ApiService.user.uid);
     super.initState();
   }
 
@@ -58,14 +53,28 @@ class _PostViewState extends State<PostView> {
           iconData: Icons.arrow_back_rounded, size: 25,color: AppColors.to.contrastThemeColor,
         ),
       ),
-      body: ListView.builder(
-        controller: _scrollController,
-        itemCount: posts.length,
-        itemBuilder: (context, index) {
-          final postsData = posts[index];
-          return CommonPostView(
-              key: ValueKey(postsData.postId),
-              postsData: postsData);
+      body: BlocBuilder<PostCubit, PostState>(
+        builder: (context,state){
+          if (state is PostLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          else if(state is PostLoaded) {
+            posts = state.posts;
+            final reversedPosts = posts.reversed.toList();
+            return ListView.builder(
+              controller: _scrollController,
+              itemCount: posts.length,
+              itemBuilder: (context, index) {
+                final postsData = reversedPosts[index];
+                return CommonPostView(
+                    key: ValueKey(postsData.postId),
+                    postsData: postsData);
+              },
+            );
+          }
+          else {
+            return const Center(child: Text("No posts found."));
+          }
         },
       ),
     );
