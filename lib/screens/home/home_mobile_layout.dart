@@ -31,6 +31,7 @@ class _HomeMobileLayoutState extends State<HomeMobileLayout> {
   void initState() {
     context.read<FeedPostCubit>().fetchFollowingPosts();
     context.read<PostCubit>().fetchPosts();
+    ApiService.getSelfInfo();
     super.initState();
   }
 

@@ -58,6 +58,7 @@ class ApiService {
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages(UserModel chatUser){
     return firestore
         .collection('chats/${getConversationID(chatUser.uid)}/messages/')
+        .orderBy('sent',descending: true)
         .snapshots();
   }
 
@@ -180,11 +181,11 @@ class ApiService {
   }
 
   ///  get specific user info
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getUserInfo(
+  static Stream<DocumentSnapshot<Map<String, dynamic>>> getUserInfo(
       UserModel user) {
     return firestore
         .collection('users')
-        .where('id', isEqualTo: user.uid)
+        .doc(user.uid)
         .snapshots();
   }
 

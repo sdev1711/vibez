@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    ApiService.getSelfInfo();
+    if(ApiService.auth.currentUser!=null)ApiService.getSelfInfo();
     _updateOldPosts();
     Future.delayed(Duration(seconds: 2), () {
       if(ApiService.auth.currentUser==null){

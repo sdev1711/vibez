@@ -16,14 +16,14 @@ import 'package:vibez/widgets/common_text.dart';
 import 'package:vibez/widgets/story_view_widget.dart';
 import 'package:vibez/widgets/suggested_user_widget.dart';
 
-class HomeTabletLayout extends StatefulWidget {
-  const HomeTabletLayout({super.key});
+class HomeWebLayout extends StatefulWidget {
+  const HomeWebLayout({super.key});
 
   @override
-  State<HomeTabletLayout> createState() => _HomeTabletLayoutState();
+  State<HomeWebLayout> createState() => _HomeWebLayoutState();
 }
 
-class _HomeTabletLayoutState extends State<HomeTabletLayout> {
+class _HomeWebLayoutState extends State<HomeWebLayout> {
   late List<PostModel> postsData;
 
   ApiService apiService = ApiService();

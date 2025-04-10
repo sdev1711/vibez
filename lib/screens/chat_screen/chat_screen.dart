@@ -49,20 +49,20 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     userData = Get.arguments;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToBottom();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _scrollToBottom();
+    // });
     context
         .read<UserCubit>()
         .fetchChatUserProfile(userData.uid, ApiService.user.uid);
     super.initState();
   }
 
-  void _scrollToBottom() {
-    if (_scrollController.hasClients) {
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    }
-  }
+  // void _scrollToBottom() {
+  //   if (_scrollController.hasClients) {
+  //     _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+  //   }
+  // }
 
   void _toggleAttachmentOptions(BuildContext context, UserModel userData, GlobalKey key) {
     if (_overlayEntry != null) {
@@ -213,89 +213,97 @@ class _ChatScreenState extends State<ChatScreen> {
             icon: Icon(Icons.arrow_back_rounded,
                 color: AppColors.to.contrastThemeColor),
           ),
-          title: StreamBuilder(
-              stream: ApiService.getUserInfo(userData),
-              builder: (context, snapshot) {
-                final data = snapshot.data?.docs;
-                final list =
-                    data?.map((e) => UserModel.fromJson(e.data())).toList() ??
-                        [];
-
-                return Row(
-                  spacing: 10.w,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(AppRoutes.otherUserProfileScreen,
-                            arguments: userData);
-                      },
-                      child: CircleAvatar(
-                        backgroundColor: AppColors.to.defaultProfileImageBg,
-                        radius: 16,
-                        backgroundImage: userData.image.isNotEmpty
-                            ? NetworkImage(userData.image)
-                            : AssetImage(
-                                ImagePath.profileIcon,
-                              ) as ImageProvider,
+          title: Row(
+            spacing: 10.w,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(AppRoutes.otherUserProfileScreen, arguments: userData);
+                },
+                child: CircleAvatar(
+                  backgroundColor: AppColors.to.defaultProfileImageBg,
+                  radius: 16,
+                  backgroundImage: userData.image.isNotEmpty
+                      ? NetworkImage(userData.image)
+                      : AssetImage(ImagePath.profileIcon) as ImageProvider,
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed(AppRoutes.otherUserProfileScreen,
+                              arguments: userData);
+                        },
+                        child: CommonSoraText(
+                          text: userData.username,
+                          color: AppColors.to.contrastThemeColor,
+                          textSize: 17,
+                        ),
                       ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Get.toNamed(AppRoutes.otherUserProfileScreen,
-                                    arguments: userData);
-                              },
-                              child: CommonSoraText(
-                                text: userData.username,
-                                color: AppColors.to.contrastThemeColor,
-                                textSize: 17,
-                              ),
-                            ),
-                            CommonIconButton(
-                              iconData: Icons.navigate_next_rounded,
-                              size: 20,
-                              color: AppColors.to.contrastThemeColor,
-                              onTap: () {
-                                Get.toNamed(AppRoutes.otherUserProfileScreen,
-                                    arguments: userData);
-                              },
-                            ),
-                          ],
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            log("is online : ${list[0].isOnline}");
-                            log("username : ${list[0].username}");
-                          },
-                          child: CommonSoraText(
-                            text: list.isNotEmpty
-                                ? list[0].isOnline
-                                    ? "Online"
-                                    : MyDateUtil.getLastActiveTime(
-                                        context: context,
-                                        lastActive: list[0].lastActive)
-                                : MyDateUtil.getLastActiveTime(
-                                    context: context,
-                                    lastActive: userData.lastActive),
-                            // text: userData.isOnline
-                            //     ? "Online"
-                            //     : MyDateUtil.getLastActiveTime(
-                            //         context: context,
-                            //         lastActive: userData.lastActive),
-                            color: AppColors.to.contrastThemeColor,
-                            textSize: 12,
+                      CommonIconButton(
+                        iconData: Icons.navigate_next_rounded,
+                        size: 20,
+                        color: AppColors.to.contrastThemeColor,
+                        onTap: () {
+                          Get.toNamed(AppRoutes.otherUserProfileScreen,
+                              arguments: userData);
+                        },
+                      ),
+                    ],
+                  ),
+                  StreamBuilder(
+                    stream:  ApiService.getUserInfo(userData),
+                    builder: (context,snapshot){
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Container();
+                      }
+
+                      if (snapshot.hasError) {
+                        return CommonSoraText(text: 'Error');
+                      }
+
+                      if (!snapshot.hasData || snapshot.data == null || !snapshot.data!.exists) {
+                        return Container();
+                      }
+
+                      final data = snapshot.data!.data();
+                      final list = data != null ? [UserModel.fromJson(data)] : [];
+
+                      // These logs will now run only when data is guaranteed to exist
+                      log("=====list is ===== $list");
+                      log("=====list is ===== ${list[0].isOnline}");
+                      return  GestureDetector(
+                        onTap: () {
+                          log("is online : ${list[0].isOnline}");
+                          log("username : ${list[0].username}");
+                        },
+                        child: CommonSoraText(
+                          text: list.isNotEmpty
+                              ? list[0].isOnline
+                              ? "Online"
+                              : MyDateUtil.getLastActiveTime(
+                            context: context,
+                            lastActive: list[0].lastActive,
+                          )
+                              : MyDateUtil.getLastActiveTime(
+                            context: context,
+                            lastActive: userData.lastActive,
                           ),
+                          color: AppColors.to.contrastThemeColor,
+                          textSize: 12,
                         ),
-                      ],
-                    ),
-                  ],
-                );
-              }),
-          actions: [
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+      actions: [
             // IconButton(
             //   icon: Icon(
             //     Icons.video_call,
@@ -321,6 +329,7 @@ class _ChatScreenState extends State<ChatScreen> {
               Expanded(
                 child: StreamBuilder(
                   stream: ApiService.getAllMessages(userData),
+
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.waiting:
@@ -334,15 +343,16 @@ class _ChatScreenState extends State<ChatScreen> {
                                 .toList() ??
                             [];
                         // Scroll only when a new message is added
-                        if (_list.length > _previousListLength) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            _scrollToBottom();
-                          });
-                        }
+                        // if (_list.length > _previousListLength) {
+                        //   WidgetsBinding.instance.addPostFrameCallback((_) {
+                        //     _scrollToBottom();
+                        //   });
+                        // }
 
                         _previousListLength = _list.length;
                         if (_list.isNotEmpty) {
                           return ListView.builder(
+                            reverse:  true,
                             controller: _scrollController,
                             itemCount: _list.length,
                             itemBuilder: (context, index) {
@@ -470,7 +480,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                 Future.delayed(
                                                     Duration(milliseconds: 300),
                                                     () {
-                                                  _scrollToBottom();
+                                                  // _scrollToBottom();
                                                 });
                                               }
                                             },

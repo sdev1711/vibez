@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -37,6 +39,7 @@ class ProfileDrawer extends StatelessWidget {
       backgroundColor: AppColors.to.darkBgColor,
       child: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, state) {
+          log("=====state is $state=====");
           if (state is AuthAuthenticated) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),

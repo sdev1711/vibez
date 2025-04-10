@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,15 +21,14 @@ import 'package:vibez/utils/image_path/image_path.dart';
 import 'package:vibez/widgets/common_alert_dialog.dart';
 import 'package:vibez/widgets/common_button.dart';
 import 'package:vibez/widgets/common_text.dart';
-
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class MainScreenWeb extends StatefulWidget {
+  const MainScreenWeb({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<MainScreenWeb> createState() => _MainScreenWebState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenWebState extends State<MainScreenWeb> {
   int pageIndex = 0;
   int iconIndex = 0;
   final List<Widget> pageList = [
@@ -43,7 +42,7 @@ class _MainScreenState extends State<MainScreen> {
   UserModel? userModel;
   ApiService apiService = ApiService();
   final BottomNavController bottomNavController =
-      Get.find<BottomNavController>();
+  Get.find<BottomNavController>();
   @override
   void initState() {
     SystemChannels.lifecycle.setMessageHandler((message) {
@@ -102,6 +101,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return WillPopScope(
       onWillPop: () async {
         final shouldExit = await _showExitDialog(context);
@@ -109,50 +109,56 @@ class _MainScreenState extends State<MainScreen> {
       },
       child: Scaffold(
         backgroundColor: AppColors.to.darkBgColor,
-        body: Obx(() => pageList[bottomNavController.pageIndex.value]),
-        bottomNavigationBar: Container(
-          height: 60.h,
-          decoration: BoxDecoration(
-            color: AppColors.to.darkBgColor,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-          ),
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildNavItem(
-                // text: LocaleKeys.home.tr,
-                iconPath: ImagePath.homeIcon,
-                index: 0,
-                screenHeight: 23.h,
+        body: Row(
+          children: [
+            Container(
+              width: 50.w,
+              decoration: BoxDecoration(
+                color: AppColors.to.darkBgColor,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10), topRight: Radius.circular(10)),
               ),
-              _buildNavItem(
-                // text: LocaleKeys.search.tr,
-                iconPath: ImagePath.searchIcon,
-                index: 1,
-                screenHeight: 23.h,
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildNavItem(
+                    // text: LocaleKeys.home.tr,
+                    iconPath: ImagePath.homeIcon,
+                    index: 0,
+                    screenHeight: 23.h,
+                  ),
+                  _buildNavItem(
+                    // text: LocaleKeys.search.tr,
+                    iconPath: ImagePath.searchIcon,
+                    index: 1,
+                    screenHeight: 23.h,
+                  ),
+                  _buildNavItem(
+                    // text: "Post",
+                    iconPath: ImagePath.postIcon,
+                    index: 2,
+                    screenHeight: 27.h,
+                  ),
+                  _buildNavItem(
+                    // text: LocaleKeys.notification.tr,
+                    iconPath: ImagePath.notificationIcon,
+                    index: 3,
+                    screenHeight: 23.h,
+                  ),
+                  _buildNavItem(
+                    // text: LocaleKeys.profile.tr,
+                    iconPath: ImagePath.profileIcon,
+                    index: 4,
+                    screenHeight: 23.h,
+                  ),
+                ],
               ),
-              _buildNavItem(
-                // text: "Post",
-                iconPath: ImagePath.postIcon,
-                index: 2,
-                screenHeight: 27.h,
-              ),
-              _buildNavItem(
-                // text: LocaleKeys.notification.tr,
-                iconPath: ImagePath.notificationIcon,
-                index: 3,
-                screenHeight: 23.h,
-              ),
-              _buildNavItem(
-                // text: LocaleKeys.profile.tr,
-                iconPath: ImagePath.profileIcon,
-                index: 4,
-                screenHeight: 23.h,
-              ),
-            ],
-          ),
+            ),
+            SizedBox(
+                width: 150.w,
+                child: Obx(() => pageList[bottomNavController.pageIndex.value])),
+          ],
         ),
       ),
     );
@@ -164,7 +170,7 @@ class _MainScreenState extends State<MainScreen> {
     required double screenHeight,
   }) {
     final BottomNavController bottomNavController =
-        Get.find<BottomNavController>();
+    Get.find<BottomNavController>();
     return GestureDetector(
       onTap: () {
         bottomNavController.changeIndex(index);
@@ -176,72 +182,71 @@ class _MainScreenState extends State<MainScreen> {
           children: [
             isSelected
                 ? Column(
-                    children: [
-                      Container(
-                        width: 60.w,
-                        height: 35.h,
-                        decoration: BoxDecoration(
-                            color: AppColors.to.lightPrimaryBgColor,
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Center(
-                          child: ImageIcon(
-                            AssetImage(iconPath),
-                            color: isSelected
-                                ? AppColors.to.contrastThemeColor
-                                : AppColors.to.contrastThemeColor
-                                    .withOpacity(0.5),
-                            size: screenHeight,
-                          ),
-                        ),
-                      ),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(top: 3.0),
-                      //   child: CommonSoraText(
-                      //     text: text??"",
-                      //     color: AppColors.to.contrastThemeColor,
-                      //     textSize: 12,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      // )
-                    ],
-                  )
+              children: [
+                Container(
+                  width: 60.w,
+                  height: 35.h,
+                  decoration: BoxDecoration(
+                      color: AppColors.to.lightPrimaryBgColor,
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Center(
+                    child: ImageIcon(
+                      AssetImage(iconPath),
+                      color: isSelected
+                          ? AppColors.to.contrastThemeColor
+                          : AppColors.to.contrastThemeColor
+                          .withOpacity(0.5),
+                      size: screenHeight,
+                    ),
+                  ),
+                ),
+                // Padding(
+                //   padding: const EdgeInsets.only(top: 3.0),
+                //   child: CommonSoraText(
+                //     text: text??"",
+                //     color: AppColors.to.contrastThemeColor,
+                //     textSize: 12,
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                // )
+              ],
+            )
                 : Column(
-                    children: [
-                      Container(
-                        width: 60.w,
-                        height: 35.h,
-                        decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Center(
-                          child: ImageIcon(
-                            AssetImage(iconPath),
-                            color: isSelected
-                                ? AppColors.to.contrastThemeColor
-                                : AppColors.to.contrastThemeColor
-                                    .withOpacity(0.5),
-                            size: screenHeight,
-                          ),
-                        ),
-                      ),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(top: 3.0),
-                      //   child: CommonSoraText(
-                      //     text: text??"",
-                      //     color: AppColors.to.contrastThemeColor,
-                      //     textSize: 12,
-                      //     fontWeight: FontWeight.w400,
-                      //   ),
-                      // )
-                    ],
-                  )
+              children: [
+                Container(
+                  width: 60.w,
+                  height: 35.h,
+                  decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Center(
+                    child: ImageIcon(
+                      AssetImage(iconPath),
+                      color: isSelected
+                          ? AppColors.to.contrastThemeColor
+                          : AppColors.to.contrastThemeColor
+                          .withOpacity(0.5),
+                      size: screenHeight,
+                    ),
+                  ),
+                ),
+                // Padding(
+                //   padding: const EdgeInsets.only(top: 3.0),
+                //   child: CommonSoraText(
+                //     text: text??"",
+                //     color: AppColors.to.contrastThemeColor,
+                //     textSize: 12,
+                //     fontWeight: FontWeight.w400,
+                //   ),
+                // )
+              ],
+            )
           ],
         );
       }),
     );
   }
 }
-
 Future<bool?> _showExitDialog(BuildContext context) {
   return showDialog<bool>(
     context: context,
@@ -268,7 +273,7 @@ Future<bool?> _showExitDialog(BuildContext context) {
               },
               bgColor: Colors.transparent,
               boxBorder:
-                  Border.all(width: 2, color: AppColors.to.contrastThemeColor),
+              Border.all(width: 2, color: AppColors.to.contrastThemeColor),
               height: 40.h,
               width: 100.w,
               child: CommonSoraText(

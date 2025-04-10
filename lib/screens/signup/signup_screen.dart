@@ -70,7 +70,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       Center(
                         child: CommonTitle(
                           text: LocaleKeys.vibez.tr,
-                          color: AppColors.to.white,
+                          gradientColors: [AppColors.to.titleLightColor,AppColors.to.titleDarkColor],
                           textSize: 50,
                           // fontWeight: FontWeight.bold,
                         ),

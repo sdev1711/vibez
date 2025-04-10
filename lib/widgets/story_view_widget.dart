@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:vibez/api_service/api_service.dart';
 import 'package:vibez/app/app_route.dart';
@@ -22,7 +23,7 @@ class _StoryViewWidgetState extends State<StoryViewWidget> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 120,
+      height: 120.h,
       child: Row(
         children: [
           // All Stories (Scrollable List)
