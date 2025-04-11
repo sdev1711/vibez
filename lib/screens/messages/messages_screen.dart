@@ -380,7 +380,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                                             ? LocaleKeys.busy.tr
                                             : message.type == Type.image
                                                 ? LocaleKeys.image.tr
-                                                : message.msg,
+                                                : message.type == Type.text? message.msg:message.fileName??"Document",
                                         color: message == null
                                             ? AppColors.to.contrastThemeColor
                                                 .withOpacity(0.5)
@@ -421,38 +421,41 @@ class _MessagesScreenState extends State<MessagesScreen> {
                                             ? Colors.grey.shade500
                                             : Colors.blue.shade400,
                                       ),
-                                    CommonSoraText(
-                                      text: message == null
-                                          ? ""
-                                          : (message.toId !=
-                                                  ApiService.user.uid)
-                                              ? context
-                                                  .watch<TimeCubit>()
-                                                  .formattedTime(message.sent)
-                                                  .replaceAll("~", "")
-                                              : "",
-                                      color: AppColors.to.contrastThemeColor
-                                          .withOpacity((message != null &&
-                                                  message.read.isEmpty &&
-                                                  message.fromId !=
-                                                      ApiService.user.uid)
-                                              ? 1
-                                              : 0.5),
-                                      textSize: (message != null &&
-                                              message.read.isEmpty &&
-                                              message.fromId !=
-                                                  ApiService.user.uid)
-                                          ? 15
-                                          : 14,
-                                      fontWeight: (message != null &&
-                                              message.read.isEmpty &&
-                                              message.fromId !=
-                                                  ApiService.user.uid)
-                                          ? FontWeight.bold
-                                          : FontWeight.normal,
-                                      maxLine: 1,
-                                      softWrap: false,
-                                      textOverflow: TextOverflow.fade,
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 5.0),
+                                      child: CommonSoraText(
+                                        text: message == null
+                                            ? ""
+                                            : (message.toId !=
+                                                    ApiService.user.uid)
+                                                ? context
+                                                    .watch<TimeCubit>()
+                                                    .formattedTime(message.sent)
+                                                    .replaceAll("~", "")
+                                                : "",
+                                        color: AppColors.to.contrastThemeColor
+                                            .withOpacity((message != null &&
+                                                    message.read.isEmpty &&
+                                                    message.fromId !=
+                                                        ApiService.user.uid)
+                                                ? 1
+                                                : 0.5),
+                                        textSize: (message != null &&
+                                                message.read.isEmpty &&
+                                                message.fromId !=
+                                                    ApiService.user.uid)
+                                            ? 15
+                                            : 14,
+                                        fontWeight: (message != null &&
+                                                message.read.isEmpty &&
+                                                message.fromId !=
+                                                    ApiService.user.uid)
+                                            ? FontWeight.bold
+                                            : FontWeight.normal,
+                                        maxLine: 1,
+                                        softWrap: false,
+                                        textOverflow: TextOverflow.fade,
+                                      ),
                                     ),
                                     if (message != null &&
                                         message.read.isEmpty &&

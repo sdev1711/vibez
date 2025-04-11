@@ -1,22 +1,29 @@
 import 'dart:developer';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:intl/intl.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:vibez/Cubit/document_download_cubit/document_download_cubit.dart';
 import 'package:vibez/api_service/api_service.dart';
 import 'package:vibez/app/colors.dart';
 import 'package:vibez/model/message_model.dart';
 import 'package:vibez/utils/dialog/dialog.dart';
 import 'package:vibez/utils/date_format/my_date_util.dart';
 import 'package:vibez/widgets/bottomshit_options.dart';
+import 'package:vibez/widgets/common_button.dart';
 import 'package:vibez/widgets/common_cached_widget.dart';
 import 'package:vibez/widgets/common_text.dart';
 import 'package:vibez/widgets/common_text_button.dart';
 import 'package:vibez/widgets/common_textfield.dart';
+import 'package:http/http.dart' as http;
 
 class MessageCard extends StatefulWidget {
   final MessageModel message;
@@ -35,11 +42,20 @@ class _MessageCardState extends State<MessageCard> {
       onLongPress: () {
         showBottomShit(isMe);
       },
+      onTap: (){
+        log("hiiiii ${widget.message.type}");
+      },
       child: isMe ? primaryMessage() : secondaryMessage(),
     );
   }
 
   Widget primaryMessage() {
+    if (widget.message.read.isEmpty) {
+      // Only update if not read
+      Future.delayed(Duration(milliseconds: 500), () {
+        ApiService.updateMessageReadStatus(widget.message);
+      });
+    }
     Timestamp convertStringToTimestamp(String timestampString) {
       int milliseconds = int.parse(timestampString); // Convert String to int
       return Timestamp.fromMillisecondsSinceEpoch(milliseconds);
@@ -59,7 +75,7 @@ class _MessageCardState extends State<MessageCard> {
           // Ensures the message container doesn't force overflow
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-            padding: EdgeInsets.all(10),
+            padding: widget.message.type == Type.text?EdgeInsets.all(10):EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: AppColors.to.sendUserColor,
               borderRadius: BorderRadius.circular(10),
@@ -84,18 +100,103 @@ class _MessageCardState extends State<MessageCard> {
                             AppColors.to.defaultProfileImageBg.withOpacity(0.5),
                         textSize: 10,
                       ),
-                      if (widget.message.read.isNotEmpty) ...[
+                      if (widget.message.read.isNotEmpty&& ApiService.user.uid == widget.message.fromId) ...[
                         SizedBox(width: 5.w),
                         Icon(Icons.done_all_rounded,
-                            color: Colors.blue.shade400, size: 15),
+                            color: Colors.blue.shade400, size: 17),
                       ] else ...[
                         SizedBox(width: 5.w),
                         Icon(Icons.done_all_rounded,
-                            color: Colors.grey.shade500, size: 15),
+                            color: Colors.grey.shade500, size: 17),
                       ]
                     ],
                   )
-                : CommonCachedWidget(imageUrl:  widget.message.msg, height: 300.h, width: 250.w),
+                :  widget.message.type == Type.image?Stack(
+                  children:[
+                    CommonCachedWidget(
+                        imageUrl: widget.message.msg, height: 300.h, width: 250.w),
+                    Positioned(
+                      bottom: 5,
+                        right: 15,
+                        child:widget.message.read.isNotEmpty && ApiService.user.uid == widget.message.fromId?
+            Icon(Icons.done_all_rounded,
+                color: Colors.blue.shade400, size: 17):Icon(Icons.done_all_rounded,
+                            color: Colors.grey.shade500, size: 17),
+
+                    ),
+                  ],
+                ):GestureDetector(
+              onTap: () async {
+                final url = widget.message.msg;
+                try {
+                  // Download the file to local storage
+                  final response = await http.get(Uri.parse(url));
+                  final fileName =  'document.pdf';
+
+                  final dir = await getTemporaryDirectory();
+                  final filePath = '${dir.path}/$fileName';
+
+                  final file = File(filePath);
+                  await file.writeAsBytes(response.bodyBytes);
+
+                  // Open using system handler
+                  final result = await OpenFilex.open(filePath);
+                  log('Open result: ${result.message}');
+                } catch (e) {
+                  log('Failed to open file: $e');
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Couldn't open document.")),
+                  );
+                }
+              },
+              child: Container(
+                padding: EdgeInsets.all(12),
+                width: 250.w,
+                decoration: BoxDecoration(
+                  color: AppColors.to.primaryBgColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.insert_drive_file,
+                        size: 30, color: AppColors.to.white),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CommonSoraText(
+                            text:
+                           widget.message.fileName??'Document',
+                            textSize: 14,
+                            color: AppColors.to.white,
+                            softWrap: true,
+                            maxLine: 1,
+                            textOverflow: TextOverflow.ellipsis,
+                          ),
+                          SizedBox(height: 5),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CommonSoraText(
+                                text: formatTimestamp(timestamp),
+                                textSize: 10,
+                                color: AppColors.to.white
+                                    .withOpacity(0.5),
+                              ),
+                              widget.message.read.isNotEmpty&& ApiService.user.uid == widget.message.fromId?
+                              Icon(Icons.done_all_rounded,
+                                  color: Colors.blue.shade400, size: 17):Icon(Icons.done_all_rounded,
+                                  color: Colors.grey.shade500, size: 17),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ],
@@ -128,7 +229,7 @@ class _MessageCardState extends State<MessageCard> {
           // Ensures the message container doesn't force overflow
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-            padding: EdgeInsets.all(10),
+            padding:  widget.message.type == Type.text?EdgeInsets.all(10):EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: AppColors.to.receiveUserColor,
               borderRadius: BorderRadius.circular(10),
@@ -154,13 +255,103 @@ class _MessageCardState extends State<MessageCard> {
                       ),
                     ],
                   )
-                : CommonCachedWidget(imageUrl:  widget.message.msg, height: 300.h, width: 250.w),
+                : widget.message.type == Type.image
+                    ? Stack(
+              children:[
+                CommonCachedWidget(
+                    imageUrl: widget.message.msg, height: 300.h, width: 250.w),
+                Positioned(
+                  bottom: 5,
+                  right: 15,
+                  child:widget.message.read.isNotEmpty?
+                  Icon(Icons.done_all_rounded,
+                      color: Colors.blue.shade400, size: 17):Icon(Icons.done_all_rounded,
+                      color: Colors.grey.shade500, size: 17),
+                ),
+              ],
+            )
+                    : GestureDetector(
+              onTap: () async {
+                final dir = await getTemporaryDirectory();
+                final filePath = '${dir.path}/${widget.message.fileName ?? "document.pdf"}';
+                final file = File(filePath);
+
+                if (await file.exists()) {
+                  await OpenFilex.open(filePath);
+                }
+              },
+              child: Container(
+                padding: EdgeInsets.all(12),
+                width: 250.w,
+                decoration: BoxDecoration(
+                  color: AppColors.to.receiveUserColor,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.insert_drive_file, size: 30, color: AppColors.to.receiveUserFontColor),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CommonSoraText(
+                            text: widget.message.fileName ?? 'Document',
+                            textSize: 14,
+                            color: AppColors.to.receiveUserFontColor,
+                            softWrap: true,
+                            maxLine: 1,
+                            textOverflow: TextOverflow.ellipsis,
+                          ),
+                          SizedBox(height: 5),
+                          CommonSoraText(
+                            text: formatTimestamp(timestamp),
+                            textSize: 10,
+                            color: AppColors.to.receiveUserFontColor.withOpacity(0.5),
+                          ),
+                          SizedBox(height: 10),
+
+                          ///Show download button only if file doesn't exist
+                          BlocProvider(
+                            create: (_) => DocumentDownloadCubit()
+                              ..checkIfDownloaded(widget.message.fileName ?? 'document.pdf'),
+                            child: BlocBuilder<DocumentDownloadCubit, bool>(
+                              builder: (context, isDownloaded) {
+                                if (!isDownloaded) {
+                                  return Align(
+                                    alignment: Alignment.centerRight,
+                                    child: CommonButton(
+                                      bgColor: AppColors.to.receiveUserFontColor,
+                                      height: 40.h,
+                                      width: 100.w,
+                                      onPressed: () {
+                                        final cubit = context.read<DocumentDownloadCubit>();
+                                        cubit.downloadFile(widget.message.msg, widget.message.fileName ?? 'document.pdf');
+                                      },
+                                      child: CommonSoraText(
+                                        text: "Download",
+                                        color: AppColors.to.contrastThemeColor,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return SizedBox.shrink(); // Hide button if already downloaded
+                              },
+                            ),
+                          ),
+
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ],
     );
   }
-
   void showBottomShit(bool isMe) {
     showModalBottomSheet(
         isDismissible: true,

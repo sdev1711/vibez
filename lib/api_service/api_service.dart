@@ -50,19 +50,21 @@ class ApiService {
   }
 
   /// get conversation id
-    static String getConversationID(String id) => user.uid.hashCode <= id.hashCode
-        ? '${user.uid}_$id'
-        : '${id}_${user.uid}';
+  static String getConversationID(String id) => user.uid.hashCode <= id.hashCode
+      ? '${user.uid}_$id'
+      : '${id}_${user.uid}';
 
   /// get all messages of specific conversation from firestore database
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages(UserModel chatUser){
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages(
+      UserModel chatUser) {
     return firestore
         .collection('chats/${getConversationID(chatUser.uid)}/messages/')
-        .orderBy('sent',descending: true)
+        .orderBy('sent', descending: true)
         .snapshots();
   }
 
-  static Future<void> sendMessage(UserModel chatUser, String msg, Type type) async {
+  static Future<void> sendMessage(UserModel chatUser, String msg, Type type,
+      {String? fileName}) async {
     /// sending time of msg
     final time = DateTime.now().millisecondsSinceEpoch.toString();
 
@@ -74,16 +76,29 @@ class ApiService {
       read: "",
       type: type,
       sent: time,
+      fileName: fileName,
     );
 
     final ref = firestore
         .collection('chats/${getConversationID(chatUser.uid)}/messages/');
-    await ref.doc(time).set(message.toJson()).then((value) =>
-        sendPushNotification(chatUser, type == Type.text ? msg : 'image'));
+    await ref.doc(time).set(message.toJson()).then(
+          (value) {
+            if(chatUser.uid!=user.uid) {
+              sendPushNotification(
+                chatUser,
+                type == Type.text
+                    ? msg
+                    : type == Type.image
+                    ? 'Photo'
+                    : fileName ?? "Document");
+            }
+          }
+        );
   }
 
   /// for sending push notification (Updated Codes)
-  static Future<void> sendPushNotification(UserModel chatUser, String msg) async {
+  static Future<void> sendPushNotification(
+      UserModel chatUser, String msg) async {
     try {
       final body = {
         "message": {
@@ -131,7 +146,8 @@ class ApiService {
         .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
   }
 
-  static Stream<Map<String, MessageModel>> getAllLastMessagesStream(List<UserModel> users) {
+  static Stream<Map<String, MessageModel>> getAllLastMessagesStream(
+      List<UserModel> users) {
     List<Stream<Map<String, MessageModel>>> streams = users.map((user) {
       return firestore
           .collection('chats/${getConversationID(user.uid)}/messages/')
@@ -159,7 +175,6 @@ class ApiService {
     });
   }
 
-
   static Future<void> sendChatImage(UserModel user, File file) async {
     /// getting image file extension
     final ext = file.path.split('.').last;
@@ -180,13 +195,31 @@ class ApiService {
     await sendMessage(user, imageUrl, Type.image);
   }
 
+  static Future<void> sendChatDocument(
+      UserModel user, File file, String fileName) async {
+    log("========= file name($fileName) =========");
+    final ext = file.path.split('.').last;
+
+    final ref = FirebaseStorage.instance.ref().child(
+          'documents/${getConversationID(user.uid)}/${DateTime.now().millisecondsSinceEpoch}.$ext',
+        );
+
+    await ref
+        .putFile(file, SettableMetadata(contentType: 'application/$ext'))
+        .then((p0) {
+      log('Document Uploaded: ${p0.bytesTransferred / 1000} kb');
+    });
+
+    final fileUrl = await ref.getDownloadURL();
+
+    // Send file message with download link and file name
+    await sendMessage(user, fileUrl, Type.document, fileName: fileName);
+  }
+
   ///  get specific user info
   static Stream<DocumentSnapshot<Map<String, dynamic>>> getUserInfo(
       UserModel user) {
-    return firestore
-        .collection('users')
-        .doc(user.uid)
-        .snapshots();
+    return firestore.collection('users').doc(user.uid).snapshots();
   }
 
   /// update user active or not active status
@@ -222,29 +255,33 @@ class ApiService {
       await storage.refFromURL(message.msg).delete();
     }
   }
+
   /// update message
-  static Future<void> updateMessage(MessageModel message, String updatedMsg) async {
+  static Future<void> updateMessage(
+      MessageModel message, String updatedMsg) async {
     await firestore
         .collection('chats/${getConversationID(message.toId)}/messages/')
         .doc(message.sent)
         .update({'msg': updatedMsg});
   }
 
-
   /// update caption
-  static Future<void> updateCaption(PostModel post, String updatedCaption) async {
+  static Future<void> updateCaption(
+      PostModel post, String updatedCaption) async {
     await firestore
         .collection('posts')
         .doc(post.postId)
         .update({'content': updatedCaption});
   }
+
   /// list of all followers
   static Stream<UserModel> getUserStream(String userId) {
     return FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
         .snapshots()
-        .map((snapshot) => UserModel.fromJson(snapshot.data() as Map<String, dynamic>));
+        .map((snapshot) =>
+            UserModel.fromJson(snapshot.data() as Map<String, dynamic>));
   }
 
   Future<UserModel?> getCurrentUser() async {
@@ -257,11 +294,13 @@ class ApiService {
       throw Exception("Error fetching current user: $e");
     }
   }
+
   Future<void> removeFollower(String userId) async {
-    String currentUserId= ApiService.user.uid;
+    String currentUserId = ApiService.user.uid;
     try {
       // Reference to the current user's followers list
-      DocumentReference userDoc =firestore.collection('users').doc(currentUserId);
+      DocumentReference userDoc =
+          firestore.collection('users').doc(currentUserId);
 
       await userDoc.update({
         "followers": FieldValue.arrayRemove([userId])
@@ -285,5 +324,4 @@ class ApiService {
   //   }
   //   return null; // Return null if user is not found
   // }
-
 }

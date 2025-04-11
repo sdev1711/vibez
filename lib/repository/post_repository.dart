@@ -2,6 +2,8 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:vibez/api_service/api_service.dart';
 import 'package:vibez/model/comment_model.dart';
 import 'package:vibez/model/post_model.dart';
@@ -108,6 +110,8 @@ class PostRepository {
           .doc(postId)
           .set(post.toJson());
       log("Post successfully added to Firestore!");
+      Get.snackbar("Success", "Successfully posted!",
+            backgroundColor: Colors.green, colorText: Colors.white);
       DocumentReference userRef = ApiService.firestore.collection('users').doc(userId);
       await userRef.update({
         'postCount': FieldValue.increment(1),

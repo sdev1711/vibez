@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:vibez/Cubit/chat_screen_appbar/chat_appbar_cubit.dart';
 import 'package:vibez/Cubit/chatbot/chatbot_cubit.dart';
+import 'package:vibez/Cubit/document_download_cubit/document_download_cubit.dart';
 import 'package:vibez/Cubit/emoji/emoji_cubit.dart';
 import 'package:vibez/Cubit/feed_post/feed_post_cubit.dart';
 import 'package:vibez/Cubit/message_input/message_input_cubit.dart';
@@ -156,6 +157,9 @@ class _MyAppState extends State<MyApp> {
           ),
           BlocProvider<ProfileBioCubit>(
             create: (context) => ProfileBioCubit(),
+          ),
+          BlocProvider<DocumentDownloadCubit>(
+            create: (context) => DocumentDownloadCubit(),
           ),
         ],
         child: GetMaterialApp(

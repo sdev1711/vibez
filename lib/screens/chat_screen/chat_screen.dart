@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -151,6 +152,37 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                           CommonSoraText(
                             text: LocaleKeys.camera.tr,
+                            color: AppColors.to.contrastThemeColor,
+                            textSize: 15,
+                          ),
+                        ],
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        _removeOverlay();
+                        final result = await FilePicker.platform.pickFiles(
+                          allowMultiple: true,
+                          type: FileType.custom,
+                          allowedExtensions: ['pdf', 'docx', 'xlx', 'txt'],
+                        );
+
+                        if (result != null) {
+                          for (var file in result.files) {
+                            final pickedFile = File(file.path!);
+                            await ApiService.sendChatDocument(userData, pickedFile, file.name);
+                          }
+                        }
+                      },
+                      child: Row(
+                        spacing: 10.w,
+                        children: [
+                          Icon(
+                            Icons.file_copy_rounded,
+                            color: AppColors.to.contrastThemeColor,
+                          ),
+                          CommonSoraText(
+                            text: "Document",
                             color: AppColors.to.contrastThemeColor,
                             textSize: 15,
                           ),

@@ -6,6 +6,7 @@ class MessageModel {
     required this.sent,
     required this.toId,
     required this.type,
+    this.fileName,
   });
 
   late final String toId;
@@ -14,14 +15,24 @@ class MessageModel {
   late final Type type;
   late final String fromId;
   late final String sent;
+   String? fileName;
+
 
    MessageModel.fromJson(Map<String, dynamic>json){
     toId= json['toId'].toString();
     msg= json['msg'].toString();
     read= json['read'].toString();
-    type= json['type'].toString()==Type.image.name ? Type.image : Type.text;
+    final typeString = json['type'].toString();
+    if (typeString == Type.image.name) {
+      type = Type.image;
+    } else if (typeString == Type.document.name) {
+      type = Type.document;
+    } else {
+      type = Type.text;
+    }
     fromId= json['fromId'].toString();
     sent= json['sent'].toString();
+    fileName = json['fileName']?.toString();
   }
 
   Map<String,dynamic>toJson(){
@@ -32,7 +43,10 @@ class MessageModel {
      data['type']=type.name;
      data['fromId']=fromId;
      data['sent']=sent;
+     if (fileName != null) {
+       data['fileName'] = fileName;
+     }
      return data;
   }
 }
-enum Type{text,image}
+enum Type{text,image,document}
