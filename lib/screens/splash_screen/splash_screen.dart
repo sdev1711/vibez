@@ -5,7 +5,6 @@ import 'package:vibez/api_service/api_service.dart';
 import 'package:vibez/app/app_route.dart';
 import 'package:vibez/app/colors.dart';
 import 'package:vibez/generated/locales.g.dart';
-import 'package:vibez/model/post_model.dart';
 import 'package:vibez/widgets/common_text.dart';
 
 class SplashScreen extends StatefulWidget {

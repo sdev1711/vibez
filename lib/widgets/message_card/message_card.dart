@@ -95,7 +95,7 @@ class _MessageCardState extends State<MessageCard> {
                       ]
                     ],
                   )
-                : CommonCachedWidget(imageUrl:  widget.message.msg, height: 200.h, width: 200.w),
+                : CommonCachedWidget(imageUrl:  widget.message.msg, height: 300.h, width: 250.w),
           ),
         ),
       ],
@@ -154,7 +154,7 @@ class _MessageCardState extends State<MessageCard> {
                       ),
                     ],
                   )
-                : CommonCachedWidget(imageUrl:  widget.message.msg, height: 200.h, width: 200.w),
+                : CommonCachedWidget(imageUrl:  widget.message.msg, height: 300.h, width: 250.w),
           ),
         ),
       ],
