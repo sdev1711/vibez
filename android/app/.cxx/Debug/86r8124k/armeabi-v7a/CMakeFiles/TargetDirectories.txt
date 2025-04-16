@@ -1,0 +1,2 @@
+C:/Users/Dev 17/vibez/android/app/.cxx/Debug/86r8124k/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/Dev 17/vibez/android/app/.cxx/Debug/86r8124k/armeabi-v7a/CMakeFiles/rebuild_cache.dir

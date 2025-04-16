@@ -10,7 +10,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:intl/intl.dart';
 import 'package:open_filex/open_filex.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:vibez/Cubit/document_download_cubit/document_download_cubit.dart';
 import 'package:vibez/api_service/api_service.dart';
 import 'package:vibez/app/colors.dart';

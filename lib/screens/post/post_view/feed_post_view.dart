@@ -39,7 +39,8 @@ class _FeedPostViewState extends State<FeedPostView> {
         ),
       ),
       body: CommonPostView(
-          postsData: postData),
+          postsData: postData,
+      ),
     );
   }
 }

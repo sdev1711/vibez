@@ -197,7 +197,6 @@ class _ChatScreenState extends State<ChatScreen> {
         );
       },
     );
-
     Overlay.of(context).insert(_overlayEntry!);
   }
 
@@ -243,7 +242,8 @@ class _ChatScreenState extends State<ChatScreen> {
               Navigator.of(context).pop();
             },
             icon: Icon(Icons.arrow_back_rounded,
-                color: AppColors.to.contrastThemeColor),
+                color: AppColors.to.contrastThemeColor,
+            ),
           ),
           title: Row(
             spacing: 10.w,
