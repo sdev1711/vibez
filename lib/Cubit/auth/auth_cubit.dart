@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:vibez/api_service/api_service.dart';
 import 'package:vibez/app/app_route.dart';
 import 'package:vibez/app/colors.dart';
+import 'package:vibez/controllers/bottom_navigation_controller.dart' show BottomNavController;
 import 'package:vibez/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 part 'auth_state.dart';
@@ -155,6 +156,9 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthAuthenticated(_user!));
       log("hello is user $_user");
       Get.offAllNamed(AppRoutes.mainScreen);
+      Future.delayed(Duration(milliseconds: 100), () {
+        Get.find<BottomNavController>().changeIndex(4);
+      });
     } catch (e) {
       emit(AuthError(e.toString()));
     }

@@ -38,7 +38,7 @@ class ApiService {
         me = UserModel.fromJson(user.data()!);
         await getFirebaseMessagingToken();
         //for setting user status to active
-        ApiService.updateUserActiveStatus(true);
+        // ApiService.updateUserActiveStatus(true);
         // log('My Data: ${user.data()}');
       }
     });

@@ -1,0 +1,2 @@
+C:/Users/Dev 17/vibez/android/app/.cxx/RelWithDebInfo/k4v6274p/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/Dev 17/vibez/android/app/.cxx/RelWithDebInfo/k4v6274p/armeabi-v7a/CMakeFiles/rebuild_cache.dir

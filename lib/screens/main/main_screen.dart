@@ -48,6 +48,7 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     SystemChannels.lifecycle.setMessageHandler((message) {
       log("main screen message $message ");
+      ApiService.getSelfInfo();
       if (ApiService.auth.currentUser != null) {
         if (message.toString().contains('resume')) {
           ApiService.updateUserActiveStatus(true);
