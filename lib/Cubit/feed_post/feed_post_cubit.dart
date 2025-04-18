@@ -8,7 +8,7 @@ part 'feed_post_state.dart';
 class FeedPostCubit extends Cubit<FeedPostState> {
   final PostRepository postRepository;
   FeedPostCubit({required this.postRepository}) : super(FeedPostInitial());
-  // Fetch All Users Posts
+  /// Fetch All Users Posts
   Future<void> fetchAllPosts() async {
     emit(FeedPostLoading());
     try {

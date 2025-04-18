@@ -6,7 +6,7 @@ class ZoomCubit extends Cubit<ZoomState> {
   ZoomCubit() : super(ZoomState());
 
   void updateScale(double scale) {
-    emit(state.copyWith(scale: scale.clamp(1.0, 4.0))); // Clamping zoom
+    emit(state.copyWith(scale: scale.clamp(1.0, 4.0)));
   }
 
   void updateOffset(Offset offset) {
@@ -14,7 +14,7 @@ class ZoomCubit extends Cubit<ZoomState> {
   }
 
   void resetZoom() {
-    emit(ZoomState()); // Reset to default zoom and offset
+    emit(ZoomState());
   }
 }
 

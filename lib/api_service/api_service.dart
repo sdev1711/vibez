@@ -295,6 +295,7 @@ class ApiService {
     }
   }
 
+/// remove follower
   Future<void> removeFollower(String userId) async {
     String currentUserId = ApiService.user.uid;
     try {
@@ -311,6 +312,7 @@ class ApiService {
       log("Error removing follower: $e");
     }
   }
+
   // Future<UserModel?> getUserById(String userId) async {
   //   try {
   //     final doc =

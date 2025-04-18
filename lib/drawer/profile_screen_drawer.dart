@@ -142,8 +142,8 @@ class ProfileDrawer extends StatelessWidget {
                                   onChanged: (value) {
                                     AppColors.to.toggleTheme(value ?? 2);
                                     // previousTheme=value??2;
-                                    print("value of previous value $previousTheme");
-                                    print("value of actual value ${AppColors.to.isSelection.value}");
+                                    log("value of previous value $previousTheme");
+                                    log("value of actual value ${AppColors.to.isSelection.value}");
                                     //AppColors.to.toggleTheme(2);
                                   },
                                 ),
@@ -167,7 +167,6 @@ class ProfileDrawer extends StatelessWidget {
 
                                 Navigator.pop(context, 'OK');
                                 if (previousTheme != AppColors.to.isSelection.value) {
-                                  // Theme has changed, ask for restart confirmation
                                   showDialog(
                                     barrierDismissible: false,
                                     context: context,
@@ -185,7 +184,7 @@ class ProfileDrawer extends StatelessWidget {
                                       ),
                                       actions: [
                                         CommonTextButton(
-                                          onPressed: () => Navigator.pop(context), // Dismiss dialog
+                                          onPressed: () => Navigator.pop(context),
                                           child: CommonSoraText(
                                             text: "Cancel",
                                             textSize: 15,
@@ -195,10 +194,6 @@ class ProfileDrawer extends StatelessWidget {
                                         CommonTextButton(
                                           onPressed: () {
                                             Restart.restartApp(
-                                              /// In Web Platform, Fill webOrigin only when your new origin is different than the app's origin
-                                              // webOrigin: 'http://example.com',
-
-                                              // Customizing the restart notification message (only needed on iOS)
                                               notificationTitle: 'Restarting App',
                                               notificationBody: 'Please tap here to open the app again.',
                                             ); // Restart the app

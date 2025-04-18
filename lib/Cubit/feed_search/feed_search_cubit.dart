@@ -9,7 +9,7 @@ class FeedSearchCubit extends Cubit<FeedSearchState> {
 
   void searchUsers(String query) async {
     if (query.isEmpty) {
-      emit(FeedSearchState(userList: [], isSearching: false)); // Reset to full list
+      emit(FeedSearchState(userList: [], isSearching: false));
       return;
     }
 

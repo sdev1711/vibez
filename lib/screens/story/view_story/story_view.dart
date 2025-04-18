@@ -141,7 +141,6 @@ class _StoryViewerScreenState extends State<StoryViewerScreen> {
                     onTap: () {
                       _storyController.pause();
                       _showViewersList(context, userStories[currentStoryIndex]);
-                      // _showViewersList(context, userStories[index]);
                     },
                     child: Center(
                       child: Container(
@@ -323,12 +322,10 @@ class _StoryViewerScreenState extends State<StoryViewerScreen> {
                       .collection('stories')
                       .doc(storyId.storyId) // Replace with the actual storyId
                       .delete();
-
-                  // Show success message (Optional)
                   Get.snackbar("Success", "Story deleted successfully",
                       backgroundColor: Colors.green, colorText: Colors.white);
                 } catch (e) {
-                  // Handle error
+
                   Get.snackbar("Error", "Failed to delete story",
                       backgroundColor: Colors.red, colorText: Colors.white);
                 }

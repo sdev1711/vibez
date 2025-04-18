@@ -43,7 +43,7 @@ class FollowRequestCubit extends Cubit<FollowRequestState> {
       DocumentReference currentUserRef = firestore.collection('users').doc(currentUserId);
       DocumentReference requesterRef = firestore.collection('users').doc(requesterId);
 
-      // Fetch the latest user data before updating
+      /// Fetch the latest user data before updating
       DocumentSnapshot currentUserSnapshot = await currentUserRef.get();
       DocumentSnapshot requesterSnapshot = await requesterRef.get();
       UserModel targetUser = UserModel.fromJson(requesterSnapshot.data() as Map<String, dynamic>);
@@ -69,12 +69,12 @@ class FollowRequestCubit extends Cubit<FollowRequestState> {
         targetUser,
         "$currentUsername accepted your follow request.",
       );
-      log("✅ Request accepted successfully!");
+      log("Request accepted successfully!");
       log("Updated Current User followers: ${(updatedUserSnapshot.data() as Map<String, dynamic>)['followers']}");
       log("Updated Requester following: ${(updatedRequesterSnapshot.data() as Map<String, dynamic>)['following']}");
 
     } catch (e) {
-      log("❌ Error accepting request: $e");
+      log("Error accepting request: $e");
     }
   }
 
@@ -93,7 +93,7 @@ class FollowRequestCubit extends Cubit<FollowRequestState> {
 
   @override
   Future<void> close() {
-    followRequestSubscription?.cancel(); // Cancel subscription when closing Cubit
+    followRequestSubscription?.cancel();
     return super.close();
   }
 }

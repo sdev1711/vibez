@@ -179,8 +179,9 @@ class NotificationsScreen extends StatelessWidget {
 
                                 log("liked user length ${likedUsers.length}");
 
-                                if (likedUsers.isEmpty)
-                                  return Container(); // If no other user liked, don't show anything
+                                if (likedUsers.isEmpty) {
+                                  return Container();
+                                }
 
                                 return likedUsers.length == 1
                                     ? Expanded(

@@ -26,10 +26,10 @@ class _ClipScreenState extends State<ClipScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: PageView.builder(
-        scrollDirection: Axis.vertical, // Scroll reels up/down
+        scrollDirection: Axis.vertical,
         itemCount: clips.length,
         itemBuilder: (context, index) {
-          return ClipView(clip: clips[index]); // Pass each reel to ReelPlayer
+          return ClipView(clip: clips[index]);
         },
       ),
     );

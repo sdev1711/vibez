@@ -71,7 +71,6 @@ class _MessageCardState extends State<MessageCard> {
       mainAxisAlignment: MainAxisAlignment.end, // Align messages to the left
       children: [
         Flexible(
-          // Ensures the message container doesn't force overflow
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
             padding: widget.message.type == Type.text?EdgeInsets.all(10):EdgeInsets.all(5),
@@ -85,7 +84,6 @@ class _MessageCardState extends State<MessageCard> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Flexible(
-                        // Prevents text from forcing overflow
                         child: CommonSoraText(
                           text: widget.message.msg,
                           color: AppColors.to.sendUserFontColor,
@@ -138,7 +136,6 @@ class _MessageCardState extends State<MessageCard> {
                   final file = File(filePath);
                   await file.writeAsBytes(response.bodyBytes);
 
-                  // Open using system handler
                   final result = await OpenFilex.open(filePath);
                   log('Open result: ${result.message}');
                 } catch (e) {
@@ -204,7 +201,6 @@ class _MessageCardState extends State<MessageCard> {
 
   Widget secondaryMessage() {
     if (widget.message.read.isEmpty) {
-      // Only update if not read
       Future.delayed(Duration(milliseconds: 500), () {
         ApiService.updateMessageReadStatus(widget.message);
       });
@@ -225,7 +221,6 @@ class _MessageCardState extends State<MessageCard> {
       mainAxisAlignment: MainAxisAlignment.start, // Align messages to the left
       children: [
         Flexible(
-          // Ensures the message container doesn't force overflow
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
             padding:  widget.message.type == Type.text?EdgeInsets.all(10):EdgeInsets.all(5),
@@ -309,7 +304,6 @@ class _MessageCardState extends State<MessageCard> {
                             color: AppColors.to.receiveUserFontColor.withOpacity(0.5),
                           ),
                           SizedBox(height: 10),
-
                           ///Show download button only if file doesn't exist
                           BlocProvider(
                             create: (_) => DocumentDownloadCubit()

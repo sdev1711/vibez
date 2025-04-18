@@ -116,7 +116,6 @@ class AddClipScreenState extends State<AddClipScreen> {
                                   : const Center(
                                       child: CircularProgressIndicator()),
 
-                              // Play/Pause Button
                               Align(
                                 alignment: Alignment.bottomCenter,
                                 child: IconButton(

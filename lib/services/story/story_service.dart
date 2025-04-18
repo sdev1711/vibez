@@ -20,7 +20,6 @@ class StoryService {
   static Future<void> uploadStory(String mediaUrl, {String? caption}) async {
     String userId = ApiService.user.uid;
 
-    // Generate document ID manually
     String docId = ApiService.firestore.collection('stories').doc().id;
     log("doc id is ======$docId");
     StoryModel story = StoryModel(
@@ -32,7 +31,7 @@ class StoryService {
       viewedBy: [],
     );
     log("story id is ======${story.storyId}");
-    // Store the document with the same ID
+
     await ApiService.firestore
         .collection('stories')
         .doc(docId)

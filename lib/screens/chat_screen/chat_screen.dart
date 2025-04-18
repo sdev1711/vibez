@@ -44,26 +44,16 @@ class _ChatScreenState extends State<ChatScreen> {
   final GlobalKey _attachmentButtonKey = GlobalKey();
   OverlayEntry? _overlayEntry;
   String? selectedMessageId;
-  int _previousListLength = 0;
   final CallService callService = CallService();
   String currentUserId = ApiService.user.uid;
   @override
   void initState() {
     userData = Get.arguments;
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _scrollToBottom();
-    // });
     context
         .read<UserCubit>()
         .fetchChatUserProfile(userData.uid, ApiService.user.uid);
     super.initState();
   }
-
-  // void _scrollToBottom() {
-  //   if (_scrollController.hasClients) {
-  //     _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-  //   }
-  // }
 
   void _toggleAttachmentOptions(BuildContext context, UserModel userData, GlobalKey key) {
     if (_overlayEntry != null) {
@@ -205,23 +195,23 @@ class _ChatScreenState extends State<ChatScreen> {
     _overlayEntry = null;
   }
 
-  void initiateCall(String callerId, String receiverId) async {
-    String channelId = await CallService()
-        .startCall(callerId: callerId, receiverId: receiverId);
-
-    // Listen for call updates using the channelId
-    CallService().listenToCallUpdates(channelId).listen((call) {
-      if (call != null && call.status == 'ongoing') {
-        // Navigate to Video Call Screen when the call is accepted
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => VideoCallScreen(channelId: call.channelId),
-          ),
-        );
-      }
-    });
-  }
+  // void initiateCall(String callerId, String receiverId) async {
+  //   String channelId = await CallService()
+  //       .startCall(callerId: callerId, receiverId: receiverId);
+  //
+  //   // Listen for call updates using the channelId
+  //   CallService().listenToCallUpdates(channelId).listen((call) {
+  //     if (call != null && call.status == 'ongoing') {
+  //       // Navigate to Video Call Screen when the call is accepted
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (context) => VideoCallScreen(channelId: call.channelId),
+  //         ),
+  //       );
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -374,14 +364,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 ?.map((e) => MessageModel.fromJson(e.data()))
                                 .toList() ??
                             [];
-                        // Scroll only when a new message is added
-                        // if (_list.length > _previousListLength) {
-                        //   WidgetsBinding.instance.addPostFrameCallback((_) {
-                        //     _scrollToBottom();
-                        //   });
-                        // }
 
-                        _previousListLength = _list.length;
                         if (_list.isNotEmpty) {
                           return ListView.builder(
                             reverse:  true,
@@ -464,7 +447,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                           focusedErrorBorder: InputBorder.none,
                                           onTap: () => context
                                               .read<EmojiCubit>()
-                                              .closeEmojiKeyboard(), // Close emoji keyboard when tapping input
+                                              .closeEmojiKeyboard(),
                                         );
                                       },
                                     ),
@@ -478,7 +461,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                           if (isEmpty) ...[
                                             GestureDetector(
                                               key:
-                                                  _attachmentButtonKey, // To get the position of the button
+                                                  _attachmentButtonKey,
                                               onTap: () {
                                                 _toggleAttachmentOptions(
                                                   context,
@@ -488,7 +471,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                               },
                                               child: Icon(
                                                 Icons
-                                                    .attach_file, // 📎 Pin Icon
+                                                    .attach_file,
                                                 size: 30,
                                                 color: AppColors
                                                     .to.contrastThemeColor,
@@ -512,7 +495,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                                 Future.delayed(
                                                     Duration(milliseconds: 300),
                                                     () {
-                                                  // _scrollToBottom();
                                                 });
                                               }
                                             },

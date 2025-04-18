@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           iconData: passSecured ? Icons.visibility_off : Icons.visibility,
                           onTap: () {
                             setState(() {
-                              passSecured = !passSecured; // Toggle state
+                              passSecured = !passSecured;
                             });
                           },
                           color: AppColors.to.contrastThemeColor,

@@ -70,13 +70,11 @@ class UserCubit extends Cubit<UserState> {
       if (updatedData.containsKey("username")) {
         String newUsername = updatedData["username"];
 
-        // Query Firestore to check if username already exists
         QuerySnapshot querySnapshot = await firestore
             .collection("users")
             .where("username", isEqualTo: newUsername)
             .get();
 
-        // If the username already exists and it's not the current user, show error
         if (querySnapshot.docs.isNotEmpty) {
           for (var doc in querySnapshot.docs) {
             if (doc.id != userId) {
@@ -87,7 +85,7 @@ class UserCubit extends Cubit<UserState> {
                 backgroundColor: AppColors.to.alertColor,
                 colorText: AppColors.to.white,
               );
-              return; // Stop execution if username is taken
+              return;
             }
           }
         }
@@ -174,7 +172,7 @@ class UserCubit extends Cubit<UserState> {
       bool isTargetPrivate = targetUserData['isPrivate'] ?? false;
 
       if (currentFollowing.contains(targetUserId)) {
-        // 🔹 Remove connection if already linked
+        // Remove connection if already linked
         await currentUserRef.update({
           'following': FieldValue.arrayRemove([targetUserId])
         });
@@ -185,36 +183,36 @@ class UserCubit extends Cubit<UserState> {
       } else {
         if (isTargetPrivate) {
           if (targetVibeRequests.contains(currentUserId)) {
-            // 🔹 Cancel the request if already sent
+
             await targetUserRef.update({
               'followRequests': FieldValue.arrayRemove([currentUserId])
             });
             isRequestSent = false;
           } else {
-            // 🔹 Send request if private
+
             await targetUserRef.update({
               'followRequests': FieldValue.arrayUnion([currentUserId])
             });
             isRequestSent = true;
-            // ✅ Send Notification for Follow Request
+
              ApiService.sendPushNotification(
               targetUser,
               "$currentUsername requested to follow you.",
             );
           }
         } else {
-          // 🔹 Directly add vibeLink if public
+
           await currentUserRef.update({
             'following': FieldValue.arrayUnion(
-                [targetUserId]) // ✅ ADD targetUserId to your following
+                [targetUserId])
           });
           await targetUserRef.update({
             'followers': FieldValue.arrayUnion(
-                [currentUserId]) // ✅ ADD your ID to their followers
+                [currentUserId])
           });
 
           isFollowing = true;
-          // ✅ Send Notification for Direct Follow
+
           ApiService.sendPushNotification(
             targetUser,
             "$currentUsername started following you.",

@@ -55,7 +55,6 @@ class _SignupScreenState extends State<SignupScreen> {
               ));
             }
           },
-          // child: BlocBuilder<AuthCubit, AuthState>(
             builder: (context, state) {
               return SingleChildScrollView(
                 child: Form(
@@ -245,7 +244,6 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               );
             },
-          // ),
         ),
       ),
     );

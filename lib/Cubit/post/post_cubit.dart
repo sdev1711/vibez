@@ -13,7 +13,7 @@ class PostCubit extends Cubit<PostState> {
 
   PostCubit({required this.postRepository}) : super(PostInitial());
 
-  // Fetch User Posts
+  /// Fetch User Posts
   Future<void> fetchPosts() async {
     emit(PostLoading());
     try {
@@ -23,7 +23,7 @@ class PostCubit extends Cubit<PostState> {
       emit(PostError(message: e.toString()));
     }
   }
-// Fetch Other User Posts
+/// Fetch Other User Posts
   Future<void> fetchOtherUserPosts(String otherUserId) async {
     emit(PostLoading());
     try {
@@ -33,7 +33,7 @@ class PostCubit extends Cubit<PostState> {
       emit(PostError(message: e.toString()));
     }
   }
-  // Add Post
+  /// Add Post
   Future<void> addPost({required String content,required File imageUrl,required PostType postType}) async {
     try {
       await postRepository.createPost(content,imageUrl,postType);
@@ -59,16 +59,14 @@ class PostCubit extends Cubit<PostState> {
       if (state is PostLoaded) {
         final currentState = state as PostLoaded;
 
-        // Find the post to update
         final updatedPosts = currentState.posts.map((post) {
           if (post.postId == postId) {
-            // ✅ Just update the post's existing comments list
             post.comments.add(comment);
           }
           return post;
         }).toList();
 
-        emit(PostLoaded(posts: updatedPosts)); // Emit updated posts list
+        emit(PostLoaded(posts: updatedPosts));
       }
     } catch (e) {
       emit(PostError(message: e.toString()));

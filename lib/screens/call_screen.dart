@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -5,13 +7,13 @@ import 'package:permission_handler/permission_handler.dart';
 class VideoCallScreen extends StatefulWidget {
   final String channelId;
 
-  const VideoCallScreen({Key? key, required this.channelId}) : super(key: key);
+  const VideoCallScreen({super.key, required this.channelId});
 
   @override
-  _VideoCallScreenState createState() => _VideoCallScreenState();
+  VideoCallScreenState createState() => VideoCallScreenState();
 }
 
-class _VideoCallScreenState extends State<VideoCallScreen> {
+class VideoCallScreenState extends State<VideoCallScreen> {
   final RTCVideoRenderer _localRenderer = RTCVideoRenderer();
   final RTCVideoRenderer _remoteRenderer = RTCVideoRenderer();
   RTCPeerConnection? _peerConnection;
@@ -41,13 +43,13 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       };
 
       _localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
-      print("MediaStream retrieved successfully: ${_localStream!.id}");
+      log("MediaStream retrieved successfully: ${_localStream!.id}");
 
       setState(() {
         _localRenderer.srcObject = _localStream;
       });
     } catch (e) {
-      print("Error accessing media: $e");
+      log("Error accessing media: $e");
     }
   }
 
@@ -56,7 +58,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     final micStatus = await Permission.microphone.request();
 
     if (status.isDenied || micStatus.isDenied) {
-      print("Camera or Microphone permission denied.");
+      log("Camera or Microphone permission denied.");
     }
   }
 
@@ -75,22 +77,22 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         _peerConnection?.addTrack(track, _localStream!);
       }
     } else {
-      print("⚠ _localStream is null! Video call may not work properly.");
+      log("_localStream is null! Video call may not work properly.");
     }
 
     _peerConnection?.onTrack = (RTCTrackEvent event) {
       if (event.streams.isNotEmpty) {
-        print("Received remote stream: ${event.streams.first.id}");
+        log("Received remote stream: ${event.streams.first.id}");
         setState(() {
           _remoteRenderer.srcObject = event.streams.first;
         });
       } else {
-        print("⚠ No Remote Stream found!");
+        log("⚠ No Remote Stream found!");
       }
     };
 
     _peerConnection?.onIceCandidate = (RTCIceCandidate candidate) {
-      print("Sending ICE Candidate: ${candidate.toMap()}");
+      log("Sending ICE Candidate: ${candidate.toMap()}");
 
     };
   }

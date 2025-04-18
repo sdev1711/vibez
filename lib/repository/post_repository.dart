@@ -11,12 +11,10 @@ import 'package:vibez/model/user_model.dart';
 
 class PostRepository {
   ApiService apiService = ApiService();
-  // Get current user's ID
   String getCurrentUserId() {
     return ApiService.user.uid;
   }
 
-  // Fetch User Posts from Firestore
   Future<List<PostModel>> getPosts() async {
     String? userId = ApiService.user.uid;
     try {
@@ -29,7 +27,6 @@ class PostRepository {
           .map((doc) => PostModel.fromJson(doc.data() as Map<String, dynamic>))
           .toList();
 
-      // Sort manually by timestamp
       posts.sort((a, b) => b.timestamp.compareTo(a.timestamp));
 
       return posts;
@@ -37,7 +34,7 @@ class PostRepository {
       throw Exception("Failed to fetch posts: $e");
     }
   }
-  //Fetch Other user posts
+
   Future<List<PostModel>> otherUserPosts(String userId) async {
     try {
       QuerySnapshot querySnapshot = await ApiService.firestore
@@ -49,7 +46,6 @@ class PostRepository {
           .map((doc) => PostModel.fromJson(doc.data() as Map<String, dynamic>))
           .toList();
 
-      // Sort manually by timestamp
       posts.sort((a, b) => b.timestamp.compareTo(a.timestamp));
 
       return posts;
@@ -57,7 +53,7 @@ class PostRepository {
       throw Exception("Failed to fetch posts: $e");
     }
   }
-  // Fetch All Posts from Firestore
+
   Future<List<PostModel>> allPosts() async {
     try {
       QuerySnapshot querySnapshot =
@@ -72,7 +68,7 @@ class PostRepository {
       throw Exception("Failed to fetch posts: $e");
     }
   }
-  // Create a new post (Automatically sets userId)
+
   Future<void> createPost(String content, File imageFile,PostType postType) async {
     try {
       log("hello from repository function start");
@@ -84,19 +80,17 @@ class PostRepository {
       // Generate a unique post ID
       String postId = ApiService.firestore.collection('posts').doc().id;
       log("Generated post ID: $postId");
-      // Upload image to Firebase Storage
       String imageUrl = await uploadImageToStorage(imageFile, postId);
       log("Image uploaded: $imageUrl");
-      // Ensure image URL is valid
       if (imageUrl.isEmpty) {
         throw Exception("Image upload failed. No URL received.");
       }
-      // Create PostModel with userId
+
       PostModel post = PostModel(
         postId: postId,
         userId: userId,
         content: content,
-        imageUrl: imageUrl, // Use the uploaded image URL
+        imageUrl: imageUrl,
         timestamp: DateTime.now().toIso8601String(),
         likes: [],
         comments: [],
@@ -104,7 +98,7 @@ class PostRepository {
         postType: postType,
       );
       log("Post JSON: ${post.toJson()}");
-      // Save post details in Firestore
+
       await ApiService.firestore
           .collection('posts')
           .doc(postId)
@@ -141,7 +135,7 @@ class PostRepository {
       throw Exception("Image upload failed: $e");
     }
   }
-  // Add a comment to a post
+
   Future<void> addComment(String postId, CommentModel comment) async {
     try {
       await ApiService.firestore.collection('posts').doc(postId).update({
@@ -151,7 +145,7 @@ class PostRepository {
       throw Exception("Failed to add comment: $e");
     }
   }
-  //Delete a comment
+
   Future<void> deleteComment(String postId,CommentModel comment)async{
     try{
       await ApiService.firestore.collection('posts').doc(postId).update({
@@ -161,7 +155,7 @@ class PostRepository {
       throw Exception("Failed to delete comment: $e");
     }
   }
-  //Add a like to a post
+
   Future<void> addLike(String postId, String username,UserModel postUser) async {
     try {
       await ApiService.firestore.collection('posts').doc(postId).update({
@@ -175,7 +169,6 @@ class PostRepository {
       throw Exception("Failed to like: $e");
     }
   }
-  // Remove a like from a post
   Future<void> removeLike(String postId, String username) async {
     try {
       await ApiService.firestore.collection('posts').doc(postId).update({
@@ -196,11 +189,11 @@ class PostRepository {
     } catch (e) {
       log("Error fetching user: $e");
     }
-    return null; // Return null if user is not found
+    return null;
   }
   Future<List<String>> getFollowedUserIds() async {
-    final user = await apiService.getCurrentUser(); // Get current user data
-    return user?.following ?? []; // Return the list of followed user IDs
+    final user = await apiService.getCurrentUser();
+    return user?.following ?? [];
   }
   // Stream comments for a specific post
   Stream<List<CommentModel>> getCommentsStream(String postId) {

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -26,7 +27,7 @@ class ImagePickerCubit extends Cubit<File?>{
           emit(videoFile); // Emit the video file
         });
     } else {
-      print("No video selected");
+      log("No video selected");
     }
   }
 

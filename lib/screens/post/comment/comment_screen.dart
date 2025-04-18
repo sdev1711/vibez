@@ -170,7 +170,6 @@ class _CommentScreenState extends State<CommentScreen> {
             ),
           ),
 
-          // Add Comment Field
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 10),
             child: Row(
@@ -196,7 +195,6 @@ class _CommentScreenState extends State<CommentScreen> {
                         profileImage: ApiService.me.image,
                       );
 
-                        // postData.comments.add(newComment);
                       context.read<PostCubit>().addComment(postData.postId, newComment);
                       context.read<FeedPostCubit>().fetchFollowingPosts();
                       _commentController.clear();

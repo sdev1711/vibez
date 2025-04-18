@@ -129,6 +129,6 @@ class _HomeMobileLayoutState extends State<HomeMobileLayout> {
         .read<FeedPostCubit>()
         .fetchFollowingPosts();
     if(!mounted)return;
-    await context.read<PostCubit>().fetchPosts(); // Fetch posts again
+    await context.read<PostCubit>().fetchPosts();
   }
 }

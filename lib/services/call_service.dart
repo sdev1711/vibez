@@ -5,7 +5,7 @@ import 'package:vibez/model/call_model.dart';
 class CallService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Start a call
+
   Future<String> startCall({required String callerId, required String receiverId}) async {
     String channelId = Uuid().v4(); // Generate unique channel ID
 
@@ -22,7 +22,6 @@ class CallService {
   }
 
 
-  // Listen for incoming calls
   Stream<CallModel?> getIncomingCall(String userId) {
     return _firestore
         .collection('calls')
@@ -34,7 +33,7 @@ class CallService {
       return CallModel.fromMap(snapshot.docs.first.data());
     });
   }
-// Listen for call status updates
+
   Stream<CallModel?> listenToCallUpdates(String channelId) {
     return _firestore.collection('calls').doc(channelId).snapshots().map((snapshot) {
       if (!snapshot.exists) return null;
@@ -42,7 +41,7 @@ class CallService {
     });
   }
 
-  // Accept call
+
   Future<void> acceptCall(String channelId) async {
     await _firestore.collection('calls').doc(channelId).update({'status': 'ongoing'});
   }

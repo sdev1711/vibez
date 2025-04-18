@@ -8,7 +8,7 @@ class SearchCubit extends Cubit<SearchState> {
 
   void searchUsers(String query) async {
     if (query.isEmpty) {
-      emit(SearchState(userList: [], isSearching: false)); // Reset to full list
+      emit(SearchState(userList: [], isSearching: false));
       return;
     }
 

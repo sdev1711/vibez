@@ -27,7 +27,6 @@ class AuthCubit extends Cubit<AuthState> {
         Get.offAllNamed(AppRoutes.loginScreen);
         return;
       }
-      //Fetch user details from Firestore
       DocumentSnapshot snapshot =
           await fireStore.collection('users').doc(currentUser.uid).get();
 

@@ -17,7 +17,6 @@ class NotificationAccessToken {
         // To get Admin Json File: Go to Firebase > Project Settings > Service Accounts
         // > Click on 'Generate new private key' Btn & Json file will be downloaded
 
-        // Paste Your Generated Json File Content
         ServiceAccountCredentials.fromJson(
             {
               "type": "service_account",
