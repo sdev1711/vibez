@@ -16,6 +16,7 @@ import 'package:vibez/app/colors.dart';
 import 'package:vibez/controllers/bottom_navigation_controller.dart';
 import 'package:vibez/model/post_model.dart';
 import 'package:vibez/model/user_model.dart';
+import 'package:vibez/screens/post/comment/comment_screen.dart';
 import 'package:vibez/utils/image_path/image_path.dart';
 import 'package:vibez/widgets/bottomshit_options.dart';
 import 'package:vibez/widgets/common_icon_button.dart';
@@ -24,6 +25,8 @@ import 'package:vibez/widgets/common_text_button.dart';
 import 'package:vibez/widgets/common_textfield.dart';
 import 'package:vibez/widgets/post_image_view.dart';
 import 'package:vibez/widgets/post_video_view.dart';
+
+import 'comment_bottom_shit.dart';
 
 class PostCard extends StatelessWidget {
   final PostModel postsData;
@@ -42,6 +45,7 @@ class PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String currentUser=ApiService.me.username;
     String userId = ApiService.user.uid;
     bool isMe = userId == postsData.userId;
     void sharePost(String name, String userName) {
@@ -290,13 +294,12 @@ class PostCard extends StatelessWidget {
             child: GestureDetector(
               onDoubleTap: () {
                 final postCubit = context.read<PostCubit>();
-
-                if (postsData.likes.contains(username)) {
+                if (postsData.likes.contains(currentUser)) {
                   return;
                 } else {
                   postCubit.addLike(
-                      postsData.postId, username, userDetails);
-                  postsData.likes.add(username);
+                      postsData.postId, currentUser, userDetails);
+                  postsData.likes.add(currentUser);
                 }
                 (context as Element).markNeedsBuild();
               },
@@ -334,10 +337,7 @@ class PostCard extends StatelessWidget {
                   SizedBox(width: 10.w),
                   GestureDetector(
                     onTap: () {
-                      Get.toNamed(AppRoutes.commentScreen, arguments: {
-                        "postData": postsData,
-                        "userData": ApiService.me,
-                      });
+                      commentBottomShit(context,postsData,ApiService.me);
                     },
                     child: CommonSoraText(
                       text: postsData.content,
@@ -360,21 +360,21 @@ class PostCard extends StatelessWidget {
                     onTap: () {
                       final postCubit = context.read<PostCubit>();
 
-                      if (postsData.likes.contains(username)) {
-                        postCubit.removeLike(postsData.postId, username);
-                        postsData.likes.remove(username);
+                      if (postsData.likes.contains(currentUser)) {
+                        postCubit.removeLike(postsData.postId, currentUser);
+                        postsData.likes.remove(currentUser);
                       } else {
                         postCubit.addLike(
-                            postsData.postId, username, userDetails);
-                        postsData.likes.add(username);
+                            postsData.postId, currentUser, userDetails);
+                        postsData.likes.add(currentUser);
                       }
                       (context as Element).markNeedsBuild();
                     },
                     child: ImageIcon(
-                      AssetImage(postsData.likes.contains(username)
+                      AssetImage(postsData.likes.contains(currentUser)
                           ? ImagePath.likeIcon
                           : ImagePath.noLikeIcon),
-                      color: postsData.likes.contains(username)
+                      color: postsData.likes.contains(currentUser)
                           ? AppColors.to.alertColor
                           : AppColors.to.contrastThemeColor,
                       size: 30,
@@ -394,10 +394,7 @@ class PostCard extends StatelessWidget {
                   SizedBox(width: 15.w),
                   GestureDetector(
                     onTap: () {
-                      Get.toNamed(AppRoutes.commentScreen, arguments: {
-                        "postData": postsData,
-                        "userData": ApiService.me,
-                      });
+                      commentBottomShit(context,postsData,ApiService.me);
                     },
                     child: ImageIcon(
                       AssetImage(ImagePath.commentIcon),

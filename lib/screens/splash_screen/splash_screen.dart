@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
     if(ApiService.auth.currentUser!=null)ApiService.getSelfInfo();
-    _updateOldPosts();
+    // _updateOldPosts();
     Future.delayed(Duration(seconds: 2), () {
       if(ApiService.auth.currentUser==null){
       Get.offNamed(AppRoutes.loginScreen);
@@ -30,14 +30,14 @@ class _SplashScreenState extends State<SplashScreen>
       }
     });
   }
-  Future<void> _updateOldPosts() async {
-    QuerySnapshot snapshot = await ApiService.firestore.collection('users').get();
-    for (var doc in snapshot.docs) {
-      if (!doc.data().toString().contains('lastOpenedDate')) { // Check if field is missing
-        await ApiService.firestore.collection('users').doc(doc.id).update({'lastOpenedDate': ''});
-      }
-    }
-  }
+  // Future<void> _updateOldPosts() async {
+  //   QuerySnapshot snapshot = await ApiService.firestore.collection('users').get();
+  //   for (var doc in snapshot.docs) {
+  //     if (!doc.data().toString().contains('lastOpenedDate')) { // Check if field is missing
+  //       await ApiService.firestore.collection('users').doc(doc.id).update({'lastOpenedDate': ''});
+  //     }
+  //   }
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

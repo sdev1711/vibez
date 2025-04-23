@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:vibez/app/colors.dart';
@@ -41,7 +43,6 @@ class _CommonPostViewState extends State<CommonPostView>
         UserModel userDetails = UserModel.fromJson(userData);
         String username = userDetails.username;
         String profilePic = userDetails.image;
-
         return PostCard(
           postsData: widget.postsData,
           userDetails: userDetails,

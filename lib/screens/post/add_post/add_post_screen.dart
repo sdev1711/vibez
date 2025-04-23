@@ -42,6 +42,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
           color: AppColors.to.contrastThemeColor,
         ),
         actions: [
+          IconButton(onPressed: (){
+            context.read<ImagePickerCubit>().pickImageFromCamera();
+          }, icon: Icon(Icons.camera_alt_outlined)),
           IconButton(
             icon: const Icon(Icons.send),
             onPressed: () {

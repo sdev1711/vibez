@@ -99,6 +99,7 @@ class ApiService {
   /// for sending push notification (Updated Codes)
   static Future<void> sendPushNotification(
       UserModel chatUser, String msg) async {
+    log("heloooooooooooooooo  ${chatUser.pushToken}");
     try {
       final body = {
         "message": {
@@ -241,6 +242,7 @@ class ApiService {
       if (t != null) {
         me.pushToken = t;
         log("push token from get messagingToken======$t");
+        log("push token from me======${me.pushToken}");
       }
     });
   }

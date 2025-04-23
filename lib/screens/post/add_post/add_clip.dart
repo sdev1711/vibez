@@ -37,6 +37,9 @@ class AddClipScreenState extends State<AddClipScreen> {
           color: AppColors.to.contrastThemeColor,
         ),
         actions: [
+          IconButton(onPressed: (){
+            context.read<ImagePickerCubit>().pickVideoFromCamera();
+          }, icon: Icon(Icons.camera_alt_outlined)),
           IconButton(
             icon: const Icon(Icons.send),
             onPressed: () {

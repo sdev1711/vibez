@@ -46,6 +46,7 @@ class _MainScreenState extends State<MainScreen> {
       Get.find<BottomNavController>();
   @override
   void initState() {
+    ApiService.getSelfInfo();
     SystemChannels.lifecycle.setMessageHandler((message) {
       log("main screen message $message ");
       if (ApiService.auth.currentUser != null) {
