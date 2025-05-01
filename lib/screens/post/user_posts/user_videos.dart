@@ -51,7 +51,7 @@ class _UserVideosState extends State<UserVideos> {
                 CommonSoraText(
                   text: "No post",
                   color: AppColors.to.contrastThemeColor,
-                  textSize: 20,
+                  textSize: 17,
                 ),
               ],
             );

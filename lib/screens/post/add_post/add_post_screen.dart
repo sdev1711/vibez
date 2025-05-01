@@ -38,6 +38,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
       backgroundColor: AppColors.to.darkBgColor,
       appBar: CommonAppBar(
         title: CommonSoraText(
+          textSize: 17,
           text: "Add post",
           color: AppColors.to.contrastThemeColor,
         ),

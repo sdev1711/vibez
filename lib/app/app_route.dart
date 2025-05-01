@@ -28,7 +28,7 @@ import 'package:vibez/screens/user_profile/other_user_profile_screen.dart';
 
 class AppRoutes{
   static const String initialRoute ="/";
-  static const String homeScreen="/news_screens";
+  static const String homeScreen="/HomeScreen";
   static const String onboardingScreen="/onBoarding";
   static const String loginScreen="/loginScreen";
   static const String signUpScreen="/signUpScreen";

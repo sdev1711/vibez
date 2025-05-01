@@ -138,7 +138,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
               title: CommonSoraText(
                 text: ApiService.me.username,
                 color: AppColors.to.contrastThemeColor,
-                textSize: 20,
+                textSize: 17,
               ),
               leading: IconButton(
                 onPressed: () {
@@ -222,7 +222,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                                         text:
                                             'No results found for "${searchController.text}"',
                                         color: AppColors.to.contrastThemeColor,
-                                        textSize: 16,
+                                        textSize: 15,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
@@ -297,7 +297,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                     CommonSoraText(
                       text: "No recent chats yet",
                       color: AppColors.to.contrastThemeColor,
-                      textSize: 20,
+                      textSize: 15,
                     ),
                   ],
                 ),

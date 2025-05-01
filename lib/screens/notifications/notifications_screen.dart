@@ -25,6 +25,7 @@ class NotificationsScreen extends StatelessWidget {
       backgroundColor: AppColors.to.darkBgColor,
       appBar: CommonAppBar(
         title: CommonSoraText(
+          textSize: 17,
           text: LocaleKeys.notifications.tr,
           color: AppColors.to.contrastThemeColor,
         ),
@@ -73,8 +74,8 @@ class NotificationsScreen extends StatelessWidget {
                                 ? AssetImage(ImagePath.profileIcon)
                                 : NetworkImage(user.image),
                           ),
-                          title: Text(user.username),
-                          subtitle: Text(user.name),
+                          title: CommonSoraText(text:user.username,color: AppColors.to.contrastThemeColor,textSize: 13,fontWeight: FontWeight.w500,),
+                          subtitle: CommonSoraText(text:user.name,color: AppColors.to.contrastThemeColor.withOpacity(0.5),textSize: 13,),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -94,7 +95,7 @@ class NotificationsScreen extends StatelessWidget {
                                 child: CommonSoraText(
                                   text: LocaleKeys.accept.tr,
                                   color: AppColors.to.darkBgColor,
-                                  textSize: 14,
+                                  textSize: 13,
                                 ),
                               ),
                               SizedBox(width: 8),
@@ -112,7 +113,7 @@ class NotificationsScreen extends StatelessWidget {
                                 child: CommonSoraText(
                                   text: LocaleKeys.reject.tr,
                                   color: AppColors.to.contrastThemeColor,
-                                  textSize: 14,
+                                  textSize: 13,
                                 ),
                               ),
                             ],

@@ -126,6 +126,7 @@ class CommonTextField extends StatelessWidget {
         labelStyle: labelTextStyle,
         hintText: hintText,
         hintStyle: GoogleFonts.sora(
+          textStyle: TextStyle(fontSize: 13),
           color: AppColors.to.white.withOpacity(0.5),
         ),
         prefixIcon: prefixIcons,

@@ -42,7 +42,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
         title: CommonSoraText(
           text: "Ask Genie",
           gradientColors: [AppColors.to.aiLightColor, AppColors.to.aiDarkColor],
-          textSize: 20,
+          textSize: 17,
         ),
         leading: IconButton(
           onPressed: () {

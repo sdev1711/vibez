@@ -250,18 +250,20 @@ Future<bool?> _showExitDialog(BuildContext context) {
       title: Center(
         child: CommonSoraText(
           text: LocaleKeys.exitApp.tr,
-          textSize: 18,
+          textSize: 15,
           fontWeight: FontWeight.w500,
           color: AppColors.to.contrastThemeColor,
         ),
       ),
       content: CommonSoraText(
         text: LocaleKeys.exitFromApp.tr,
+        textSize: 13,
         color: AppColors.to.contrastThemeColor,
         textAlign: TextAlign.center,
       ),
       actions: [
         Row(
+          mainAxisAlignment:MainAxisAlignment.center,
           children: [
             CommonButton(
               onPressed: () {
@@ -271,7 +273,7 @@ Future<bool?> _showExitDialog(BuildContext context) {
               boxBorder:
                   Border.all(width: 2, color: AppColors.to.contrastThemeColor),
               height: 40.h,
-              width: 100.w,
+              width: 70.w,
               child: CommonSoraText(
                 text: LocaleKeys.no.tr,
                 color: AppColors.to.contrastThemeColor,
@@ -286,7 +288,7 @@ Future<bool?> _showExitDialog(BuildContext context) {
               },
               bgColor: AppColors.to.contrastThemeColor,
               height: 40.h,
-              width: 100.w,
+              width: 70.w,
               child: CommonSoraText(
                 text: LocaleKeys.yes.tr,
                 color: AppColors.to.darkBgColor,

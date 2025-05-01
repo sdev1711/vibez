@@ -339,10 +339,11 @@ class ProfileDrawer extends StatelessWidget {
                           text: LocaleKeys.logOutOfYourAccount.tr,
                           color: AppColors.to.contrastThemeColor,
                           textAlign: TextAlign.center,
-                          textSize: 14,
+                          textSize: 13,
                         ),
                         actions: [
                           Row(
+                            mainAxisAlignment:MainAxisAlignment.center,
                             children: [
                               CommonButton(
                                 onPressed: () {
@@ -353,11 +354,11 @@ class ProfileDrawer extends StatelessWidget {
                                     width: 2,
                                     color: AppColors.to.contrastThemeColor),
                                 height: 40.h,
-                                width: 100.w,
+                                width: 70.w,
                                 child: CommonSoraText(
                                   text: LocaleKeys.no.tr,
                                   color: AppColors.to.contrastThemeColor,
-                                  textSize: 15,
+                                  textSize: 13,
                                 ),
                               ),
                               SizedBox(
@@ -369,11 +370,11 @@ class ProfileDrawer extends StatelessWidget {
                                 },
                                 bgColor: AppColors.to.contrastThemeColor,
                                 height: 40.h,
-                                width: 100.w,
+                                width: 70.w,
                                 child: CommonSoraText(
                                   text: LocaleKeys.yes.tr,
                                   color: AppColors.to.darkBgColor,
-                                  textSize: 15,
+                                  textSize: 13,
                                 ),
                               ),
                             ],

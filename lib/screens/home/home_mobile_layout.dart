@@ -43,7 +43,7 @@ class _HomeMobileLayoutState extends State<HomeMobileLayout> {
         title: CommonTitle(
           text: LocaleKeys.vibez.tr,
           gradientColors: [AppColors.to.titleLightColor,AppColors.to.titleDarkColor],
-          textSize: 30,
+          textSize: 25,
         ),
         actions: [
           Padding(
@@ -82,7 +82,7 @@ class _HomeMobileLayoutState extends State<HomeMobileLayout> {
                     SuggestedUserWidget(),
                     CommonSoraText(
                       text: "Follow people\nfor content",
-                      textSize: 20,
+                      textSize: 15,
                       color: AppColors.to.contrastThemeColor,
                       textAlign: TextAlign.center,
                     ),

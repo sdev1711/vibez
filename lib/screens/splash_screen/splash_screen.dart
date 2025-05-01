@@ -16,9 +16,27 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnim;
+  late Animation<double> _fadeAnim;
+
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1200),
+      vsync: this,
+    );
+
+    _scaleAnim = Tween<double>(begin: 0.7, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
+    );
+
+    _fadeAnim = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
+    );
+
+    _controller.forward();
     if(ApiService.auth.currentUser!=null)ApiService.getSelfInfo();
     // _updateOldPosts();
     Future.delayed(Duration(seconds: 2), () {
@@ -29,6 +47,11 @@ class _SplashScreenState extends State<SplashScreen>
         Get.offNamed(AppRoutes.mainScreen);
       }
     });
+  }
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
   // Future<void> _updateOldPosts() async {
   //   QuerySnapshot snapshot = await ApiService.firestore.collection('users').get();
@@ -43,18 +66,24 @@ class _SplashScreenState extends State<SplashScreen>
     return Scaffold(
       backgroundColor: AppColors.to.darkBgColor,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CommonTitle(
-              text: LocaleKeys.vibez.tr,
-              gradientColors: [AppColors.to.titleLightColor,AppColors.to.titleDarkColor],
-              textSize: 60,
+        child: FadeTransition(
+          opacity: _fadeAnim,
+          child: ScaleTransition(
+            scale: _scaleAnim,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CommonTitle(
+                  text: LocaleKeys.vibez.tr,
+                  gradientColors: [AppColors.to.titleLightColor,AppColors.to.titleDarkColor],
+                  textSize: 60,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+              ],
             ),
-            SizedBox(
-              height: 10,
-            ),
-          ],
+          ),
         ),
       ),
     );

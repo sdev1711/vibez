@@ -94,7 +94,7 @@ class _EditProfileState extends State<EditProfile> {
                                   CommonSoraText(
                                     text: LocaleKeys.editProfile.tr,
                                     color: AppColors.to.contrastThemeColor,
-                                    textSize: 20,
+                                    textSize: 17,
                                   ),
                                 ],
                               ),

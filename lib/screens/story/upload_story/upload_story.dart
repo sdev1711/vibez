@@ -59,7 +59,7 @@ class UploadStoryScreenState extends State<UploadStoryScreen> {
         title: CommonSoraText(
           text: "Upload Story",
           color: AppColors.to.contrastThemeColor,
-          textSize: 20,
+          textSize: 17,
         ),
         leading:  CommonIconButton(
           iconData: Icons.arrow_back_rounded,

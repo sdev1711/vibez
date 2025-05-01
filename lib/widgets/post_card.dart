@@ -271,7 +271,7 @@ class PostCard extends StatelessWidget {
                         child: CommonSoraText(
                           text: username,
                           color: AppColors.to.contrastThemeColor,
-                          textSize: 16,
+                          textSize: 13,
                         ),
                       ),
                     ],
@@ -331,7 +331,7 @@ class PostCard extends StatelessWidget {
                       text: username,
                       color: AppColors.to.contrastThemeColor,
                       fontWeight: FontWeight.bold,
-                      textSize: 16,
+                      textSize: 13,
                     ),
                   ),
                   SizedBox(width: 10.w),
@@ -342,7 +342,7 @@ class PostCard extends StatelessWidget {
                     child: CommonSoraText(
                       text: postsData.content,
                       color: AppColors.to.contrastThemeColor,
-                      textSize: 16,
+                      textSize: 13,
                     ),
                   ),
                 ],

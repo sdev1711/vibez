@@ -53,7 +53,7 @@ class _UsersPostsState extends State<UsersPosts> {
                 CommonSoraText(
                   text: "No post",
                   color: AppColors.to.contrastThemeColor,
-                  textSize: 20,
+                  textSize: 17,
                 ),
               ],
             );
