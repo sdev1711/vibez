@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:vibez/Cubit/bottom_nav_post/bottom_nav_post_cubit.dart';
 import 'package:vibez/Cubit/chat_screen_appbar/chat_appbar_cubit.dart';
 import 'package:vibez/Cubit/chatbot/chatbot_cubit.dart';
 import 'package:vibez/Cubit/document_download_cubit/document_download_cubit.dart';
@@ -160,6 +161,9 @@ class _MyAppState extends State<MyApp> {
           ),
           BlocProvider<DocumentDownloadCubit>(
             create: (context) => DocumentDownloadCubit(),
+          ),
+          BlocProvider<BottomNavCubit>(
+            create: (context) => BottomNavCubit(),
           ),
         ],
         child: GetMaterialApp(

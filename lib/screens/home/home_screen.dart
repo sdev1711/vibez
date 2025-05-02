@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vibez/Cubit/auth/auth_cubit.dart';
 import 'package:vibez/screens/home/home_mobile_layout.dart';
 import 'package:vibez/screens/home/home_tablet_layout.dart';
-import 'package:vibez/screens/home/home_web_layout.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,9 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return LayoutBuilder(
       builder: (context, constraints) {
         double availableWidth = constraints.maxWidth;
-        if (availableWidth >= 1200) {
-          return HomeWebLayout();
-        } else if (availableWidth >= 600) {
+         if (availableWidth >= 600) {
           return HomeTabletLayout();
         } else {
           return HomeMobileLayout();

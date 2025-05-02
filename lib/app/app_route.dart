@@ -16,6 +16,7 @@ import 'package:vibez/screens/post/comment/comment_screen.dart';
 import 'package:vibez/screens/post/post_view/feed_post_view.dart';
 import 'package:vibez/screens/post/post_view/post_view.dart';
 import 'package:vibez/screens/post/add_post/add_clip.dart';
+import 'package:vibez/screens/post/select_post_type/select_post_type.dart';
 import 'package:vibez/screens/search/search_screen.dart';
 import 'package:vibez/screens/signup/signUp_screen.dart';
 import 'package:vibez/screens/splash_screen/splash_screen.dart';
@@ -42,7 +43,6 @@ class AppRoutes{
   static const String userAccountScreen="/userAccountScreen";
   static const String followingScreen="/followingScreen";
   static const String followersScreen="/followersScreen";
-  static const String addPostScreen="/addPostScreen";
   static const String postViewScreen="/postViewScreen";
   static const String commentScreen="/commentScreen";
   static const String feedScreen="/feedScreen";
@@ -55,6 +55,7 @@ class AppRoutes{
   static const String addClipScreen="/addClipScreen";
   static const String clipViewScreen="/clipViewScreen";
   static const String feedPostViewScreen="/feedPostViewScreen";
+  static const String selectPostTypeScreen="/selectPostTypeScreen";
 
   static final List<GetPage> getPages=  [
     GetPage(name: AppRoutes.initialRoute,
@@ -102,9 +103,6 @@ class AppRoutes{
     GetPage(name: AppRoutes.followingScreen,
       page: ()=> Following(),
     ),
-    GetPage(name: AppRoutes.addPostScreen,
-      page: ()=> AddPostScreen(),
-    ),
     GetPage(name: AppRoutes.postViewScreen,
       page: ()=> PostView(),
     ),
@@ -140,6 +138,9 @@ class AppRoutes{
     ),
     GetPage(name: AppRoutes.feedPostViewScreen,
       page: ()=> FeedPostView(),
+    ),
+    GetPage(name: AppRoutes.selectPostTypeScreen,
+      page: ()=> SelectPostType(),
     ),
   ];
 }

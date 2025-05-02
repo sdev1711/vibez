@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:vibez/Cubit/user_profile_data/user_profile_cubit.dart';
 import 'package:vibez/api_service/api_service.dart';
+import 'package:vibez/app/app_route.dart';
 import 'package:vibez/app/colors.dart';
 import 'package:vibez/controllers/bottom_navigation_controller.dart';
 import 'package:vibez/generated/locales.g.dart';
@@ -15,7 +16,7 @@ import 'package:vibez/model/user_model.dart';
 import 'package:vibez/screens/feed/feed.dart';
 import 'package:vibez/screens/home/home_screen.dart';
 import 'package:vibez/screens/notifications/notifications_screen.dart';
-import 'package:vibez/screens/post/select_post_type.dart';
+import 'package:vibez/screens/post/select_post_type/select_post_type.dart';
 import 'package:vibez/screens/user_profile/profile_screen.dart';
 import 'package:vibez/utils/image_path/image_path.dart';
 import 'package:vibez/widgets/common_alert_dialog.dart';
@@ -35,7 +36,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> pageList = [
     const HomeScreen(),
     const FeedScreen(),
-    const SelectPostType(),
+     SelectPostType(),
     const NotificationsScreen(),
     const ProfileScreen(),
   ];
@@ -168,8 +169,16 @@ class _MainScreenState extends State<MainScreen> {
         Get.find<BottomNavController>();
     return GestureDetector(
       onTap: () {
-        bottomNavController.changeIndex(index);
+        if (index == 2) {
+          final previousIndex = bottomNavController.pageIndex.value;
+          Get.toNamed(AppRoutes.selectPostTypeScreen)?.then( (_){
+            bottomNavController.changeIndex(previousIndex);
+          });
+        } else {
+          bottomNavController.changeIndex(index);
+        }
       },
+
       child: Obx(() {
         bool isSelected = bottomNavController.pageIndex.value == index;
         return Column(
@@ -195,15 +204,6 @@ class _MainScreenState extends State<MainScreen> {
                           ),
                         ),
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(top: 3.0),
-                      //   child: CommonSoraText(
-                      //     text: text??"",
-                      //     color: AppColors.to.contrastThemeColor,
-                      //     textSize: 12,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      // )
                     ],
                   )
                 : Column(
@@ -225,15 +225,6 @@ class _MainScreenState extends State<MainScreen> {
                           ),
                         ),
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(top: 3.0),
-                      //   child: CommonSoraText(
-                      //     text: text??"",
-                      //     color: AppColors.to.contrastThemeColor,
-                      //     textSize: 12,
-                      //     fontWeight: FontWeight.w400,
-                      //   ),
-                      // )
                     ],
                   )
           ],

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:vibez/Cubit/post/image_picker_cubit/image_picker_cubit.dart';
 import 'package:vibez/Cubit/post/post_cubit.dart';
 import 'package:vibez/Cubit/user_profile_data/user_profile_cubit.dart';
@@ -12,7 +11,6 @@ import 'package:vibez/app/colors.dart';
 import 'package:vibez/controllers/bottom_navigation_controller.dart';
 import 'package:vibez/model/post_model.dart';
 import 'package:vibez/widgets/common_appBar.dart';
-import 'package:vibez/widgets/common_button.dart';
 import 'package:vibez/widgets/common_text.dart';
 import 'package:vibez/widgets/common_textfield.dart';
 
@@ -28,8 +26,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   @override
   void initState() {
+    context.read<ImagePickerCubit>().pickImage();
     super.initState();
-    // context.read<PostCubit>().fetchPosts();
   }
 
   @override
@@ -41,6 +39,13 @@ class _AddPostScreenState extends State<AddPostScreen> {
           textSize: 15.sp,
           text: "Add post",
           color: AppColors.to.contrastThemeColor,
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(Icons.arrow_back_rounded,
+              color: AppColors.to.contrastThemeColor),
         ),
         actions: [
           IconButton(onPressed: (){
@@ -86,63 +91,53 @@ class _AddPostScreenState extends State<AddPostScreen> {
           children: [
             BlocBuilder<ImagePickerCubit, File?>(
               builder: (context, imageFile) {
-                return Container(
-                  height: 300.h,
-                  width: 300.w,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    image: imageFile != null
-                        ? DecorationImage(
-                      image: FileImage(imageFile),
-                      fit: BoxFit.cover,
-                    )
-                        : null,
-                  ),
-                  child: Center(
-                    child: imageFile == null
-                        ? CommonButton(
-                      onPressed: () {
-                        context.read<ImagePickerCubit>().pickImage();
-                      },
-                      bgColor: AppColors.to.darkBgColor,
-                      boxBorder: Border.all(width: 1,color:AppColors.to.contrastThemeColor),
-                      height: 40.h,
-                      width: 80.w,
-                      child: CommonSoraText(
-                        text: "Add post",
-                        color: AppColors.to.contrastThemeColor,
+                return Column(
+                  children: [
+                    Container(
+                      height: 300.h,
+                      width: 300.w,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: imageFile != null
+                            ? DecorationImage(
+                          image: FileImage(imageFile),
+                          fit: BoxFit.cover,
+                        )
+                            : null,
                       ),
-                    )
-                        : Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        icon: Icon(Icons.close, color: Colors.white),
-                        onPressed: () =>
-                            context.read<ImagePickerCubit>().clearImage(),
+                      child: imageFile==null?Container():Center(
+                        child:Align(
+                          alignment: Alignment.topRight,
+                          child: IconButton(
+                            icon: Icon(Icons.close, color: Colors.white),
+                            onPressed: () =>
+                                context.read<ImagePickerCubit>().clearImage(),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    imageFile==null?Container():SizedBox(
+                      height: 50.h,
+                      child: CommonTextField(
+                        controller: _postController,
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 3, horizontal: 10,
+                        ),
+                        hintText: "Add a caption...",
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
+                        ),
+                        fillColor: AppColors.to.contrastThemeColor.withOpacity(0.5),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                  ],
                 );
               },
-            ),
-            SizedBox(
-              height: 50.h,
-              child: CommonTextField(
-                controller: _postController,
-                contentPadding: EdgeInsets.symmetric(
-                  vertical: 3, horizontal: 10,
-                ),
-                hintText: "Add a caption...",
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
-                fillColor: AppColors.to.contrastThemeColor.withOpacity(0.5),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
-              ),
             ),
           ],
         ),

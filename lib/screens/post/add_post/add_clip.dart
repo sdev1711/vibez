@@ -28,6 +28,12 @@ class AddClipScreenState extends State<AddClipScreen> {
   final TextEditingController _postController = TextEditingController();
 
   @override
+  void initState() {
+    context.read<ImagePickerCubit>().pickVideo();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.to.darkBgColor,
@@ -36,6 +42,13 @@ class AddClipScreenState extends State<AddClipScreen> {
           textSize: 15.sp,
           text: "Pick clip",
           color: AppColors.to.contrastThemeColor,
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(Icons.arrow_back_rounded,
+              color: AppColors.to.contrastThemeColor),
         ),
         actions: [
           IconButton(onPressed: (){
@@ -89,26 +102,8 @@ class AddClipScreenState extends State<AddClipScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: videoFile == null
-                        ? Center(
-                          child: CommonButton(
-                            onPressed: () {
-                              context.read<ImagePickerCubit>().pickVideo();
-                            },
-                            bgColor: AppColors.to.darkBgColor,
-                            boxBorder: Border.all(
-                              width: 1,
-                              color: AppColors.to.contrastThemeColor,
-                            ),
-                            height: 40,
-                            width: 80,
-                            child: CommonSoraText(
-                              text: "Pick Clip",
-                              color: AppColors.to.contrastThemeColor,
-                            ),
-                          ),
-                        )
-                        : Stack(
+                    child: videoFile==null?Container():
+                    Stack(
                             children: [
                               videoController != null &&
                                       videoController.value.isInitialized
@@ -156,26 +151,26 @@ class AddClipScreenState extends State<AddClipScreen> {
                 );
               },
             ),
-            SizedBox(
-              height: 50.h,
-              child: CommonTextField(
-                controller: _postController,
-                contentPadding: EdgeInsets.symmetric(
-                  vertical: 3, horizontal: 10,
-                ),
-                hintText: "Add a caption...",
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
-                fillColor: AppColors.to.contrastThemeColor.withOpacity(0.5),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-            SizedBox(height: 10,),
+            // SizedBox(
+            //   height: 50.h,
+            //   child: CommonTextField(
+            //     controller: _postController,
+            //     contentPadding: EdgeInsets.symmetric(
+            //       vertical: 3, horizontal: 10,
+            //     ),
+            //     hintText: "Add a caption...",
+            //     focusedBorder: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(10),
+            //       borderSide: BorderSide.none,
+            //     ),
+            //     fillColor: AppColors.to.contrastThemeColor.withOpacity(0.5),
+            //     enabledBorder: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(10),
+            //       borderSide: BorderSide.none,
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(height: 10,),
           ],
         ),
       ),

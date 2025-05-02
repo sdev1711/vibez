@@ -23,7 +23,7 @@ class UploadStoryScreenState extends State<UploadStoryScreen> {
 
   Future<void> _pickMedia() async {
     final ImagePicker picker = ImagePicker();
-    final XFile? media = await picker.pickImage(source: ImageSource.gallery);
+    final XFile? media = await picker.pickImage(source:ImageSource.gallery);
     if (media != null) {
       setState(() {
         _selectedMedia = media;
@@ -38,7 +38,6 @@ class UploadStoryScreenState extends State<UploadStoryScreen> {
     String mediaUrl = await StoryService.uploadMediaToFirebase(_selectedMedia!);
     await StoryService.uploadStory(mediaUrl, caption: _captionController.text);
 
-    // Show success message or navigate back
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: CommonSoraText(
@@ -51,7 +50,11 @@ class UploadStoryScreenState extends State<UploadStoryScreen> {
     Get.find<BottomNavController>().changeIndex(0);
     Navigator.of(context).pop();
   }
-
+@override
+  void initState() {
+  _pickMedia();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +70,14 @@ class UploadStoryScreenState extends State<UploadStoryScreen> {
           color: AppColors.to.contrastThemeColor,
           onTap: Navigator.of(context).pop,
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.send),
+            onPressed: () {
+              _uploadStory();
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -80,50 +91,11 @@ class UploadStoryScreenState extends State<UploadStoryScreen> {
                   height: 200.h,
                   child: Center(
                     child: CommonSoraText(
-                      text: "Select media",
+                      text: "Select photo/video",
                       color: AppColors.to.contrastThemeColor,
                     ),
                   ),
                 ),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 10),
-          //   child: CommonTextField(
-          //     controller: _captionController,
-          //     hintText: "Add a caption",
-          //   ),
-          // ),
-          Spacer(),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                CommonButton(
-                  height: 40.h,
-                  width: 100.w,
-                  bgColor: AppColors.to.contrastThemeColor,
-                  onPressed: _pickMedia,
-                  child: CommonSoraText(
-                    text: "Pick Image",
-                    color: AppColors.to.darkBgColor,
-                    textSize: 12.sp,
-                  ),
-                ),
-                CommonButton(
-                  height: 40.h,
-                  width: 100.w,
-                  bgColor: AppColors.to.contrastThemeColor,
-                  onPressed: _uploadStory,
-                  child: CommonSoraText(
-                    text: "Upload story",
-                    color: AppColors.to.darkBgColor,
-                    textSize: 12.sp,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 20),
         ],
       ),
     );
