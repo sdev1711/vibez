@@ -33,7 +33,7 @@ class AddClipScreenState extends State<AddClipScreen> {
       backgroundColor: AppColors.to.darkBgColor,
       appBar: CommonAppBar(
         title: CommonSoraText(
-          textSize: 17,
+          textSize: 15.sp,
           text: "Pick clip",
           color: AppColors.to.contrastThemeColor,
         ),

@@ -71,7 +71,7 @@ class _ClipViewState extends State<ClipView> {
                   child: CommonSoraText(
                     text: "Clips",
                     color: AppColors.to.contrastThemeColor,
-                    textSize: 20,
+                    textSize: 15.sp,
                   ),
                 ),
                 Positioned(

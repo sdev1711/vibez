@@ -49,7 +49,7 @@ class _CommentScreenState extends State<CommentScreen> {
         backgroundColor: AppColors.to.darkBgColor,
         body: Column(
           children: [
-            CommonSoraText(text: "Comment",color:AppColors.to.contrastThemeColor ,textSize: 16,),
+            CommonSoraText(text: "Comment",color:AppColors.to.contrastThemeColor ,textSize: 12.sp,),
             Expanded(
               child: SingleChildScrollView(
                 // reverse: true,

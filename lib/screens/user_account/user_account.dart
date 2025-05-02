@@ -32,7 +32,7 @@ class _UserAccountState extends State<UserAccount> {
       backgroundColor: AppColors.to.darkBgColor,
       appBar: CommonAppBar(
         title: CommonSoraText(
-          textSize: 17,
+          textSize: 15.sp,
           text: LocaleKeys.account.tr,
           color: AppColors.to.contrastThemeColor,
         ),

@@ -101,7 +101,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           child: CommonSoraText(
                             text: LocaleKeys.noDataFound.tr,
                             color: AppColors.to.contrastThemeColor,
-                            textSize: 16,
+                            textSize: 12.sp,
                             fontWeight: FontWeight.w500,
                           ),
                         ),

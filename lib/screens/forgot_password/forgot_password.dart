@@ -49,7 +49,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         title: CommonSoraText(
           text: "Forgot password",
           color: AppColors.to.contrastThemeColor,
-          textSize: 20,
+          textSize: 15.sp,
         ),
         actions: [
           Padding(
@@ -78,14 +78,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             CommonSoraText(
               text: "Enter email",
               color: AppColors.to.contrastThemeColor,
-              textSize: 20,
+              textSize: 15.sp,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: CommonSoraText(
                 text: "Enter email address associated\nwith your account.",
                 color: AppColors.to.contrastThemeColor,
-                textSize: 15,
+                textSize: 12.sp,
               ),
             ),
             Form(

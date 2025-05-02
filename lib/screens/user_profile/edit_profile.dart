@@ -94,7 +94,7 @@ class _EditProfileState extends State<EditProfile> {
                                   CommonSoraText(
                                     text: LocaleKeys.editProfile.tr,
                                     color: AppColors.to.contrastThemeColor,
-                                    textSize: 17,
+                                    textSize: 15.sp,
                                   ),
                                 ],
                               ),
@@ -160,7 +160,7 @@ class _EditProfileState extends State<EditProfile> {
                           /// **Name Field**
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical:5.0),
-                            child: CommonSoraText(text: LocaleKeys.enterName.tr, color: AppColors.to.contrastThemeColor),
+                            child: CommonSoraText(text: LocaleKeys.enterName.tr, color: AppColors.to.contrastThemeColor,textSize: 12.sp,),
                           ),
                           CommonTextField(
                             controller: nameController,
@@ -176,7 +176,7 @@ class _EditProfileState extends State<EditProfile> {
                           /// **Username Field**
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical:5.0),
-                            child: CommonSoraText(text: LocaleKeys.userName.tr, color: AppColors.to.contrastThemeColor),
+                            child: CommonSoraText(text: LocaleKeys.userName.tr, color: AppColors.to.contrastThemeColor,textSize: 12.sp,),
                           ),
                           CommonTextField(
                             controller: userNameController,
@@ -192,7 +192,7 @@ class _EditProfileState extends State<EditProfile> {
                           /// **Bio Field**
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical:5.0),
-                            child: CommonSoraText(text: LocaleKeys.bio.tr, color: AppColors.to.contrastThemeColor),
+                            child: CommonSoraText(text: LocaleKeys.bio.tr, color: AppColors.to.contrastThemeColor,textSize: 12.sp,),
                           ),
                           CommonTextField(
                             controller: aboutController,

@@ -44,6 +44,7 @@ class _PostViewState extends State<PostView> {
       backgroundColor: AppColors.to.darkBgColor,
       appBar: CommonAppBar(
         title: CommonSoraText(
+          textSize: 12.sp,
             text: "Posts", color: AppColors.to.contrastThemeColor),
         leading: CommonIconButton(
           onTap: () {

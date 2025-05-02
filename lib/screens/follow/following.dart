@@ -33,7 +33,7 @@ class _FollowingState extends State<Following> {
         title: CommonSoraText(
           text: LocaleKeys.following.tr,
           color: AppColors.to.contrastThemeColor,
-          textSize: 20,
+          textSize: 15.sp,
         ),
         leading: IconButton(
           onPressed: () {

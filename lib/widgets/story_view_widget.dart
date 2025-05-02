@@ -132,7 +132,7 @@ class _StoryViewWidgetState extends State<StoryViewWidget> {
                                     AppColors.to.contrastThemeColor,
                                     maxLine: 1,
                                     softWrap: true,
-                                    textSize: 13,
+                                    textSize: 12.sp,
                                     textOverflow: TextOverflow.ellipsis,
                                   ),
                                 ),

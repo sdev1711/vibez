@@ -37,7 +37,7 @@ class _FollowersState extends State<Followers> {
         title: CommonSoraText(
           text: LocaleKeys.followers.tr,
           color: AppColors.to.contrastThemeColor,
-          textSize: 20,
+          textSize: 15.sp,
         ),
         leading: IconButton(
           onPressed: () {

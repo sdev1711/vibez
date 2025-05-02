@@ -271,7 +271,7 @@ class PostCard extends StatelessWidget {
                         child: CommonSoraText(
                           text: username,
                           color: AppColors.to.contrastThemeColor,
-                          textSize: 13,
+                          textSize: 12.sp,
                         ),
                       ),
                     ],
@@ -331,7 +331,7 @@ class PostCard extends StatelessWidget {
                       text: username,
                       color: AppColors.to.contrastThemeColor,
                       fontWeight: FontWeight.bold,
-                      textSize: 13,
+                      textSize: 12.sp,
                     ),
                   ),
                   SizedBox(width: 10.w),
@@ -342,7 +342,7 @@ class PostCard extends StatelessWidget {
                     child: CommonSoraText(
                       text: postsData.content,
                       color: AppColors.to.contrastThemeColor,
-                      textSize: 13,
+                      textSize: 12.sp,
                     ),
                   ),
                 ],
@@ -377,7 +377,7 @@ class PostCard extends StatelessWidget {
                       color: postsData.likes.contains(currentUser)
                           ? AppColors.to.alertColor
                           : AppColors.to.contrastThemeColor,
-                      size: 30,
+                      size: 25.sp,
                     ),
                   ),
                   Visibility(
@@ -387,7 +387,7 @@ class PostCard extends StatelessWidget {
                       child: CommonSoraText(
                         text: postsData.likes.length.toString(),
                         color: AppColors.to.contrastThemeColor,
-                        textSize: 16,
+                        textSize: 12.sp,
                       ),
                     ),
                   ),
@@ -399,7 +399,7 @@ class PostCard extends StatelessWidget {
                     child: ImageIcon(
                       AssetImage(ImagePath.commentIcon),
                       color: AppColors.to.contrastThemeColor,
-                      size: 27,
+                      size: 23.sp,
                     ),
                   ),
                   Visibility(
@@ -409,7 +409,7 @@ class PostCard extends StatelessWidget {
                       child: CommonSoraText(
                         text: postsData.comments.length.toString(),
                         color: AppColors.to.contrastThemeColor,
-                        textSize: 16,
+                        textSize: 12.sp,
                       ),
                     ),
                   ),
@@ -422,7 +422,7 @@ class PostCard extends StatelessWidget {
                     child: ImageIcon(
                       AssetImage(ImagePath.shareIcon),
                       color: AppColors.to.contrastThemeColor,
-                      size: 27,
+                      size: 23.sp,
                     ),
                   ),
                 ],

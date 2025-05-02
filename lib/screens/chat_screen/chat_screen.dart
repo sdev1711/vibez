@@ -263,7 +263,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         child: CommonSoraText(
                           text: userData.username,
                           color: AppColors.to.contrastThemeColor,
-                          textSize: 17,
+                          textSize: 13.sp,
                         ),
                       ),
                       CommonIconButton(
@@ -316,7 +316,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             lastActive: userData.lastActive,
                           ),
                           color: AppColors.to.contrastThemeColor,
-                          textSize: 12,
+                          textSize: 10.sp,
                         ),
                       );
                     },

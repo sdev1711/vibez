@@ -226,7 +226,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                 title: CommonSoraText(
                   text: state.user.username,
                   color: AppColors.to.contrastThemeColor,
-                  textSize: 17,
+                  textSize: 15.sp,
                 ),
                 leading: IconButton(
                   onPressed: () {
@@ -309,7 +309,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                                   children: [
                                                     CommonSoraText(
                                                       text: LocaleKeys.followers.tr,
-                                                      textSize: 12,
+                                                      textSize: 12.sp,
                                                       color: AppColors
                                                           .to.contrastThemeColor,
                                                     ),
@@ -320,7 +320,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                                       // Updated followers count
                                                       color: AppColors
                                                           .to.contrastThemeColor,
-                                                      textSize: 13,
+                                                      textSize: 12.sp,
                                                       fontWeight: FontWeight.w500,
                                                     ),
                                                   ],
@@ -343,7 +343,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                                   spacing: 5.w,
                                                   children: [
                                                     CommonSoraText(
-                                                      textSize: 12,
+                                                      textSize: 12.sp,
                                                       text: LocaleKeys.following.tr,
                                                       color: AppColors
                                                           .to.contrastThemeColor,
@@ -355,7 +355,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                                       // Updated following count
                                                       color: AppColors
                                                           .to.contrastThemeColor,
-                                                      textSize: 13,
+                                                      textSize: 12.sp,
                                                       fontWeight: FontWeight.w500,
                                                     ),
                                                   ],
@@ -370,14 +370,14 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                                 text: "Active days streak",
                                                 color:
                                                 AppColors.to.contrastThemeColor,
-                                                textSize: 12,
+                                                textSize: 12.sp,
                                               ),
                                               CommonSoraText(
                                                 text:
                                                 state.user.userScore.toString(),
                                                 color:
                                                 AppColors.to.contrastThemeColor,
-                                                textSize: 13,
+                                                textSize: 12.sp,
                                                 fontWeight: FontWeight.w500,
                                               ),
                                             ],
@@ -392,12 +392,12 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                   CommonSoraText(
                                     text: state.user.name,
                                     color: AppColors.to.contrastThemeColor,
-                                    textSize: 13,
+                                    textSize: 12.sp,
                                     fontWeight: FontWeight.w500,
                                   ),
                                   CommonSoraText(
                                     text: state.user.about,
-                                    textSize: 13,
+                                    textSize: 12.sp,
                                     color: AppColors.to.contrastThemeColor,
                                   ),
                                   SizedBox(
@@ -453,7 +453,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                                                       .follow.tr),
                                                           color: AppColors.to
                                                               .contrastThemeColor,
-                                                          textSize: 13,
+                                                          textSize: 12.sp,
                                                           // fontWeight: FontWeight.w500,
                                                         ),
                                                 ),
@@ -479,6 +479,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                             ),
                                             child: Center(
                                               child: CommonSoraText(
+                                                textSize: 12.sp,
                                                 text: LocaleKeys.message.tr,
                                                 color: AppColors
                                                     .to.contrastThemeColor,
@@ -521,14 +522,14 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                                 child: CommonSoraText(
                                   text: "Posts (${state.user.postCount})",
                                   color: AppColors.to.contrastThemeColor,
-                                  textSize: 15,
+                                  textSize: 12.sp,
                                 ),
                               ),
                               Tab(
                                 child: CommonSoraText(
                                   text: "Clips",
                                   color: AppColors.to.contrastThemeColor,
-                                  textSize: 15,
+                                  textSize: 12.sp,
                                 ),
                               ),
                             ],
@@ -559,7 +560,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen>
                             CommonSoraText(
                               text: "Private account",
                               color: AppColors.to.contrastThemeColor,
-                              textSize: 15,
+                              textSize: 15.sp,
                             ),
                           ],
                         ),

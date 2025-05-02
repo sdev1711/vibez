@@ -24,10 +24,11 @@ class OptionItem extends StatelessWidget {
               color: name == "Read at"
                   ? Colors.blue.shade400
                   : AppColors.to.contrastThemeColor,
-              size: 25,
+              size: 20.sp,
             ),
             Flexible(
               child: CommonSoraText(
+                textSize: 10.sp,
                 text: name,
                 color: AppColors.to.contrastThemeColor,
               ),

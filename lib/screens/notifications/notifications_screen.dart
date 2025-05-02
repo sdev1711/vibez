@@ -60,7 +60,7 @@ class NotificationsScreen extends StatelessWidget {
                       child: CommonSoraText(
                         text: "Follow requests",
                         color: AppColors.to.contrastThemeColor,
-                        textSize: 17,
+                        textSize: 13,
                       ),
                     ),
                     ListView.builder(
@@ -148,7 +148,7 @@ class NotificationsScreen extends StatelessWidget {
                             child: CommonSoraText(
                               text: "Likes",
                               color: AppColors.to.contrastThemeColor,
-                              textSize: 17,
+                              textSize: 13,
                             ),
                           ),
                     ListView.builder(

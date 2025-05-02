@@ -138,7 +138,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
               title: CommonSoraText(
                 text: ApiService.me.username,
                 color: AppColors.to.contrastThemeColor,
-                textSize: 17,
+                textSize: 15.sp,
               ),
               leading: IconButton(
                 onPressed: () {

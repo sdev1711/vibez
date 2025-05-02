@@ -53,7 +53,7 @@ class SelectPostType extends StatelessWidget {
                     CommonSoraText(
                       text: "Image",
                       color: AppColors.to.contrastThemeColor,
-                      textSize: 15,
+                      textSize: 12.sp,
                     ),
                   ],
                 ),
@@ -84,7 +84,7 @@ class SelectPostType extends StatelessWidget {
                     CommonSoraText(
                       text: "Clip",
                       color: AppColors.to.contrastThemeColor,
-                      textSize: 15,
+                      textSize: 12.sp,
                     ),
                   ],
                 ),

@@ -59,7 +59,7 @@ class UploadStoryScreenState extends State<UploadStoryScreen> {
         title: CommonSoraText(
           text: "Upload Story",
           color: AppColors.to.contrastThemeColor,
-          textSize: 17,
+          textSize: 15.sp,
         ),
         leading:  CommonIconButton(
           iconData: Icons.arrow_back_rounded,
@@ -106,7 +106,7 @@ class UploadStoryScreenState extends State<UploadStoryScreen> {
                   child: CommonSoraText(
                     text: "Pick Image",
                     color: AppColors.to.darkBgColor,
-                    textSize: 15,
+                    textSize: 12.sp,
                   ),
                 ),
                 CommonButton(
@@ -117,7 +117,7 @@ class UploadStoryScreenState extends State<UploadStoryScreen> {
                   child: CommonSoraText(
                     text: "Upload story",
                     color: AppColors.to.darkBgColor,
-                    textSize: 15,
+                    textSize: 12.sp,
                   ),
                 ),
               ],

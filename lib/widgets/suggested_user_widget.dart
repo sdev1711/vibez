@@ -111,7 +111,7 @@ class SuggestedUserWidget extends StatelessWidget {
                                           .to.darkBgColor,
                                       maxLine: 1,
                                       softWrap: true,
-                                      textSize: 13,
+                                      textSize: 12.sp,
                                       textOverflow:
                                       TextOverflow
                                           .ellipsis,
@@ -181,7 +181,7 @@ class SuggestedUserWidget extends StatelessWidget {
                                         fontWeight:
                                         FontWeight
                                             .w500,
-                                        textSize: 13,
+                                        textSize: 12.sp,
                                       ),
                                     ),
                                   ),

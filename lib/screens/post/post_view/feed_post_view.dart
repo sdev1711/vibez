@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:vibez/Cubit/post/post_cubit.dart';
 import 'package:vibez/app/colors.dart';
@@ -29,6 +30,7 @@ class _FeedPostViewState extends State<FeedPostView> {
       backgroundColor: AppColors.to.darkBgColor,
       appBar: CommonAppBar(
         title: CommonSoraText(
+          textSize: 15.sp,
             text: "Feed Post", color: AppColors.to.contrastThemeColor),
         leading: CommonIconButton(
           onTap: () {
