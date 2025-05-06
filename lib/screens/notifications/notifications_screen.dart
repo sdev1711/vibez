@@ -8,6 +8,7 @@ import 'package:vibez/Cubit/follow_request/follow_request_state.dart';
 import 'package:vibez/Cubit/post/post_cubit.dart';
 import 'package:vibez/Cubit/user_profile_data/user_profile_cubit.dart';
 import 'package:vibez/api_service/api_service.dart';
+import 'package:vibez/app/app_route.dart';
 import 'package:vibez/app/colors.dart';
 import 'package:vibez/generated/locales.g.dart';
 import 'package:vibez/model/user_model.dart';
@@ -25,7 +26,7 @@ class NotificationsScreen extends StatelessWidget {
       backgroundColor: AppColors.to.darkBgColor,
       appBar: CommonAppBar(
         title: CommonSoraText(
-          textSize: 17,
+          textSize: 17.sp,
           text: LocaleKeys.notifications.tr,
           color: AppColors.to.contrastThemeColor,
         ),
@@ -60,7 +61,7 @@ class NotificationsScreen extends StatelessWidget {
                       child: CommonSoraText(
                         text: "Follow requests",
                         color: AppColors.to.contrastThemeColor,
-                        textSize: 13,
+                        textSize: 12.sp,
                       ),
                     ),
                     ListView.builder(
@@ -69,13 +70,22 @@ class NotificationsScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         UserModel user = state.requests[index];
                         return ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: user.image.isEmpty
-                                ? AssetImage(ImagePath.profileIcon)
-                                : NetworkImage(user.image),
+                          leading: GestureDetector(
+                            onTap: (){
+                              Get.toNamed(AppRoutes.otherUserProfileScreen,arguments: user);
+                            },
+                            child: CircleAvatar(
+                              backgroundImage: user.image.isEmpty
+                                  ? AssetImage(ImagePath.profileIcon)
+                                  : NetworkImage(user.image),
+                            ),
                           ),
-                          title: CommonSoraText(text:user.username,color: AppColors.to.contrastThemeColor,textSize: 13,fontWeight: FontWeight.w500,),
-                          subtitle: CommonSoraText(text:user.name,color: AppColors.to.contrastThemeColor.withOpacity(0.5),textSize: 13,),
+                          title: GestureDetector(
+                              onTap: (){
+                                Get.toNamed(AppRoutes.otherUserProfileScreen,arguments: user);
+                              },
+                              child: CommonSoraText(text:user.username,color: AppColors.to.contrastThemeColor,textSize: 12.sp,fontWeight: FontWeight.w500,)),
+                          subtitle: CommonSoraText(text:user.name,color: AppColors.to.contrastThemeColor.withOpacity(0.5),textSize: 12.sp,),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -91,11 +101,11 @@ class NotificationsScreen extends StatelessWidget {
                                 },
                                 bgColor: AppColors.to.contrastThemeColor,
                                 height: 30.h,
-                                width: 70.w,
+                                width: 50.w,
                                 child: CommonSoraText(
                                   text: LocaleKeys.accept.tr,
                                   color: AppColors.to.darkBgColor,
-                                  textSize: 13,
+                                  textSize: 10.sp,
                                 ),
                               ),
                               SizedBox(width: 8),
@@ -109,11 +119,11 @@ class NotificationsScreen extends StatelessWidget {
                                 boxBorder: Border.all(
                                     color: AppColors.to.contrastThemeColor),
                                 height: 30.h,
-                                width: 70.w,
+                                width: 50.w,
                                 child: CommonSoraText(
                                   text: LocaleKeys.reject.tr,
                                   color: AppColors.to.contrastThemeColor,
-                                  textSize: 13,
+                                  textSize: 10.sp,
                                 ),
                               ),
                             ],
@@ -129,7 +139,7 @@ class NotificationsScreen extends StatelessWidget {
                 child: CommonSoraText(
                   text: LocaleKeys.noData.tr,
                   color: AppColors.to.contrastThemeColor,
-                  textSize: 14,
+                  textSize: 13.sp,
                 ),
               );
             },
@@ -148,7 +158,7 @@ class NotificationsScreen extends StatelessWidget {
                             child: CommonSoraText(
                               text: "Likes",
                               color: AppColors.to.contrastThemeColor,
-                              textSize: 13,
+                              textSize: 12.sp,
                             ),
                           ),
                     ListView.builder(
@@ -192,6 +202,7 @@ class NotificationsScreen extends StatelessWidget {
                                                 "${likedUsers.first} liked your post",
                                             color:
                                                 AppColors.to.contrastThemeColor,
+                                            textSize:12.sp,
                                           ),
                                           leading: _buildImage(post.imageUrl),
                                         ),
@@ -204,6 +215,7 @@ class NotificationsScreen extends StatelessWidget {
                                                     "${likedUsers[0]}, ${likedUsers[1]} liked your post",
                                                 color: AppColors
                                                     .to.contrastThemeColor,
+                                                textSize: 12.sp,
                                               ),
                                               leading:
                                                   _buildImage(post.imageUrl),
@@ -216,6 +228,7 @@ class NotificationsScreen extends StatelessWidget {
                                                     "${likedUsers[0]}, ${likedUsers[1]} and others liked your post",
                                                 color: AppColors
                                                     .to.contrastThemeColor,
+                                                textSize: 12.sp,
                                               ),
                                               leading:
                                                   _buildImage(post.imageUrl),

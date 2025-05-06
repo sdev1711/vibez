@@ -47,4 +47,8 @@ class SharedPrefs {
   static String? getUserData() {
     return prefs?.getString(userData);
   }
+
+  static Future<bool?> clearData()async{
+    return await prefs?.remove(userData);
+  }
 }

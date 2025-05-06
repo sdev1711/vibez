@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void initState() {
-    super.initState();
+    if(ApiService.auth.currentUser!=null)ApiService.getSelfInfo();
     _controller = AnimationController(
       duration: const Duration(milliseconds: 1200),
       vsync: this,
@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     _controller.forward();
-    if(ApiService.auth.currentUser!=null)ApiService.getSelfInfo();
+
     // _updateOldPosts();
     Future.delayed(Duration(seconds: 2), () {
       if(ApiService.auth.currentUser==null){
@@ -47,6 +47,7 @@ class _SplashScreenState extends State<SplashScreen>
         Get.offNamed(AppRoutes.mainScreen);
       }
     });
+    super.initState();
   }
   @override
   void dispose() {

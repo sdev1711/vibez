@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,8 +9,10 @@ import 'package:vibez/Cubit/post/post_cubit.dart';
 import 'package:vibez/api_service/api_service.dart';
 import 'package:vibez/app/app_route.dart';
 import 'package:vibez/app/colors.dart';
+import 'package:vibez/database/shared_preference.dart';
 import 'package:vibez/generated/locales.g.dart';
 import 'package:vibez/model/post_model.dart';
+import 'package:vibez/model/user_model.dart';
 import 'package:vibez/utils/image_path/image_path.dart';
 import 'package:vibez/widgets/common_appBar.dart';
 import 'package:vibez/widgets/common_post_view.dart';
@@ -24,19 +28,33 @@ class HomeMobileLayout extends StatefulWidget {
 }
 
 class _HomeMobileLayoutState extends State<HomeMobileLayout> {
-  late List<PostModel> postsData;
 
-  ApiService apiService = ApiService();
+  late List<PostModel> postsData;
+   UserModel? me;
+
   @override
   void initState() {
+    ApiService.getSelfInfo();
+    getCurrentUserData();
     context.read<FeedPostCubit>().fetchFollowingPosts();
     context.read<PostCubit>().fetchPosts();
-    ApiService.getSelfInfo();
     super.initState();
   }
-
+Future<void> getCurrentUserData()async{
+  String? userDataString = SharedPrefs.getUserData();
+  log("userDataString is $userDataString");
+  if (userDataString != null) {
+    Map<String, dynamic> userMap = jsonDecode(userDataString);
+    me = UserModel.fromJson(userMap);
+    log("following============ ${me?.following}");
+  }
+  else{
+    log("User data is null");
+  }
+}
   @override
   Widget build(BuildContext context) {
+    log("following============ ${me?.following}");
     return Scaffold(
       backgroundColor: AppColors.to.darkBgColor,
       appBar: CommonAppBar(
@@ -76,7 +94,7 @@ class _HomeMobileLayoutState extends State<HomeMobileLayout> {
           child: Column(
             children: [
               StoryViewWidget(),
-              if (ApiService.me.following.isEmpty) ...[
+              if (me?.following.isEmpty??false) ...[
                 Column(
                   children: [
                     SuggestedUserWidget(),
@@ -128,6 +146,8 @@ class _HomeMobileLayoutState extends State<HomeMobileLayout> {
     await context
         .read<FeedPostCubit>()
         .fetchFollowingPosts();
+    ApiService.getSelfInfo();
+    getCurrentUserData();
     if(!mounted)return;
     await context.read<PostCubit>().fetchPosts();
   }

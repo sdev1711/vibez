@@ -35,14 +35,14 @@ class SelectPostType extends StatelessWidget {
             borderRadius: BorderRadius.circular(30),
             child: BottomAppBar(
               height: 50.h,
-              color: Colors.black,
+              color: AppColors.to.contrastThemeColor,
               shape: const CircularNotchedRectangle(),
               notchMargin: 4,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   _buildNavItem(context,"Post", 0),
-                  _buildNavItem(context,"Reel", 1),
+                  _buildNavItem(context,"Clip", 1),
                   _buildNavItem(context,"Live", 2),
                 ],
               ),
@@ -65,8 +65,9 @@ class SelectPostType extends StatelessWidget {
              children: [
                CommonSoraText(
                  text: label,
-                 color: isSelected ? Colors.white : Colors.white60,
-                   ),
+                 color: isSelected ? AppColors.to.darkBgColor : AppColors.to.darkBgColor.withOpacity(0.5),
+                 textSize: 12.sp,
+               ),
              ],
            ),
          );

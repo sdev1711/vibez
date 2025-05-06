@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:vibez/api_service/api_service.dart';
 import 'package:vibez/app/app_route.dart';
 import 'package:vibez/app/colors.dart';
+import 'package:vibez/database/shared_preference.dart';
 import 'package:vibez/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 part 'auth_state.dart';
@@ -134,7 +135,6 @@ class AuthCubit extends Cubit<AuthState> {
       String name = userQuery.docs.first["name"];
       String uid = userQuery.docs.first["uid"];
       await auth.signInWithEmailAndPassword(email: email, password: password);
-      ApiService.getSelfInfo();
       _user = UserModel(
         username: username,
         name: name,
@@ -151,6 +151,7 @@ class AuthCubit extends Cubit<AuthState> {
         userScore: 0,
         lastOpenedDate: '',
       );
+      ApiService.getSelfInfo();
       emit(AuthAuthenticated(_user!));
       log("hello is user $_user");
       Get.offAllNamed(AppRoutes.mainScreen);
@@ -164,6 +165,7 @@ class AuthCubit extends Cubit<AuthState> {
       ApiService.updateUserActiveStatus(false);
       await auth.signOut();
       _user = null;
+      SharedPrefs.clearData();
       emit(AuthInitial());
       Get.offAllNamed(AppRoutes.loginScreen);
     } catch (e) {

@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:vibez/database/shared_preference.dart';
 import 'package:vibez/model/message_model.dart';
 import 'package:vibez/model/post_model.dart';
 import 'package:vibez/model/user_model.dart';
@@ -36,6 +37,8 @@ class ApiService {
     await firestore.collection('users').doc(user.uid).get().then((user) async {
       if (user.exists) {
         me = UserModel.fromJson(user.data()!);
+        String userData=jsonEncode(me);
+        SharedPrefs.saveUserData(userData);
         await getFirebaseMessagingToken();
         //for setting user status to active
         // ApiService.updateUserActiveStatus(true);

@@ -36,14 +36,6 @@ class _MessagesScreenState extends State<MessagesScreen> {
   TextEditingController searchController = TextEditingController();
   UserModel? userModel;
   ApiService apiService = ApiService();
-  @override
-  void initState() {
-    // String user = SharedPrefs.getUserData() ?? "";
-    // Map<String, dynamic> userMap = jsonDecode(user);
-    // userModel = UserModel.fromJson(userMap);
-
-    super.initState();
-  }
 
   Stream<CallModel?> getIncomingCall() {
     return ApiService.firestore
@@ -389,7 +381,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                                                         ApiService.user.uid)
                                                 ? AppColors
                                                     .to.contrastThemeColor
-                                                : AppColors
+                                                    : AppColors
                                                     .to.contrastThemeColor
                                                     .withOpacity(0.5),
                                         textSize: message != null &&
