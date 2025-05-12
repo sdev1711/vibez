@@ -120,7 +120,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 Get.toNamed(AppRoutes.chatBotScreen);
               },
               child: ImageIcon(
-                  AssetImage(ImagePath.chatbotIcon),
+                AssetImage(ImagePath.chatbotIcon),
                 color: AppColors.to.aiLightColor,
                 size: 40,
               ),
@@ -372,7 +372,10 @@ class _MessagesScreenState extends State<MessagesScreen> {
                                             ? LocaleKeys.busy.tr
                                             : message.type == Type.image
                                                 ? LocaleKeys.image.tr
-                                                : message.type == Type.text? message.msg:message.fileName??"Document",
+                                                : message.type == Type.text
+                                                    ? message.msg
+                                                    : message.fileName ??
+                                                        "Document",
                                         color: message == null
                                             ? AppColors.to.contrastThemeColor
                                                 .withOpacity(0.5)
@@ -381,7 +384,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                                                         ApiService.user.uid)
                                                 ? AppColors
                                                     .to.contrastThemeColor
-                                                    : AppColors
+                                                : AppColors
                                                     .to.contrastThemeColor
                                                     .withOpacity(0.5),
                                         textSize: message != null &&
@@ -411,7 +414,12 @@ class _MessagesScreenState extends State<MessagesScreen> {
                                                 message.toId !=
                                                     ApiService.user.uid
                                             ? Colors.grey.shade500
-                                            : Colors.blue.shade400,
+                                            : userData.readReceipts == false ||
+                                                    ApiService
+                                                            .me.readReceipts ==
+                                                        false
+                                                ? Colors.grey.shade500
+                                                : Colors.blue.shade400,
                                       ),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 5.0),

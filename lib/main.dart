@@ -11,9 +11,11 @@ import 'package:vibez/Cubit/chatbot/chatbot_cubit.dart';
 import 'package:vibez/Cubit/document_download_cubit/document_download_cubit.dart';
 import 'package:vibez/Cubit/emoji/emoji_cubit.dart';
 import 'package:vibez/Cubit/feed_post/feed_post_cubit.dart';
+import 'package:vibez/Cubit/last_seen_switch/last_seen_switch.dart';
 import 'package:vibez/Cubit/message_input/message_input_cubit.dart';
 import 'package:vibez/Cubit/post/image_picker_cubit/image_picker_cubit.dart';
 import 'package:vibez/Cubit/private_account_switch/private_account_switch_cubit.dart';
+import 'package:vibez/Cubit/read_receipts_switch/read_receipts_switch.dart';
 import 'package:vibez/Cubit/search/search_cubit.dart';
 import 'package:vibez/Cubit/search_field_cubit/search_field_cubit.dart';
 import 'package:vibez/Cubit/send_receive_chat_time/send_receive_chat_cubit.dart';
@@ -124,6 +126,15 @@ class _MyAppState extends State<MyApp> {
           ),
           BlocProvider<SwitchCubit>(
             create: (context) => SwitchCubit()..fetchInitialState(),
+          ),
+          BlocProvider<LastSeenCubit>(
+            create: (context) => LastSeenCubit()..fetchInitialState(),
+          ),
+          BlocProvider<ReadReceiptsCubit>(
+            create: (context) => ReadReceiptsCubit()..fetchInitialState(),
+          ),
+          BlocProvider<ZoomCubit>(
+            create: (context) => ZoomCubit(),
           ),
           BlocProvider<FollowRequestCubit>(
             create: (context) => FollowRequestCubit()..listenToFollowRequests(),

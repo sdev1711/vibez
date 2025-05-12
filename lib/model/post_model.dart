@@ -50,6 +50,8 @@ class PostModel {
       pushToken: "pushToken",
       username: "username",
       isPrivate: false,
+      readReceipts: false,
+      lastSeen: false,
       postCount: 0,
       userScore: 0,
       lastOpenedDate: '',

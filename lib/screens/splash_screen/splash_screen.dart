@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vibez/api_service/api_service.dart';
@@ -57,11 +56,12 @@ class _SplashScreenState extends State<SplashScreen>
   // Future<void> _updateOldPosts() async {
   //   QuerySnapshot snapshot = await ApiService.firestore.collection('users').get();
   //   for (var doc in snapshot.docs) {
-  //     if (!doc.data().toString().contains('lastOpenedDate')) { // Check if field is missing
-  //       await ApiService.firestore.collection('users').doc(doc.id).update({'lastOpenedDate': ''});
+  //     if (!doc.data().toString().contains('lastSeen')) { // Check if field is missing
+  //       await ApiService.firestore.collection('users').doc(doc.id).update({'lastSeen': true});
   //     }
   //   }
   // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

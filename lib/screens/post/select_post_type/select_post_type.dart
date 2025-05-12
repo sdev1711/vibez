@@ -43,7 +43,7 @@ class SelectPostType extends StatelessWidget {
                 children: <Widget>[
                   _buildNavItem(context,"Post", 0),
                   _buildNavItem(context,"Clip", 1),
-                  _buildNavItem(context,"Live", 2),
+                  _buildNavItem(context,"Story", 2),
                 ],
               ),
             ),

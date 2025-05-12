@@ -55,7 +55,8 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
   }
 
-  void _toggleAttachmentOptions(BuildContext context, UserModel userData, GlobalKey key) {
+  void _toggleAttachmentOptions(
+      BuildContext context, UserModel userData, GlobalKey key) {
     if (_overlayEntry != null) {
       _removeOverlay();
       return;
@@ -160,7 +161,8 @@ class _ChatScreenState extends State<ChatScreen> {
                         if (result != null) {
                           for (var file in result.files) {
                             final pickedFile = File(file.path!);
-                            await ApiService.sendChatDocument(userData, pickedFile, file.name);
+                            await ApiService.sendChatDocument(
+                                userData, pickedFile, file.name);
                           }
                         }
                       },
@@ -231,8 +233,9 @@ class _ChatScreenState extends State<ChatScreen> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            icon: Icon(Icons.arrow_back_rounded,
-                color: AppColors.to.contrastThemeColor,
+            icon: Icon(
+              Icons.arrow_back_rounded,
+              color: AppColors.to.contrastThemeColor,
             ),
           ),
           title: Row(
@@ -240,7 +243,8 @@ class _ChatScreenState extends State<ChatScreen> {
             children: [
               GestureDetector(
                 onTap: () {
-                  Get.toNamed(AppRoutes.otherUserProfileScreen, arguments: userData);
+                  Get.toNamed(AppRoutes.otherUserProfileScreen,
+                      arguments: userData);
                 },
                 child: CircleAvatar(
                   backgroundColor: AppColors.to.defaultProfileImageBg,
@@ -278,8 +282,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     ],
                   ),
                   StreamBuilder(
-                    stream:  ApiService.getUserInfo(userData),
-                    builder: (context,snapshot){
+                    stream: ApiService.getUserInfo(userData),
+                    builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Container();
                       }
@@ -288,44 +292,44 @@ class _ChatScreenState extends State<ChatScreen> {
                         return CommonSoraText(text: 'Error');
                       }
 
-                      if (!snapshot.hasData || snapshot.data == null || !snapshot.data!.exists) {
+                      if (!snapshot.hasData ||
+                          snapshot.data == null ||
+                          !snapshot.data!.exists) {
                         return Container();
                       }
 
                       final data = snapshot.data!.data();
-                      final list = data != null ? [UserModel.fromJson(data)] : [];
+                      final list =
+                          data != null ? [UserModel.fromJson(data)] : [];
 
                       // These logs will now run only when data is guaranteed to exist
                       log("=====list is ===== $list");
                       log("=====list is ===== ${list[0].isOnline}");
-                      return  GestureDetector(
-                        onTap: () {
-                          log("is online : ${list[0].isOnline}");
-                          log("username : ${list[0].username}");
-                        },
-                        child: CommonSoraText(
-                          text: list.isNotEmpty
-                              ? list[0].isOnline
-                              ? "Online"
-                              : MyDateUtil.getLastActiveTime(
-                            context: context,
-                            lastActive: list[0].lastActive,
-                          )
-                              : MyDateUtil.getLastActiveTime(
-                            context: context,
-                            lastActive: userData.lastActive,
-                          ),
-                          color: AppColors.to.contrastThemeColor,
-                          textSize: 10.sp,
-                        ),
-                      );
+                      return ApiService.me.lastSeen == false ||
+                              userData.lastSeen == false
+                          ? Container()
+                          : CommonSoraText(
+                              text: list.isNotEmpty
+                                  ? list[0].isOnline
+                                      ? "Online"
+                                      : MyDateUtil.getLastActiveTime(
+                                          context: context,
+                                          lastActive: list[0].lastActive,
+                                        )
+                                  : MyDateUtil.getLastActiveTime(
+                                      context: context,
+                                      lastActive: userData.lastActive,
+                                    ),
+                              color: AppColors.to.contrastThemeColor,
+                              textSize: 10.sp,
+                            );
                     },
                   ),
                 ],
               ),
             ],
           ),
-      actions: [
+          actions: [
             // IconButton(
             //   icon: Icon(
             //     Icons.video_call,
@@ -351,7 +355,6 @@ class _ChatScreenState extends State<ChatScreen> {
               Expanded(
                 child: StreamBuilder(
                   stream: ApiService.getAllMessages(userData),
-
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.waiting:
@@ -367,13 +370,17 @@ class _ChatScreenState extends State<ChatScreen> {
 
                         if (_list.isNotEmpty) {
                           return ListView.builder(
-                            reverse:  true,
+                            reverse: true,
                             controller: _scrollController,
                             itemCount: _list.length,
                             itemBuilder: (context, index) {
                               return GestureDetector(
-                                  onLongPress: () {},
-                                  child: MessageCard(message: _list[index]));
+                                onLongPress: () {},
+                                child: MessageCard(
+                                  message: _list[index],
+                                  userData: userData,
+                                ),
+                              );
                             },
                           );
                         } else {
@@ -460,8 +467,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                         children: [
                                           if (isEmpty) ...[
                                             GestureDetector(
-                                              key:
-                                                  _attachmentButtonKey,
+                                              key: _attachmentButtonKey,
                                               onTap: () {
                                                 _toggleAttachmentOptions(
                                                   context,
@@ -470,8 +476,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                 );
                                               },
                                               child: Icon(
-                                                Icons
-                                                    .attach_file,
+                                                Icons.attach_file,
                                                 size: 30,
                                                 color: AppColors
                                                     .to.contrastThemeColor,
@@ -494,8 +499,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                         ""); // Reset state
                                                 Future.delayed(
                                                     Duration(milliseconds: 300),
-                                                    () {
-                                                });
+                                                    () {});
                                               }
                                             },
                                             child: Container(

@@ -39,6 +39,8 @@ class _EditProfileState extends State<EditProfile> {
             image: "image",
             isOnline: false,
             isPrivate: false,
+          readReceipts: false,
+          lastSeen: false,
           postCount: 0,
           userScore: 0,
           lastOpenedDate: '',

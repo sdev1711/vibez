@@ -14,6 +14,7 @@ import 'package:vibez/Cubit/document_download_cubit/document_download_cubit.dart
 import 'package:vibez/api_service/api_service.dart';
 import 'package:vibez/app/colors.dart';
 import 'package:vibez/model/message_model.dart';
+import 'package:vibez/model/user_model.dart';
 import 'package:vibez/utils/dialog/dialog.dart';
 import 'package:vibez/utils/date_format/my_date_util.dart';
 import 'package:vibez/widgets/bottomshit_options.dart';
@@ -26,7 +27,8 @@ import 'package:http/http.dart' as http;
 
 class MessageCard extends StatefulWidget {
   final MessageModel message;
-  const MessageCard({super.key, required this.message});
+  final UserModel userData;
+  const MessageCard({super.key, required this.message, required this.userData});
 
   @override
   State<MessageCard> createState() => _MessageCardState();
@@ -41,7 +43,7 @@ class _MessageCardState extends State<MessageCard> {
       onLongPress: () {
         showBottomShit(isMe);
       },
-      onTap: (){
+      onTap: () {
         log("hiiiii ${widget.message.type}");
       },
       child: isMe ? primaryMessage() : secondaryMessage(),
@@ -73,7 +75,9 @@ class _MessageCardState extends State<MessageCard> {
         Flexible(
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-            padding: widget.message.type == Type.text?EdgeInsets.all(10):EdgeInsets.all(5),
+            padding: widget.message.type == Type.text
+                ? EdgeInsets.all(10)
+                : EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: AppColors.to.sendUserColor,
               borderRadius: BorderRadius.circular(10),
@@ -97,10 +101,15 @@ class _MessageCardState extends State<MessageCard> {
                             AppColors.to.defaultProfileImageBg.withOpacity(0.5),
                         textSize: 10,
                       ),
-                      if (widget.message.read.isNotEmpty&& ApiService.user.uid == widget.message.fromId) ...[
+                      if (widget.message.read.isNotEmpty &&
+                          ApiService.user.uid == widget.message.fromId) ...[
                         SizedBox(width: 5.w),
                         Icon(Icons.done_all_rounded,
-                            color: Colors.blue.shade400, size: 17),
+                            color: ApiService.me.readReceipts == false ||
+                                    widget.userData.readReceipts == false
+                                ? Colors.grey.shade500
+                                : Colors.blue.shade400,
+                            size: 17),
                       ] else ...[
                         SizedBox(width: 5.w),
                         Icon(Icons.done_all_rounded,
@@ -108,91 +117,116 @@ class _MessageCardState extends State<MessageCard> {
                       ]
                     ],
                   )
-                :  widget.message.type == Type.image?Stack(
-                  children:[
-                    CommonCachedWidget(
-                        imageUrl: widget.message.msg, height: 300.h, width: 250.w),
-                    Positioned(
-                      bottom: 5,
-                        right: 15,
-                        child:widget.message.read.isNotEmpty && ApiService.user.uid == widget.message.fromId?
-            Icon(Icons.done_all_rounded,
-                color: Colors.blue.shade400, size: 17):Icon(Icons.done_all_rounded,
-                            color: Colors.grey.shade500, size: 17),
-
-                    ),
-                  ],
-                ):GestureDetector(
-              onTap: () async {
-                final url = widget.message.msg;
-                try {
-                  // Download the file to local storage
-                  final response = await http.get(Uri.parse(url));
-                  final fileName =  'document.pdf';
-
-                  final dir = await getTemporaryDirectory();
-                  final filePath = '${dir.path}/$fileName';
-
-                  final file = File(filePath);
-                  await file.writeAsBytes(response.bodyBytes);
-
-                  final result = await OpenFilex.open(filePath);
-                  log('Open result: ${result.message}');
-                } catch (e) {
-                  log('Failed to open file: $e');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Couldn't open document.")),
-                  );
-                }
-              },
-              child: Container(
-                padding: EdgeInsets.all(12),
-                width: 250.w,
-                decoration: BoxDecoration(
-                  color: AppColors.to.primaryBgColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.insert_drive_file,
-                        size: 30, color: AppColors.to.white),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                : widget.message.type == Type.image
+                    ? Stack(
                         children: [
-                          CommonSoraText(
-                            text:
-                           widget.message.fileName??'Document',
-                            textSize: 14,
-                            color: AppColors.to.white,
-                            softWrap: true,
-                            maxLine: 1,
-                            textOverflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              CommonSoraText(
-                                text: formatTimestamp(timestamp),
-                                textSize: 10,
-                                color: AppColors.to.white
-                                    .withOpacity(0.5),
-                              ),
-                              widget.message.read.isNotEmpty&& ApiService.user.uid == widget.message.fromId?
-                              Icon(Icons.done_all_rounded,
-                                  color: Colors.blue.shade400, size: 17):Icon(Icons.done_all_rounded,
-                                  color: Colors.grey.shade500, size: 17),
-                            ],
+                          CommonCachedWidget(
+                              imageUrl: widget.message.msg,
+                              height: 300.h,
+                              width: 250.w),
+                          Positioned(
+                            bottom: 5,
+                            right: 15,
+                            child: widget.message.read.isNotEmpty &&
+                                    ApiService.user.uid == widget.message.fromId
+                                ? Icon(Icons.done_all_rounded,
+                                    color:
+                                        ApiService.me.readReceipts == false ||
+                                                widget.userData.readReceipts ==
+                                                    false
+                                            ? Colors.grey.shade500
+                                            : Colors.blue.shade400,
+                                    size: 17)
+                                : Icon(Icons.done_all_rounded,
+                                    color: Colors.grey.shade500, size: 17),
                           ),
                         ],
+                      )
+                    : GestureDetector(
+                        onTap: () async {
+                          final url = widget.message.msg;
+                          try {
+                            // Download the file to local storage
+                            final response = await http.get(Uri.parse(url));
+                            final fileName = 'document.pdf';
+
+                            final dir = await getTemporaryDirectory();
+                            final filePath = '${dir.path}/$fileName';
+
+                            final file = File(filePath);
+                            await file.writeAsBytes(response.bodyBytes);
+
+                            final result = await OpenFilex.open(filePath);
+                            log('Open result: ${result.message}');
+                          } catch (e) {
+                            log('Failed to open file: $e');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text("Couldn't open document.")),
+                            );
+                          }
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(12),
+                          width: 250.w,
+                          decoration: BoxDecoration(
+                            color: AppColors.to.primaryBgColor.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.insert_drive_file,
+                                  size: 30, color: AppColors.to.white),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CommonSoraText(
+                                      text:
+                                          widget.message.fileName ?? 'Document',
+                                      textSize: 14,
+                                      color: AppColors.to.white,
+                                      softWrap: true,
+                                      maxLine: 1,
+                                      textOverflow: TextOverflow.ellipsis,
+                                    ),
+                                    SizedBox(height: 5),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        CommonSoraText(
+                                          text: formatTimestamp(timestamp),
+                                          textSize: 10,
+                                          color: AppColors.to.white
+                                              .withOpacity(0.5),
+                                        ),
+                                        widget.message.read.isNotEmpty &&
+                                                ApiService.user.uid ==
+                                                    widget.message.fromId
+                                            ? Icon(Icons.done_all_rounded,
+                                                color: ApiService.me
+                                                                .readReceipts ==
+                                                            false ||
+                                                        widget.userData
+                                                                .readReceipts ==
+                                                            false
+                                                    ? Colors.grey.shade500
+                                                    : Colors.blue.shade400,
+                                                size: 17)
+                                            : Icon(Icons.done_all_rounded,
+                                                color: Colors.grey.shade500,
+                                                size: 17),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
           ),
         ),
       ],
@@ -223,7 +257,9 @@ class _MessageCardState extends State<MessageCard> {
         Flexible(
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-            padding:  widget.message.type == Type.text?EdgeInsets.all(10):EdgeInsets.all(5),
+            padding: widget.message.type == Type.text
+                ? EdgeInsets.all(10)
+                : EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: AppColors.to.receiveUserColor,
               borderRadius: BorderRadius.circular(10),
@@ -251,100 +287,110 @@ class _MessageCardState extends State<MessageCard> {
                   )
                 : widget.message.type == Type.image
                     ? Stack(
-              children:[
-                CommonCachedWidget(
-                    imageUrl: widget.message.msg, height: 300.h, width: 250.w),
-                Positioned(
-                  bottom: 5,
-                  right: 15,
-                  child:widget.message.read.isNotEmpty?
-                  Icon(Icons.done_all_rounded,
-                      color: Colors.blue.shade400, size: 17):Icon(Icons.done_all_rounded,
-                      color: Colors.grey.shade500, size: 17),
-                ),
-              ],
-            )
-                    : GestureDetector(
-              onTap: () async {
-                final dir = await getTemporaryDirectory();
-                final filePath = '${dir.path}/${widget.message.fileName ?? "document.pdf"}';
-                final file = File(filePath);
-
-                if (await file.exists()) {
-                  await OpenFilex.open(filePath);
-                }
-              },
-              child: Container(
-                padding: EdgeInsets.all(12),
-                width: 250.w,
-                decoration: BoxDecoration(
-                  color: AppColors.to.receiveUserColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.insert_drive_file, size: 30, color: AppColors.to.receiveUserFontColor),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CommonSoraText(
-                            text: widget.message.fileName ?? 'Document',
-                            textSize: 14,
-                            color: AppColors.to.receiveUserFontColor,
-                            softWrap: true,
-                            maxLine: 1,
-                            textOverflow: TextOverflow.ellipsis,
+                          CommonCachedWidget(
+                              imageUrl: widget.message.msg,
+                              height: 300.h,
+                              width: 250.w),
+                        ],
+                      )
+                    : GestureDetector(
+                        onTap: () async {
+                          final dir = await getTemporaryDirectory();
+                          final filePath =
+                              '${dir.path}/${widget.message.fileName ?? "document.pdf"}';
+                          final file = File(filePath);
+
+                          if (await file.exists()) {
+                            await OpenFilex.open(filePath);
+                          }
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(12),
+                          width: 250.w,
+                          decoration: BoxDecoration(
+                            color: AppColors.to.receiveUserColor,
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          SizedBox(height: 5),
-                          CommonSoraText(
-                            text: formatTimestamp(timestamp),
-                            textSize: 10,
-                            color: AppColors.to.receiveUserFontColor.withOpacity(0.5),
-                          ),
-                          SizedBox(height: 10),
-                          ///Show download button only if file doesn't exist
-                          BlocProvider(
-                            create: (_) => DocumentDownloadCubit()
-                              ..checkIfDownloaded(widget.message.fileName ?? 'document.pdf'),
-                            child: BlocBuilder<DocumentDownloadCubit, bool>(
-                              builder: (context, isDownloaded) {
-                                if (!isDownloaded) {
-                                  return Align(
-                                    alignment: Alignment.centerRight,
-                                    child: CommonButton(
-                                      bgColor: AppColors.to.receiveUserFontColor,
-                                      height: 40.h,
-                                      width: 100.w,
-                                      onPressed: () {
-                                        final cubit = context.read<DocumentDownloadCubit>();
-                                        cubit.downloadFile(widget.message.msg, widget.message.fileName ?? 'document.pdf');
-                                      },
-                                      child: CommonSoraText(
-                                        text: "Download",
-                                        color: AppColors.to.contrastThemeColor,
+                          child: Row(
+                            children: [
+                              Icon(Icons.insert_drive_file,
+                                  size: 30,
+                                  color: AppColors.to.receiveUserFontColor),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CommonSoraText(
+                                      text:
+                                          widget.message.fileName ?? 'Document',
+                                      textSize: 14,
+                                      color: AppColors.to.receiveUserFontColor,
+                                      softWrap: true,
+                                      maxLine: 1,
+                                      textOverflow: TextOverflow.ellipsis,
+                                    ),
+                                    SizedBox(height: 5),
+                                    CommonSoraText(
+                                      text: formatTimestamp(timestamp),
+                                      textSize: 10,
+                                      color: AppColors.to.receiveUserFontColor
+                                          .withOpacity(0.5),
+                                    ),
+                                    SizedBox(height: 10),
+
+                                    ///Show download button only if file doesn't exist
+                                    BlocProvider(
+                                      create: (_) => DocumentDownloadCubit()
+                                        ..checkIfDownloaded(
+                                            widget.message.fileName ??
+                                                'document.pdf'),
+                                      child: BlocBuilder<DocumentDownloadCubit,
+                                          bool>(
+                                        builder: (context, isDownloaded) {
+                                          if (!isDownloaded) {
+                                            return Align(
+                                              alignment: Alignment.centerRight,
+                                              child: CommonButton(
+                                                bgColor: AppColors
+                                                    .to.receiveUserFontColor,
+                                                height: 40.h,
+                                                width: 100.w,
+                                                onPressed: () {
+                                                  final cubit = context.read<
+                                                      DocumentDownloadCubit>();
+                                                  cubit.downloadFile(
+                                                      widget.message.msg,
+                                                      widget.message.fileName ??
+                                                          'document.pdf');
+                                                },
+                                                child: CommonSoraText(
+                                                  text: "Download",
+                                                  color: AppColors
+                                                      .to.contrastThemeColor,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          return SizedBox
+                                              .shrink(); // Hide button if already downloaded
+                                        },
                                       ),
                                     ),
-                                  );
-                                }
-                                return SizedBox.shrink(); // Hide button if already downloaded
-                              },
-                            ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-
-                        ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
           ),
         ),
       ],
     );
   }
+
   void showBottomShit(bool isMe) {
     showModalBottomSheet(
         isDismissible: true,
@@ -460,15 +506,18 @@ class _MessageCardState extends State<MessageCard> {
                 onTap: () {},
               ),
               isMe
-                  ? OptionItem(
-                      icon: Icons.done_all_rounded,
-                      name: widget.message.read.isNotEmpty
-                          ? "Read at : ${MyDateUtil.getMessageTime(
-                              time: widget.message.read,
-                            )}"
-                          : "Read at : Not seen yet",
-                      onTap: () {},
-                    )
+                  ? ApiService.me.readReceipts == false ||
+                          widget.userData.readReceipts == false
+                      ? SizedBox()
+                      : OptionItem(
+                          icon: Icons.done_all_rounded,
+                          name: widget.message.read.isNotEmpty
+                              ? "Read at : ${MyDateUtil.getMessageTime(
+                                  time: widget.message.read,
+                                )}"
+                              : "Read at : Not seen yet",
+                          onTap: () {},
+                        )
                   : SizedBox(),
               SizedBox(
                 height: 20,

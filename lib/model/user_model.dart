@@ -14,6 +14,8 @@ class UserModel {
     required this.postCount,
     required this.userScore,
     required this.lastOpenedDate,
+    required this.readReceipts,
+    required this.lastSeen,
     this.followers = const [],
     this.following = const [],
     this.followRequests = const [],
@@ -31,6 +33,8 @@ class UserModel {
   late String username;
   late String lastOpenedDate;
   late bool isPrivate;
+  late bool readReceipts;
+  late bool lastSeen;
   late int postCount;
   late int userScore;
   late List<String> followers;
@@ -52,6 +56,8 @@ class UserModel {
     postCount = json['postCount'] != null ? json['postCount'] as int : 0;
     userScore = json['userScore'] != null ? json['userScore'] as int : 0;
     isPrivate = json['isPrivate'] ?? false;
+    readReceipts = json['readReceipts'] ?? false;
+    lastSeen = json['lastSeen'] ?? false;
     followers = List<String>.from(json['followers'] ?? []);
     following = List<String>.from(json['following'] ?? []);
     followRequests = List<String>.from(json['followRequests'] ?? []);
@@ -71,6 +77,8 @@ class UserModel {
       'pushToken': pushToken,
       'username': username,
       'isPrivate': isPrivate,
+      'readReceipts': readReceipts,
+      'lastSeen': lastSeen,
       'followers': followers,
       'following': following,
       'followRequests': followRequests,
