@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:vibez/Cubit/bottom_nav_post/bottom_nav_post_cubit.dart';
@@ -40,6 +41,7 @@ import 'firebase_options.dart';
 import 'generated/locales.g.dart';
 
 Future<void> initApp({Flavour? appFlavour}) async {
+  await dotenv.load(fileName: "private_keys.env");
   WidgetsFlutterBinding.ensureInitialized();
   if (appFlavour == null) {
     throw Exception("App flavor must not be null!");
