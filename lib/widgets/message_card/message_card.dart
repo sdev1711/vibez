@@ -160,6 +160,7 @@ class _MessageCardState extends State<MessageCard> {
                             log('Open result: ${result.message}');
                           } catch (e) {
                             log('Failed to open file: $e');
+                            if(!mounted)return;
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                   content: Text("Couldn't open document.")),
@@ -425,8 +426,12 @@ class _MessageCardState extends State<MessageCard> {
                         await Clipboard.setData(
                                 ClipboardData(text: widget.message.msg))
                             .then(
-                          (value) => Navigator.pop(context),
+                          (value){
+                            if(!mounted)return;
+                            Navigator.pop(context);
+                          }
                         );
+                        if(!mounted)return;
                         Dialogs.showSnackBar(context, "Text copied!");
                       },
                     ),
@@ -453,15 +458,18 @@ class _MessageCardState extends State<MessageCard> {
 
                         if (result['isSuccess']) {
                           // Show success dialog
+                          if(!mounted)return;
                           Dialogs.showSnackBar(
                               context, "Image saved successfully!");
                           Navigator.pop(context);
                         } else {
                           // Show failure dialog
+                          if(!mounted)return;
                           Dialogs.showSnackBar(
                               context, "Failed to save image.");
                         }
                       } else {
+                        if(!mounted)return;
                         Dialogs.showSnackBar(context, "Image data is empty.");
                       }
                     } catch (e) {
@@ -490,6 +498,7 @@ class _MessageCardState extends State<MessageCard> {
                   onTap: () async {
                     Navigator.pop(context); // Close the bottom sheet first
                     await ApiService.deleteMsg(widget.message);
+                    if(!mounted)return;
                     Dialogs.showSnackBar(context, "Message deleted!");
                   },
                 ),
@@ -553,7 +562,9 @@ class _MessageCardState extends State<MessageCard> {
               onPressed: () {
                 FocusScope.of(dialogContext).unfocus(); // Hide keyboard
                 Future.delayed(Duration(milliseconds: 100), () {
+                  if(!context.mounted)return;
                   if (Navigator.canPop(dialogContext)) {
+
                     Navigator.of(dialogContext).pop();
                   }
                 });
@@ -568,6 +579,7 @@ class _MessageCardState extends State<MessageCard> {
               onPressed: () async {
                 FocusScope.of(dialogContext).unfocus(); // Hide keyboard
                 Future.delayed(Duration(milliseconds: 100), () async {
+                  if(!context.mounted)return;
                   if (Navigator.canPop(dialogContext)) {
                     Navigator.pop(dialogContext);
                   }

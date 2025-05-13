@@ -66,7 +66,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                     .collection('calls')
                     .doc(call.channelId)
                     .update({'status': 'ongoing'});
-
+                if(!context.mounted)return;
                 Navigator.of(context).pop(); // Close dialog
 
                 // Navigate to Video Call Screen
@@ -87,6 +87,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                     .collection('calls')
                     .doc(call.channelId)
                     .delete();
+                if(!context.mounted)return;
                 Navigator.of(context).pop(); // Close dialog
               },
               child: Text("Reject"),

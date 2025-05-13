@@ -18,7 +18,6 @@ import 'package:vibez/app/colors.dart';
 import 'package:vibez/generated/locales.g.dart';
 import 'package:vibez/model/message_model.dart';
 import 'package:vibez/model/user_model.dart';
-import 'package:vibez/screens/call_screen.dart';
 import 'package:vibez/services/call_service.dart';
 import 'package:vibez/utils/image_path/image_path.dart';
 import 'package:vibez/utils/date_format/my_date_util.dart';

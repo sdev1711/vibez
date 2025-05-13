@@ -192,3 +192,4 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+/// flutter run --release -t lib/Flavour/main_staging.dart
