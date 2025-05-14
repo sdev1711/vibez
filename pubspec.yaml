@@ -115,7 +115,7 @@ flutter:
   assets:
     - assets/languages/
     - assets/images/
-    - private_keys.env
+#    - private_keys.env
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
