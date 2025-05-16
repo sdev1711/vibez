@@ -1,4 +1,4 @@
-import 'config.dart';
+import 'Flavour/config.dart';
 import 'package:vibez/main.dart';
 
 Future<void> main() async{

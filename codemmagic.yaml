@@ -9,11 +9,11 @@ workflows:
         FIREBASE_CLIENT_EMAIL: $FIREBASE_CLIENT_EMAIL
         FIREBASE_CLIENT_ID: $FIREBASE_CLIENT_ID
     scripts:
-      - echo "FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID" > private_keys.env
-      - echo "FIREBASE_PRIVATE_KEY=$FIREBASE_PRIVATE_KEY" >> private_keys.env
-      - echo "FIREBASE_PRIVATE_KEY_ID=$FIREBASE_PRIVATE_KEY_ID" >> private_keys.env
-      - echo "FIREBASE_CLIENT_EMAIL=$FIREBASE_CLIENT_EMAIL" >> private_keys.env
-      - echo "FIREBASE_CLIENT_ID=$FIREBASE_CLIENT_ID" >> private_keys.env
+      - echo "FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID" > private_keys.production.env
+      - echo "FIREBASE_PRIVATE_KEY=$FIREBASE_PRIVATE_KEY" >> private_keys.production.env
+      - echo "FIREBASE_PRIVATE_KEY_ID=$FIREBASE_PRIVATE_KEY_ID" >> private_keys.production.env
+      - echo "FIREBASE_CLIENT_EMAIL=$FIREBASE_CLIENT_EMAIL" >> private_keys.production.env
+      - echo "FIREBASE_CLIENT_ID=$FIREBASE_CLIENT_ID" >> private_keys.production.env
     artifacts:
       - build/**
     publishing:

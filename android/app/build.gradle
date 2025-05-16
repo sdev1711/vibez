@@ -40,6 +40,24 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
+
+    flavorDimensions "app"
+
+    productFlavors {
+        production {
+            dimension "app"
+            applicationIdSuffix ".production"
+            versionNameSuffix "-production"
+            resValue "string", "app_name", "Vibez"
+        }
+        staging {
+            dimension "app"
+            applicationIdSuffix ".staging"
+            versionNameSuffix "-staging"
+            resValue "string", "app_name", "Vibez Staging"
+        }
+    }
+
 }
 
 flutter {

@@ -41,43 +41,21 @@ import 'firebase_options.dart';
 import 'generated/locales.g.dart';
 
 Future<void> initApp({Flavour? appFlavour}) async {
-  // await dotenv.load(fileName: "private_keys.env");
-  // WidgetsFlutterBinding.ensureInitialized();
-  // if (appFlavour == null) {
-  //   throw Exception("App flavor must not be null!");
-  // }
-  // await SharedPrefs.init();
-  // ThemeMode initialThemeMode = getStoredThemeMode();
-  // Config.appFlavour = appFlavour;
-  // Get.put(AppColors());
-  // String? languageCode = SharedPrefs.getLanguage();
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
-  // await NotificationService.initializeNotifications();
-  // await StoryService().deleteExpiredStories();
-  // Locale initialCode = languageCode != null
-  //     ? Locale(languageCode, languageCode == 'en' ? 'US' : 'IND')
-  //     : Locale('en', 'US');
-  // Get.put(BottomNavController());
-  // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-  //     .then((_) {
-  //   runApp(MyApp(
-  //     initialThemeMode: initialThemeMode,
-  //     initialLocale: initialCode,
-  //     initialRoute: AppRoutes.initialRoute,
-  //   ));
-  // });
-}
-void main()async{
-  await dotenv.load(fileName: "private_keys.env");
+  if (appFlavour == null) {
+    throw Exception("App flavor must not be null!");
+  }
+  try {
+    if (!dotenv.isEveryDefined(['API_KEY'])) {
+      await dotenv.load(fileName: "private_keys.env");
+    }
+  } catch (e) {
+    print("Failed to load .env file: $e");
+  }
+
   WidgetsFlutterBinding.ensureInitialized();
-  // if (appFlavour == null) {
-  //   throw Exception("App flavor must not be null!");
-  // }
   await SharedPrefs.init();
   ThemeMode initialThemeMode = getStoredThemeMode();
-  // Config.appFlavour = appFlavour;
+  Config.appFlavour = appFlavour;
   Get.put(AppColors());
   String? languageCode = SharedPrefs.getLanguage();
   await Firebase.initializeApp(
@@ -98,6 +76,35 @@ void main()async{
     ));
   });
 }
+// void main()async{
+//   await dotenv.load(fileName: "private_keys.production.env");
+//   WidgetsFlutterBinding.ensureInitialized();
+//   // if (appFlavour == null) {
+//   //   throw Exception("App flavor must not be null!");
+//   // }
+//   await SharedPrefs.init();
+//   ThemeMode initialThemeMode = getStoredThemeMode();
+//   // Config.appFlavour = appFlavour;
+//   Get.put(AppColors());
+//   String? languageCode = SharedPrefs.getLanguage();
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//   );
+//   await NotificationService.initializeNotifications();
+//   await StoryService().deleteExpiredStories();
+//   Locale initialCode = languageCode != null
+//       ? Locale(languageCode, languageCode == 'en' ? 'US' : 'IND')
+//       : Locale('en', 'US');
+//   Get.put(BottomNavController());
+//   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+//       .then((_) {
+//     runApp(MyApp(
+//       initialThemeMode: initialThemeMode,
+//       initialLocale: initialCode,
+//       initialRoute: AppRoutes.initialRoute,
+//     ));
+//   });
+// }
 
 ThemeMode getStoredThemeMode() {
   bool? isDarkMode = SharedPrefs.getThemeMode();

@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "651316769262",
+    "project_id": "sign-up-lxh8y8",
+    "storage_bucket": "sign-up-lxh8y8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:651316769262:android:d1c9d5b13b33eecddddeff",
+        "android_client_info": {
+          "package_name": "com.example.vibez"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLv64lYuoopbvxL_Gdo2ZNplrZ4QEu2cw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:651316769262:android:c449ecbab2609e8bdddeff",
+        "android_client_info": {
+          "package_name": "com.example.vibez.production"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLv64lYuoopbvxL_Gdo2ZNplrZ4QEu2cw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:651316769262:android:d85f038a2a85341ddddeff",
+        "android_client_info": {
+          "package_name": "com.example.vibez.staging"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLv64lYuoopbvxL_Gdo2ZNplrZ4QEu2cw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
