@@ -2,6 +2,7 @@ workflows:
   build_and_release:
     name: Build and Release
     environment:
+      flutter: stable
       vars:
         FIREBASE_PROJECT_ID: $FIREBASE_PROJECT_ID
         FIREBASE_PRIVATE_KEY: $FIREBASE_PRIVATE_KEY
@@ -9,13 +10,17 @@ workflows:
         FIREBASE_CLIENT_EMAIL: $FIREBASE_CLIENT_EMAIL
         FIREBASE_CLIENT_ID: $FIREBASE_CLIENT_ID
     scripts:
+      - echo "Setting up environment variables..."
       - echo "FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID" > private_keys.env
       - echo "FIREBASE_PRIVATE_KEY=$FIREBASE_PRIVATE_KEY" >> private_keys.env
       - echo "FIREBASE_PRIVATE_KEY_ID=$FIREBASE_PRIVATE_KEY_ID" >> private_keys.env
       - echo "FIREBASE_CLIENT_EMAIL=$FIREBASE_CLIENT_EMAIL" >> private_keys.env
       - echo "FIREBASE_CLIENT_ID=$FIREBASE_CLIENT_ID" >> private_keys.env
+      - echo "Running flutter clean..."
       - flutter clean
+      - echo "Fetching dependencies..."
       - flutter pub get
+      - echo "Building APK for Staging..."
       - flutter build apk --flavor staging -t lib/main_staging.dart
     artifacts:
       - build/**
