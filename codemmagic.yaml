@@ -21,7 +21,7 @@ workflows:
       - echo "Fetching dependencies..."
       - flutter pub get
       - echo "Building APK for Staging..."
-      - flutter build apk --flavor staging -t lib/main_staging.dart
+      - flutter build appbundle --flavor staging -t lib/main_staging.dart
     artifacts:
       - build/**
     publishing:
