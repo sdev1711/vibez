@@ -40,7 +40,7 @@ class NotificationAccessToken {
 
       return _token;
     } catch (e) {
-      log('$e');
+      log('Error getting token: ${e.toString()}');
       return null;
     }
   }
