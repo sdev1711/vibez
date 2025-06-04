@@ -102,7 +102,7 @@ class ApiService {
   /// for sending push notification (Updated Codes)
   static Future<void> sendPushNotification(
       UserModel chatUser, String msg) async {
-    log("heloooooooooooooooo  ${chatUser.pushToken}");
+    log("helloooooooooooooooo  ${chatUser.pushToken}");
     try {
       final body = {
         "message": {
@@ -331,4 +331,21 @@ class ApiService {
   //   }
   //   return null; // Return null if user is not found
   // }
+
+  Future<PostModel> getPostById(String postId) async {
+    try {
+      DocumentSnapshot doc = await ApiService.firestore
+          .collection('posts')
+          .doc(postId)
+          .get();
+
+      if (!doc.exists) {
+        throw Exception("Post not found");
+      }
+
+      return PostModel.fromJson(doc.data() as Map<String, dynamic>);
+    } catch (e) {
+      throw Exception("Failed to fetch post: $e");
+    }
+  }
 }

@@ -9,9 +9,12 @@ import 'package:vibez/api_service/api_service.dart';
 import 'package:vibez/app/app_route.dart';
 import 'package:vibez/app/colors.dart';
 import 'package:vibez/model/post_model.dart';
+import 'package:vibez/repository/post_repository.dart';
 import 'package:vibez/utils/image_path/image_path.dart';
 import 'package:vibez/widgets/common_text.dart';
 import 'package:video_player/video_player.dart';
+
+import '../../repository/post_repository.dart';
 
 class ClipView extends StatefulWidget {
   final PostModel clip;
@@ -23,11 +26,13 @@ class ClipView extends StatefulWidget {
 
 class _ClipViewState extends State<ClipView> {
   late VideoPlayerController _controller;
-  String currentUser=ApiService.me.username;
+  String currentUser = ApiService.me.username;
+  late PostModel post;
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(widget.clip.imageUrl)
+    post = widget.clip;
+    _controller = VideoPlayerController.network(post.imageUrl)
       ..initialize().then((_) {
         setState(() {
           _controller.play();
@@ -35,11 +40,13 @@ class _ClipViewState extends State<ClipView> {
         });
       });
   }
+
   void sharePost(String name, String userName) {
     final String shareText =
         "Check out my post on Vibez! 👇\n Post: $name\nUsername: $userName\n App: vibez.app";
     Share.share(shareText);
   }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -86,10 +93,12 @@ class _ClipViewState extends State<ClipView> {
                           children: [
                             CircleAvatar(
                               radius: 23,
-                              backgroundImage: widget.clip.user.image.isNotEmpty?NetworkImage(widget.clip.user.image):AssetImage(ImagePath.postImageIcon),
+                              backgroundImage: post.user.image.isNotEmpty
+                                  ? NetworkImage(post.user.image)
+                                  : AssetImage(ImagePath.postImageIcon),
                             ),
                             CommonSoraText(
-                              text: widget.clip.user.username,
+                              text: post.user.username,
                               color: AppColors.to.contrastThemeColor,
                               textSize: 16,
                               fontWeight: FontWeight.bold,
@@ -97,102 +106,113 @@ class _ClipViewState extends State<ClipView> {
                           ],
                         ),
                         CommonSoraText(
-                          text: widget.clip.content,
+                          text: post.content,
                           color: AppColors.to.contrastThemeColor,
                           textSize: 16,
                         ),
                       ],
                     )),
-                // Positioned(
-                //   bottom:50.h,
-                //   right: 120.w,
-                //   child: GestureDetector(
-                //     onTap: () {
-                //       final postCubit = context.read<PostCubit>();
-                //
-                //       if (widget.clip.likes.contains(currentUser)) {
-                //         postCubit.removeLike(widget.clip.postId, currentUser);
-                //         widget.clip.likes.remove(currentUser);
-                //       } else {
-                //         postCubit.addLike(
-                //             widget.clip.postId, currentUser, widget.clip.user);
-                //         widget.clip.likes.add(currentUser);
-                //       }
-                //       (context as Element).markNeedsBuild();
-                //     },
-                //     child: ImageIcon(
-                //       AssetImage(widget.clip.likes.contains(currentUser)
-                //           ? ImagePath.likeIcon
-                //           : ImagePath.noLikeIcon),
-                //       color: widget.clip.likes.contains(currentUser)
-                //           ? AppColors.to.alertColor
-                //           : AppColors.to.contrastThemeColor,
-                //       size: 30,
-                //     ),
-                //   ),
-                // ),
-                // Positioned(
-                //   bottom:25.h,
-                //   right: 128.w,
-                //   child:  Visibility(
-                //     visible: widget.clip.likes.isNotEmpty,
-                //     child: Padding(
-                //       padding: const EdgeInsets.only(left: 15.0),
-                //       child: CommonSoraText(
-                //         text: widget.clip.likes.length.toString(),
-                //         color: AppColors.to.contrastThemeColor,
-                //         textSize: 16,
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // Positioned(
-                //   right: 80.w,
-                //   bottom: 50.h,
-                //   child:   GestureDetector(
-                //     onTap: () {
-                //       Get.toNamed(AppRoutes.commentScreen, arguments: {
-                //         "postData": widget.clip,
-                //         "userData": ApiService.me,
-                //       });
-                //     },
-                //     child: ImageIcon(
-                //       AssetImage(ImagePath.commentIcon),
-                //       color: AppColors.to.contrastThemeColor,
-                //       size: 27,
-                //     ),
-                //   ),
-                // ),
-                // Positioned(
-                //   bottom:25.h,
-                //   right: 88.w,
-                //   child:   Visibility(
-                //     visible: widget.clip.comments.isNotEmpty,
-                //     child: Padding(
-                //       padding: const EdgeInsets.only(left: 15.0),
-                //       child: CommonSoraText(
-                //         text: widget.clip.comments.length.toString(),
-                //         color: AppColors.to.contrastThemeColor,
-                //         textSize: 16,
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // Positioned(
-                //   right: 40.w,
-                //   bottom: 50.h,
-                //   child: GestureDetector(
-                //     onTap: () {
-                //       sharePost(
-                //           widget.clip.imageUrl, widget.clip.user.username);
-                //     },
-                //     child: ImageIcon(
-                //       AssetImage(ImagePath.shareIcon),
-                //       color: AppColors.to.contrastThemeColor,
-                //       size: 27,
-                //     ),
-                //   ),
-                // ),
+                Positioned(
+                  bottom: 50.h,
+                  right: 120.w,
+                  child: GestureDetector(
+                    onTap: () async {
+                      final postCubit = context.read<PostCubit>();
+
+                      if (post.likes.contains(currentUser)) {
+                        await postCubit.removeLike(post.postId, currentUser);
+                      } else {
+                        await postCubit.addLike(
+                            post.postId, currentUser, post.user);
+                      }
+
+                      // ✅ Fetch updated post to reflect changes
+                      final updatedPost =
+                          await ApiService().getPostById(post.postId);
+
+                      setState(() {
+                        post.likes = updatedPost.likes;
+                      });
+                    },
+                    child: ImageIcon(
+                      AssetImage(post.likes.contains(currentUser)
+                          ? ImagePath.likeIcon
+                          : ImagePath.noLikeIcon),
+                      color: post.likes.contains(currentUser)
+                          ? AppColors.to.alertColor
+                          : AppColors.to.contrastThemeColor,
+                      size: 30,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 25.h,
+                  right: 128.w,
+                  child: Visibility(
+                    visible: post.likes.isNotEmpty,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15.0),
+                      child: CommonSoraText(
+                        text: post.likes.length.toString(),
+                        color: AppColors.to.contrastThemeColor,
+                        textSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: 80.w,
+                  bottom: 50.h,
+                  child: GestureDetector(
+                    onTap: () async {
+                      await Get.toNamed(AppRoutes.commentScreen, arguments: {
+                        "postData": post,
+                        "userData": ApiService.me,
+                      });
+
+                      // After returning from comment screen, refetch updated post
+                      final updatedPost =
+                          await ApiService().getPostById(post.postId);
+                      setState(() {
+                        post = updatedPost;
+                      });
+                    },
+                    child: ImageIcon(
+                      AssetImage(ImagePath.commentIcon),
+                      color: AppColors.to.contrastThemeColor,
+                      size: 27,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 25.h,
+                  right: 88.w,
+                  child: Visibility(
+                    visible: post.comments.isNotEmpty,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15.0),
+                      child: CommonSoraText(
+                        text: post.comments.length.toString(),
+                        color: AppColors.to.contrastThemeColor,
+                        textSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: 40.w,
+                  bottom: 50.h,
+                  child: GestureDetector(
+                    onTap: () {
+                      sharePost(post.imageUrl, post.user.username);
+                    },
+                    child: ImageIcon(
+                      AssetImage(ImagePath.shareIcon),
+                      color: AppColors.to.contrastThemeColor,
+                      size: 27,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

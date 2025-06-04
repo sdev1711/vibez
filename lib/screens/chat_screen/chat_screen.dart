@@ -156,7 +156,6 @@ class _ChatScreenState extends State<ChatScreen> {
                           type: FileType.custom,
                           allowedExtensions: ['pdf', 'docx', 'xlx', 'txt'],
                         );
-
                         if (result != null) {
                           for (var file in result.files) {
                             final pickedFile = File(file.path!);
@@ -195,24 +194,6 @@ class _ChatScreenState extends State<ChatScreen> {
     _overlayEntry?.remove();
     _overlayEntry = null;
   }
-
-  // void initiateCall(String callerId, String receiverId) async {
-  //   String channelId = await CallService()
-  //       .startCall(callerId: callerId, receiverId: receiverId);
-  //
-  //   // Listen for call updates using the channelId
-  //   CallService().listenToCallUpdates(channelId).listen((call) {
-  //     if (call != null && call.status == 'ongoing') {
-  //       // Navigate to Video Call Screen when the call is accepted
-  //       Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //           builder: (context) => VideoCallScreen(channelId: call.channelId),
-  //         ),
-  //       );
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -328,22 +309,6 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ],
           ),
-          actions: [
-            // IconButton(
-            //   icon: Icon(
-            //     Icons.video_call,
-            //     size: 25,
-            //     color: AppColors.to.contrastThemeColor,
-            //   ),
-            //   onPressed: () async {
-            //     initiateCall(
-            //       currentUserId,
-            //       userData.uid,
-            //     );
-            //   },
-            // ),
-          ],
-          // body: ,
         ),
         body: BlocListener<MessageInputCubit, bool>(
           listener: (context, isEmpty) {

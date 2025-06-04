@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vibez/Cubit/feed_post/feed_post_cubit.dart';
 import 'package:vibez/Cubit/post/post_cubit.dart';
+import 'package:vibez/ad_helper.dart';
 import 'package:vibez/api_service/api_service.dart';
 import 'package:vibez/app/app_route.dart';
 import 'package:vibez/app/colors.dart';
@@ -31,15 +33,33 @@ class _HomeMobileLayoutState extends State<HomeMobileLayout> {
 
   late List<PostModel> postsData;
    UserModel? me;
+BannerAd? bannerAd;
 
   @override
   void initState() {
+    BannerAd(
+      adUnitId:AdHelper.bannerAdUnitId,
+      request: AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad){
+          setState(() {
+            bannerAd=ad as BannerAd?;
+          });
+        },
+        onAdFailedToLoad: (ad,err){
+          print("failed to load a banner ad : ${err.message}");
+          ad.dispose();
+        }
+      )
+    ).load();
     ApiService.getSelfInfo();
     getCurrentUserData();
     context.read<FeedPostCubit>().fetchFollowingPosts();
     context.read<PostCubit>().fetchPosts();
     super.initState();
   }
+
 Future<void> getCurrentUserData()async{
   String? userDataString = SharedPrefs.getUserData();
   log("userDataString is $userDataString");
@@ -93,6 +113,15 @@ Future<void> getCurrentUserData()async{
           physics: BouncingScrollPhysics(),
           child: Column(
             children: [
+              if(bannerAd != null)...[
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    width: bannerAd!.size.width.toDouble(),
+                    height: bannerAd!.size.height.toDouble(),
+                    child: AdWidget(ad: bannerAd!),
+                  ),
+                ),],
               StoryViewWidget(),
               if (me?.following.isEmpty??false) ...[
                 Column(
@@ -135,6 +164,7 @@ Future<void> getCurrentUserData()async{
                   return SizedBox();
                 },
               ),
+
             ],
           ),
         ),

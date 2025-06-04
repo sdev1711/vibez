@@ -19,7 +19,6 @@ class DocumentDownloadCubit extends Cubit<bool> {
 
       final response = await http.get(Uri.parse(url));
 
-
       final downloadsDir = Directory('/storage/emulated/0/Download');
       final path = '${downloadsDir.path}/$fileName';
       final file = File(path);

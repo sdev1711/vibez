@@ -102,30 +102,6 @@ class AppColors extends GetxController {
     }
     return isDarkMode.value ? primaryBgColor : white;
   }
-  // Gradient get circleBorder{
-  //   if(isSelection.value==2){
-  //     final Brightness brightness =
-  //         WidgetsBinding.instance.window.platformBrightness;
-  //     return brightness == Brightness.dark ? LinearGradient(
-  //       colors: [primaryBgColor.withOpacity(0.8), white], // Border Gradient
-  //       begin: Alignment.topLeft,
-  //       end: Alignment.bottomRight,
-  //     ) : LinearGradient(
-  //       colors: [likeColor, primaryBgColor.withOpacity(0.8)], // Border Gradient
-  //       begin: Alignment.topLeft,
-  //       end: Alignment.bottomRight,
-  //     );
-  //   }
-  //   return isDarkMode.value ? LinearGradient(
-  //     colors: [primaryBgColor, white], // Border Gradient
-  //     begin: Alignment.topLeft,
-  //     end: Alignment.bottomRight,
-  //   ) : LinearGradient(
-  //     colors: [primaryBgColor,darkBgColor], // Border Gradient
-  //     begin: Alignment.topLeft,
-  //     end: Alignment.bottomRight,
-  //   );
-  // }
 
   void loadThemeMode() {
     bool? storeTheme = SharedPrefs.getThemeMode();

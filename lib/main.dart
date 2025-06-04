@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vibez/Cubit/bottom_nav_post/bottom_nav_post_cubit.dart';
 import 'package:vibez/Cubit/chat_screen_appbar/chat_appbar_cubit.dart';
 import 'package:vibez/Cubit/chatbot/chatbot_cubit.dart';
@@ -78,16 +80,16 @@ import 'generated/locales.g.dart';
 // }
 Future<void> initApp({Flavour? appFlavour}) async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  MobileAds.instance.initialize();
   if (appFlavour == null) {
     throw Exception("App flavor must not be null!");
   }
 
   try {
     await dotenv.load(fileName: "private_keys.env");
-    print("✅ Dotenv loaded: ${dotenv.env}");
+    log("✅ Dotenv loaded: ${dotenv.env}");
   } catch (e) {
-    print("❌ Dotenv failed: $e");
+    log("❌ Dotenv failed: $e");
   }
 
   // Now Firebase, SharedPrefs, etc
