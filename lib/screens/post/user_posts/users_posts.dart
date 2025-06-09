@@ -27,6 +27,7 @@ class _UsersPostsState extends State<UsersPosts> {
   @override
   void initState() {
     super.initState();
+    context.read<PostCubit>().fetchPosts();
   }
 
   @override

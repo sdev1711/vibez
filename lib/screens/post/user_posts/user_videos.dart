@@ -25,6 +25,7 @@ class _UserVideosState extends State<UserVideos> {
   @override
   void initState() {
     super.initState();
+    context.read<PostCubit>().fetchPosts();
   }
 
   @override
@@ -71,7 +72,7 @@ class _UserVideosState extends State<UserVideos> {
                   crossAxisCount: 3,
                   mainAxisSpacing: 4,
                   crossAxisSpacing: 4,
-                  mainAxisExtent: 200.h
+                  mainAxisExtent: 200.h,
                 ),
                   itemCount:reversedPosts.length,
                   itemBuilder: (context, index){

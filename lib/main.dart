@@ -11,6 +11,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vibez/Cubit/bottom_nav_post/bottom_nav_post_cubit.dart';
 import 'package:vibez/Cubit/chat_screen_appbar/chat_appbar_cubit.dart';
 import 'package:vibez/Cubit/chatbot/chatbot_cubit.dart';
+import 'package:vibez/Cubit/clip_screen_cubit/clip_screen_cubit.dart';
 import 'package:vibez/Cubit/document_download_cubit/document_download_cubit.dart';
 import 'package:vibez/Cubit/emoji/emoji_cubit.dart';
 import 'package:vibez/Cubit/feed_post/feed_post_cubit.dart';
@@ -230,6 +231,9 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<BottomNavCubit>(
             create: (context) => BottomNavCubit(),
           ),
+          // BlocProvider<ClipViewScreenCubit>(
+          //   create: (context) => ClipViewScreenCubit(),
+          // ),
         ],
         child: GetMaterialApp(
           debugShowCheckedModeBanner: false,

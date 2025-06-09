@@ -43,15 +43,6 @@ class PostCubit extends Cubit<PostState> {
     }
   }
 
-  // Add Comment
-  // Future<void> addComment(String postId, CommentModel comment) async {
-  //   try {
-  //     await postRepository.addComment(postId, comment);
-  //     fetchPosts(); // Refresh posts
-  //   } catch (e) {
-  //     emit(PostError(message: e.toString()));
-  //   }
-  // }
   Future<void> addComment(String postId, CommentModel comment) async {
     try {
       await postRepository.addComment(postId, comment);
@@ -72,7 +63,6 @@ class PostCubit extends Cubit<PostState> {
       emit(PostError(message: e.toString()));
     }
   }
-
   Future<void>addLike(String postId,String username,UserModel postUser)async {
     try{
     await postRepository.addLike(postId, username,postUser);
@@ -91,6 +81,7 @@ class PostCubit extends Cubit<PostState> {
       emit(PostError(message: e.toString()));
     }
   }
+
   Future<void> removeLike(String postId, String username) async {
     try {
       await postRepository.removeLike(postId, username);
@@ -110,10 +101,10 @@ class PostCubit extends Cubit<PostState> {
     }
   }
 
-
   Stream<List<CommentModel>> streamComments(String postId) {
     return postRepository.getCommentsStream(postId);
   }
+
   Stream<List<String>> getPostLikes(String postId) {
     return ApiService.firestore
         .collection('posts')
